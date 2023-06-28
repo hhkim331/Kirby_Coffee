@@ -907,7 +907,7 @@ GameObject:
   - component: {fileID: 385324497}
   - component: {fileID: 385324496}
   - component: {fileID: 385324495}
-  m_Layer: 7
+  m_Layer: 16
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1282,7 +1282,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-90236
+  m_Name: pb_Mesh23214
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1650,7 +1650,7 @@ MonoBehaviour:
   boxSize: {x: 0.5, y: 0.1, z: 0.5}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 65664
 --- !u!114 &1207496703
 MonoBehaviour:
   m_ObjectHideFlags: 0

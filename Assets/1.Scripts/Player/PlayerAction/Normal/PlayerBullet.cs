@@ -38,7 +38,7 @@ public class PlayerBullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //레이어가 스테이지 인경우
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Stage"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             //닿은 지점의 법선벡터를 구한다
             Vector3 normal = collision.contacts[0].normal;

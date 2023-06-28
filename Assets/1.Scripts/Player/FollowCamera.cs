@@ -23,11 +23,8 @@ public class FollowCamera : MonoBehaviour
     void Update()
     {
         //타겟을 정해진 각도로 따라가는 카메라
-        transform.position = targetPlayer.position + new Vector3(0, 10, -10);
+        transform.position = targetPlayer.position + new Vector3(0, 8, -8);
         transform.LookAt(targetPlayer);
-        
-        
-
     }
 
     //플레이어가 변신을 하는 경우 살짝 줌인

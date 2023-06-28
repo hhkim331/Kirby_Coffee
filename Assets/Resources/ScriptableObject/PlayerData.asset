@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   speed: 10
+  rotateSpeed: 20
   jumpPower: 10
   flyPower: 2
-  flyTime: 3
+  flyTime: 2
   gravity: -20
+  suctionPower: 10
+  suctionDelay: 0.5
+  spitItemSpeed: 20

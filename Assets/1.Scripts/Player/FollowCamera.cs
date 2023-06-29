@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,32 +8,49 @@ public class FollowCamera : MonoBehaviour
 
     public enum CameraState
     {
-        Normal,
-        Transformation,
+        Basic,
+        Zoomin,
         MapView,
     }
+    CameraState state;
+    CameraState State
+    {
+        set
+        {
+            state = value;
+            switch (value)
+            {
+                case CameraState.Basic:
+                    curOffset = basicOffset;
+                    Quaternion rot = Quaternion.LookRotation(Vector3.zero - basicOffset);
+                    transform.rotation = rot;
+                    break;
+                case CameraState.Zoomin:
+                    curOffset = zoomInOffset;
+                    break;
+                case CameraState.MapView:
+                    break;
+            }
+        }
+    }
+
+    Vector3 curOffset;
+
+    //ê¸°ë³¸ ì¹´ë©”ë¼
+    Vector3 basicOffset = new Vector3(0, 8, -8); //ë°°ì¹˜
+    //ì¤Œì¸ ì¹´ë©”ë¼
+    Vector3 zoomInOffset = new Vector3(0, 6, -6);  //ë°°ì¹˜
 
     // Start is called before the first frame update
     void Start()
     {
         targetPlayer = PlayerManager.Instance.transform;
+        State = CameraState.Basic;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Å¸°ÙÀ» Á¤ÇØÁø °¢µµ·Î µû¶ó°¡´Â Ä«¸Ş¶ó
-        transform.position = targetPlayer.position + new Vector3(0, 8, -8);
-        transform.LookAt(targetPlayer);
+        transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.deltaTime * 5);
     }
-
-    //ÇÃ·¹ÀÌ¾î°¡ º¯½ÅÀ» ÇÏ´Â °æ¿ì »ìÂ¦ ÁÜÀÎ
-    
-
-
-    //Ä«¸Ş¶ó°¡ ¸ÊÀ» º¸´Â ½Ã¾ß°¡ ¿ŞÂÊÀ¸·Î 45µµ µ¹¾Æ°¡ÀÖ´Â »óÅÂ
-
-
-
-    //Å¸°Ù ¸ÊÀ» ³ôÀº »ó´Ü¿¡¼­ ¹Ù¶óº¸´Â »óÅÂ
 }

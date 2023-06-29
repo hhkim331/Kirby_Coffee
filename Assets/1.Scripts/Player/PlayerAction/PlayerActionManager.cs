@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerActionManager : MonoBehaviour
 {
-    [SerializeField] PlayerAction normalAction;
+    [SerializeField] PlayerAction actionNormal;
+    [SerializeField] PlayerAction actionPistol;
 
     PlayerAction curAction;
 
     // Start is called before the first frame update
-    public void Set(PlayerManager.PlayerType type)
+    public void Set(PlayerManager.ChangeType type)
     {
         //기존 액션 설정해제
         if (curAction != null)
@@ -17,10 +18,11 @@ public class PlayerActionManager : MonoBehaviour
 
         switch (type)
         {
-            case PlayerManager.PlayerType.Normal:
-                curAction = normalAction;
+            case PlayerManager.ChangeType.Normal:
+                curAction = actionNormal;
                 break;
-            case PlayerManager.PlayerType.Pistol:
+            case PlayerManager.ChangeType.Pistol:
+                curAction = actionPistol;
                 break;
         }
         
@@ -31,5 +33,10 @@ public class PlayerActionManager : MonoBehaviour
     public PlayerAction GetCurAction()
     {
         return curAction;
+    }
+
+    public void ActionChange()
+    {
+
     }
 }

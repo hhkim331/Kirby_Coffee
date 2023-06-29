@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerBullet : MonoBehaviour
+public class PlayerNormalBullet : MonoBehaviour
 {
     //발사 방향
     Vector3 direction;

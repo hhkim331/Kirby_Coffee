@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerActionNormal : PlayerAction
-{    public enum Stack
+{
+    public enum Stack
     {
         None,
         Object,
@@ -22,7 +23,7 @@ public class PlayerActionNormal : PlayerAction
             if (suction.activeSelf != value)
                 suction.SetActive(value);
         }
-    }    
+    }
     bool canSuction = true;
     float suctionDelay = 0f;
 
@@ -35,10 +36,10 @@ public class PlayerActionNormal : PlayerAction
     {
         //인풋이 없는 경우
         if (!GameManager.Input.isInput)
-        IsSuction = false;
+            IsSuction = false;
 
         //빨아들이기 쿨타임
-        if(!canSuction)
+        if (!canSuction)
         {
             suctionDelay -= Time.deltaTime;
             if (suctionDelay < 0f)
@@ -49,17 +50,17 @@ public class PlayerActionNormal : PlayerAction
 
     public override void Set()
     {
-
+        gameObject.SetActive(true);
     }
 
     public override void Unset()
     {
-
+        gameObject.SetActive(false);
     }
 
     public override void KeyAction()
     {
-        if(stack!=Stack.None)
+        if (stack != Stack.None)
         {
             //변신
             if (Input.GetKeyDown(KeyCode.A))
@@ -69,8 +70,8 @@ public class PlayerActionNormal : PlayerAction
                     case Stack.Object:
                         Destroy(stackObject);
                         break;
-                    //case Stack.Enemy_Pistol:
-                    //    break;
+                        //case Stack.Enemy_Pistol:
+                        //    break;
                 }
                 stack = Stack.None;
             }
@@ -85,7 +86,7 @@ public class PlayerActionNormal : PlayerAction
                         stackObject.SetActive(true);
                         stackObject.transform.parent = null;
                         stackObject.transform.position = mouthTransform.position + transform.forward;
-                        PlayerBullet playerBullet = stackObject.AddComponent<PlayerBullet>();
+                        PlayerNormalBullet playerBullet = stackObject.AddComponent<PlayerNormalBullet>();
                         playerBullet.Set(transform.forward);
                         //물건을 뱉은 후 쿨타임
                         canSuction = false;

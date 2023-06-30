@@ -1141,8 +1141,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightFirePos: {fileID: 838473842}
   leftFirePos: {fileID: 418773431}
+  rightLine: {fileID: 838473843}
+  leftLine: {fileID: 418773432}
   bulletFactory: {fileID: 6058659167475842384, guid: 8c5ed41e7d3ee2045b61303c1c5c535d, type: 3}
-  imageAim: {fileID: 0}
+  imageAim: {fileID: 1704028029}
 --- !u!1 &418773430
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,7 +2262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1704028029
 RectTransform:
   m_ObjectHideFlags: 0

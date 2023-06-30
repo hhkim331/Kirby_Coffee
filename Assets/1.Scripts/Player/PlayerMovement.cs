@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    PlayerManager playerManager;
     PlayerData playerData;
 
     bool jumpFlag = false;
@@ -23,11 +22,12 @@ public class PlayerMovement : MonoBehaviour
     Vector3 lastFixedPosition;
     Quaternion lastFixedRotation;
     Vector3 nextFixedPosition;
+    public Vector3 NextFixedPosition { set { nextFixedPosition = value; } }
     Quaternion nextFixedRotation;
+    public Quaternion NextFixedRotation { set { nextFixedRotation = value; } }
 
-    public void Set(PlayerManager manager, PlayerData data)
+    public void Set(PlayerData data)
     {
-        playerManager = manager;
         playerData = data;
         cc = GetComponent<CharacterController>();
         gc = GetComponent<GroundChecker>();
@@ -157,14 +157,13 @@ public class PlayerMovement : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = 0;
         dir.Normalize();
-        if (isFly) dir *= 0.5f; //비행중이면 속도 절반
-        planeVelocity = dir * playerData.speed;
+        planeVelocity = dir * playerData.speed * GetMoveSpeedRatio();
 
         ////향하는 방향으로 균일한 속도로 회전
         //if (dir != Vector3.zero)
         //    transform.forward = Vector3.RotateTowards(transform.forward, dir, playerData.rotateSpeed * Time.deltaTime, 0f);
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && !PlayerManager.Instance.PlayerMouth.IsSuction)
         {
             //땅인경우 점프
             if (gc.IsGrounded()) jumpFlag = true;
@@ -180,5 +179,17 @@ public class PlayerMovement : MonoBehaviour
             jumpFlag = false;
             flyFlag = false;
         }
+    }
+
+    float GetMoveSpeedRatio()
+    {
+        if(PlayerManager.Instance.changeType!=PlayerManager.ChangeType.Normal)
+        {
+            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsAction) return 0.3f;
+            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsHardAction) return 0f;
+        }
+        if (PlayerManager.Instance.PlayerMouth.IsSuction) return 0.3f;
+        if (isFly) return 0.5f;
+        return 1f;
     }
 }

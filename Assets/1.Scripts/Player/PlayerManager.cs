@@ -36,7 +36,7 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerMovement.Set(this, playerData);
+        playerMovement.Set(playerData);
         GameManager.Input.keyaction += playerMovement.keyMove;
 
         playerMouth.Set(changeType);

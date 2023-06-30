@@ -17,40 +17,51 @@ public class PlayerManager : MonoBehaviour
     }
     public ChangeType changeType;
 
-    PlayerMovement playerMove;
+    PlayerMovement playerMovement;
+    public PlayerMovement PlayerMovement { get { return playerMovement; } }
     PlayerActionManager playerActionManager;
+    public PlayerActionManager PlayerActionManager { get { return playerActionManager; } }
+    [SerializeField] PlayerMouth playerMouth;
+    public PlayerMouth PlayerMouth { get { return playerMouth; } }
 
 
     private void Awake()
     {
         Instance = this;
         changeType = ChangeType.Normal;
-        playerMove = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<PlayerMovement>();
         playerActionManager = GetComponent<PlayerActionManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        playerMove.Set(this, playerData);
-        GameManager.Input.keyaction += playerMove.keyMove;
+        playerMovement.Set(this, playerData);
+        GameManager.Input.keyaction += playerMovement.keyMove;
+
+        playerMouth.Set(changeType);
+        GameManager.Input.keyaction += playerMouth.KeyAction;
 
         playerActionManager.Set(changeType);
-        GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
     }
 
     //변신하면 호출되는 함수(나중에 사용)
     public void Change(ChangeType type)
     {
         if (type == changeType) return;
-        changeType = type;
 
         //기존 액션 해제
-        GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
         //액션정보 변경
+        changeType = type;
+        playerMouth.Set(changeType);
         playerActionManager.Set(changeType);
         //새 액션 설정
-        GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
 
         //변신 애니메이션
         StartCoroutine(ChangeCoroutine());
@@ -61,7 +72,7 @@ public class PlayerManager : MonoBehaviour
         yield return null;
         ChangeEnd();
     }
-        
+
     public void ChangeStart()
     {
         //카메라 줌인

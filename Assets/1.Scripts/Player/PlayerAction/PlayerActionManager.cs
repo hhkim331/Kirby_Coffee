@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerActionManager : MonoBehaviour
 {
-    [SerializeField] PlayerAction actionNormal;
     [SerializeField] PlayerAction actionPistol;
 
     PlayerAction curAction;
@@ -19,15 +18,16 @@ public class PlayerActionManager : MonoBehaviour
         switch (type)
         {
             case PlayerManager.ChangeType.Normal:
-                curAction = actionNormal;
+                curAction = null;
                 break;
             case PlayerManager.ChangeType.Pistol:
                 curAction = actionPistol;
                 break;
         }
-        
+
         //새 액션 설정
-        curAction.Set();
+        if (curAction != null)
+            curAction.Set();
     }
 
     public PlayerAction GetCurAction()

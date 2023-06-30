@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -6,10 +7,14 @@ public class PlayerMovement : MonoBehaviour
     PlayerManager playerManager;
     PlayerData playerData;
 
-    bool jumpFlag;
+    bool jumpFlag = false;
+    float jumpFlagTime;
+
+    bool flyFlag = false;
     bool isFly = false;
     bool isCanFly = true;
-    float flyActiveTime;
+    float flyActiveTime;    //비행 활성화 시간
+    float flyActionDelay;   //날개짓 딜레이
 
     CharacterController cc;
     GroundChecker gc;
@@ -43,6 +48,18 @@ public class PlayerMovement : MonoBehaviour
         if (!GameManager.Input.isInput)
         {
             planeVelocity = Vector3.zero;
+            jumpFlag = false;
+            flyFlag = false;
+        }
+
+
+        if (jumpFlag && jumpFlagTime > 0)
+        {
+            jumpFlagTime -= Time.deltaTime;
+            if (jumpFlagTime <= 0)
+            {
+                jumpFlag = false;
+            }
         }
 
         //날고 있는 상태
@@ -76,35 +93,50 @@ public class PlayerMovement : MonoBehaviour
     /// </remarks>
     private float GetYVelocity()
     {
-        if (!gc.IsGrounded())
+        if (gc.IsGrounded())     //땅인 경우
         {
-            if(jumpFlag && isCanFly)
+            isFly = false;
+            isCanFly = true;
+            if (jumpFlag)
             {
-                jumpFlag = false;
-                if (velocity.y < playerData.flyPower)
+                //시작 y높이 
+                jumpFlagTime = playerData.jumpFlagTime;
+                return playerData.jumpPower;
+            }
+
+            return Mathf.Max(0.0f, velocity.y);
+        }
+        else                    //땅이 아닌 경우
+        {
+            if (jumpFlag)
+            {
+                return playerData.jumpPower;
+            }
+            if (flyFlag && isCanFly)
+            {
+                if (!isFly)
                 {
-                    if (!isFly)
+                    isFly = true;
+                    flyActiveTime = playerData.flyTime;
+                    return playerData.flyPower;
+                }
+                else
+                {
+                    flyActionDelay -= Time.deltaTime;
+                    if (flyActionDelay <= 0)
                     {
-                        isFly = true;
-                        flyActiveTime = playerData.flyTime;
+                        flyActionDelay = playerData.flyActionDelay;
+                        return playerData.flyPower;
                     }
-                    return velocity.y + playerData.flyPower;
                 }
             }
 
-            return velocity.y + playerData.gravity * Time.fixedDeltaTime;
-        }
-
-        isFly = false;
-        isCanFly = true;
-        if (jumpFlag)
-        {
-            jumpFlag = false;
-            return velocity.y + playerData.jumpPower;
-        }
-        else
-        {
-            return Mathf.Max(0.0f, velocity.y);
+            float fallSpeed = velocity.y + playerData.gravity * Time.fixedDeltaTime;
+            if (isFly && fallSpeed < playerData.maxFlyFallSpeed)
+                fallSpeed = playerData.maxFlyFallSpeed;
+            else if (fallSpeed < playerData.maxFallSpeed)
+                fallSpeed = playerData.maxFallSpeed;
+            return fallSpeed;
         }
     }
 
@@ -125,6 +157,7 @@ public class PlayerMovement : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = 0;
         dir.Normalize();
+        if (isFly) dir *= 0.5f; //비행중이면 속도 절반
         planeVelocity = dir * playerData.speed;
 
         ////향하는 방향으로 균일한 속도로 회전
@@ -132,6 +165,20 @@ public class PlayerMovement : MonoBehaviour
         //    transform.forward = Vector3.RotateTowards(transform.forward, dir, playerData.rotateSpeed * Time.deltaTime, 0f);
 
         if (Input.GetKeyDown(KeyCode.X))
-            jumpFlag = true;
+        {
+            //땅인경우 점프
+            if (gc.IsGrounded()) jumpFlag = true;
+            //입에 아무것도 없는 경우 날기가능
+            else if (PlayerManager.Instance.PlayerMouth.Stack == PlayerMouth.MouthStack.None)
+            {
+                flyFlag = true;
+                flyActionDelay = 0;
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.X))
+        {
+            jumpFlag = false;
+            flyFlag = false;
+        }
     }
 }

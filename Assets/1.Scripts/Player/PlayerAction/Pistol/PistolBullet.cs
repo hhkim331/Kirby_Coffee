@@ -25,7 +25,7 @@ public class PistolBullet : MonoBehaviour
         transform.position += moveDir * Time.deltaTime * bulletSpeed;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
     }

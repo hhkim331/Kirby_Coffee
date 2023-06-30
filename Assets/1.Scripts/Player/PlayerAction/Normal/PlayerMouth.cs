@@ -60,6 +60,7 @@ public class PlayerMouth : MonoBehaviour
     public void KeyAction()
     {
         if (!canUse) return;
+        if (PlayerManager.Instance.PlayerMovement.IsFly) return;
 
         if (stack != MouthStack.None)
         {

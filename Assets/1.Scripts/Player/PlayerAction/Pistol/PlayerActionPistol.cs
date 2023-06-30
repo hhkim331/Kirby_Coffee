@@ -133,6 +133,7 @@ public class PlayerActionPistol : PlayerAction
     public override void KeyAction()
     {
         if (isFire) return;
+        if (PlayerManager.Instance.PlayerMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))
         {

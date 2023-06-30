@@ -1,20 +1,20 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SSB_Boss : MonoBehaviour
 {
-    // state ±¸¼º
-    //1.ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù°¡°¡¼­ ¸ÁÄ¡·Î ³»·ÁÂï±â ³»·ÁÂïÀ¸¸é º°ÀÌ ³ª¿Â´Ù
-    //2.°øÁß¿¡¼­ Á¡ÇÁ ÈÄ ºù±Ûºù±Û µ¹´Ù°¡ ³»·ÁÂïÀ¸¸é ¿øÇüÀ¸·Î ÆÛÁö´Â ¿ø°Å¸® °ø°Ý
-    //3.anystate - ÇÃ·¹ÀÌ¾îÀÇ °ø°ÝÀ» ¹ÞÀ¸¸é ³Ñ¾îÁø´Ù
-    //4.HP°¡ 40%³²À¸¸é ¹«±â1À» ¶³¾î¶ß¸°´Ù
-    //5.°øÁß¿¡ ¶¹´Ù°¡ Ä¿ºñ ¹æÇâÀ¸·Î ¸ÁÄ¡ ¹«±â1À» ³»·ÁÂï´Â´Ù
-    //6.±âµÕ¹«±â¸¦ °¡Áö°í ¿À´Â ½Ã³×¸Ó½Å
-    //7.°øÁß¿¡ ¶¹´Ù°¡ Ä¿ºñ ¹æÇâÀ¸·Î ¹«±â2¸¦ ³»·ÁÂï´Â´Ù
-    //8.HP°¡ 20% ³²À¸¸é ¿¬¼ÓÀ¸·Î ¹Ù´Ú¿¡ Ä¿ºñ¹æÇâÀ¸·Î ¹«±â2¸¦ 3¹ø ³»·ÁÂï´Â´Ù
-    //9.¿·ÂÊÀ¸·Î È× ¹«±â¸¦ Ä¿ºñ ¹æÇâÀ¸·Î ÈÖµÎ¸¥´Ù
+    // state êµ¬ì„±
+    //1.í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ê°€ê°€ì„œ ë§ì¹˜ë¡œ ë‚´ë ¤ì°ê¸° ë‚´ë ¤ì°ìœ¼ë©´ ë³„ì´ ë‚˜ì˜¨ë‹¤
+    //2.ê³µì¤‘ì—ì„œ ì í”„ í›„ ë¹™ê¸€ë¹™ê¸€ ëŒë‹¤ê°€ ë‚´ë ¤ì°ìœ¼ë©´ ì›í˜•ìœ¼ë¡œ í¼ì§€ëŠ” ì›ê±°ë¦¬ ê³µê²©
+    //3.anystate - í”Œë ˆì´ì–´ì˜ ê³µê²©ì„ ë°›ìœ¼ë©´ ë„˜ì–´ì§„ë‹¤
+    //4.HPê°€ 40%ë‚¨ìœ¼ë©´ ë¬´ê¸°1ì„ ë–¨ì–´ëœ¨ë¦°ë‹¤
+    //5.ê³µì¤‘ì— ë–´ë‹¤ê°€ ì»¤ë¹„ ë°©í–¥ìœ¼ë¡œ ë§ì¹˜ ë¬´ê¸°1ì„ ë‚´ë ¤ì°ëŠ”ë‹¤
+    //6.ê¸°ë‘¥ë¬´ê¸°ë¥¼ ê°€ì§€ê³  ì˜¤ëŠ” ì‹œë„¤ë¨¸ì‹ 
+    //7.ê³µì¤‘ì— ë–´ë‹¤ê°€ ì»¤ë¹„ ë°©í–¥ìœ¼ë¡œ ë¬´ê¸°2ë¥¼ ë‚´ë ¤ì°ëŠ”ë‹¤
+    //8.HPê°€ 20% ë‚¨ìœ¼ë©´ ì—°ì†ìœ¼ë¡œ ë°”ë‹¥ì— ì»¤ë¹„ë°©í–¥ìœ¼ë¡œ ë¬´ê¸°2ë¥¼ 3ë²ˆ ë‚´ë ¤ì°ëŠ”ë‹¤
+    //9.ì˜†ìª½ìœ¼ë¡œ íœ™ ë¬´ê¸°ë¥¼ ì»¤ë¹„ ë°©í–¥ìœ¼ë¡œ íœ˜ë‘ë¥¸ë‹¤
     //10.anystate - Die
 
     public enum BossState
@@ -22,29 +22,28 @@ public class SSB_Boss : MonoBehaviour
         Idle,
         Move,
         Attack, //1.
+        JumpSpin,//2.
         Attack2,//2.
         Damage,//3.
         Drop,//4.
     };
 
     public BossState m_state = BossState.Idle;
-    //¸®Áöµå¹Ùµð
+    //ë¦¬ì§€ë“œë°”ë””
     Rigidbody rb;
-    //Ã¹¹øÂ° °¢µµ
+    //í•´ë¨¸ë¥¼ ê°€ì§€ê³  ìžˆëŠ”ì§€
+    bool isHammer = false;
+    //ì²«ë²ˆì§¸ ê°ë„
     Quaternion originRotation;
 
     private void Awake()
     {
-        //Hammer¸¦ °¡Á®¿Â´Ù
-        hammer = GameObject.Find("Hammer");
     }
 
     void Start()
     {   
-        //¸®Áöµå ¹Ùµð
-        rb = GetComponent<Rigidbody>();
-        
-        
+        //ë¦¬ì§€ë“œ ë°”ë””
+        rb = GetComponent<Rigidbody>();     
         
     }
 
@@ -62,6 +61,9 @@ public class SSB_Boss : MonoBehaviour
             case BossState.Attack:
                 Attack();
                 break;
+            case BossState.JumpSpin:
+                JumpSpin();
+                break;
             case BossState.Attack2:
                 Attack2();
                 break;
@@ -72,77 +74,129 @@ public class SSB_Boss : MonoBehaviour
                 Drop();
                 break;
         }
+        //IsHammerê°€ trueì¼ë•Œ
+        if (isHammer == true)
+        {
+            //ê²Œìž„ì˜¤ë¸Œì íŠ¸ í•´ë¨¸ë¥¼ í™œì„±í™”í•œë‹¤
+            hammer.SetActive(true);
 
+        }
     }
 
-    //ÇÃ·¹ÀÌ¾î¿Í ÀÏÁ¤°Å¸® ÀÌ»ó °¡±î¿öÁö¸é »óÅÂ¸¦ Move·Î º¯°æÇÑ´Ù
-    //ÇÊ¿ä¼Ó¼º : Å¸°Ù, ÀÏÁ¤½Ã°£ , ÇöÀç½Ã°£
+    //í”Œë ˆì´ì–´ì™€ ì¼ì •ê±°ë¦¬ ì´ìƒ ê°€ê¹Œì›Œì§€ë©´ ìƒíƒœë¥¼ Moveë¡œ ë³€ê²½í•œë‹¤
+    //í•„ìš”ì†ì„± : íƒ€ê²Ÿ, ì¼ì •ì‹œê°„ , í˜„ìž¬ì‹œê°„
     public GameObject target;
     public float creatTime;
     float currentTime = 0;
 
     private void Idle()
     {
-        //3ÃÊ ÈÄ¿¡ »óÅÂ¸¦ Move·Î º¯°æÇÑ´Ù
+        //3ì´ˆ í›„ì— ìƒíƒœë¥¼ Moveë¡œ ë³€ê²½í•œë‹¤
 
-        //ÇÊ¿ä¼Ó¼º : ÀÏÁ¤½Ã°£
+        //í•„ìš”ì†ì„± : ì¼ì •ì‹œê°„
         creatTime = 3;
-        //1.3ÃÊ°¡ Áö³ª¸é
+        //1.3ì´ˆê°€ ì§€ë‚˜ë©´
         currentTime += Time.deltaTime;
         if (currentTime > creatTime)
         {
-            //3. »óÅÂ¸¦ Move·Î º¯°æÇÑ´Ù
+            //3. ìƒíƒœë¥¼ Moveë¡œ ë³€ê²½í•œë‹¤
             m_state = BossState.Move;
+            currentTime = 0;
         }
-
-
     }
 
-    //ÇÊ¿ä¼Ó¼º : ÀÏÁ¤°Å¸® , ½ºÇÇµå
+    //í•„ìš”ì†ì„± : ì¼ì •ê±°ë¦¬ , ìŠ¤í”¼ë“œ
     public float moveRange = 3;
     public float speed = 10;
     private void Move()
     {
-        //ÇÃ·¹ÀÌ¾î¿Í ÀÏÁ¤°Å¸® ÀÌ»ó °¡±î¿öÁö¸é »óÅÂ¸¦ ¾îÅÃÀ¸·Î ÀüÈ¯ÇÑ´Ù
-        //ÇÊ¿ä¼Ó¼º : Å¸°ÙÂÊÀ¸·Î ¹æÇâ , Ã³À½ ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸® , ÀÏÁ¤°Å¸®
+        //í”Œë ˆì´ì–´ì™€ ì¼ì •ê±°ë¦¬ ì´ìƒ ê°€ê¹Œì›Œì§€ë©´ ìƒíƒœë¥¼ ì–´íƒìœ¼ë¡œ ì „í™˜í•œë‹¤
+        //í•„ìš”ì†ì„± : íƒ€ê²Ÿìª½ìœ¼ë¡œ ë°©í–¥ , ì²˜ìŒ í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ , ì¼ì •ê±°ë¦¬
         Vector3 dir = target.transform.position - transform.position;
         float distance = dir.magnitude;
         dir.Normalize();
-        //¹Ù´Ú¿¡ ºÙ¾îÀÖµµ·Ï ÇÑ´Ù
+        //ë°”ë‹¥ì— ë¶™ì–´ìžˆë„ë¡ í•œë‹¤
         dir.y = 0;
-        //¹æÇâÂÊÀ¸·Î ÀÌµ¿ÇÑ´Ù
+        //ë°©í–¥ìª½ìœ¼ë¡œ ì´ë™í•œë‹¤
         transform.position += dir * speed * Time.deltaTime;
-        //Å¸°Ù¹æÇâÀ¸·Î ¸ö È¸Àü½ÃÅ°±â LookRotationÀº ÇØ´çº¤ÅÍ¸¦ ¹Ù¶óº¸´Â ÇÔ¼ö
+        //íƒ€ê²Ÿë°©í–¥ìœ¼ë¡œ ëª¸ íšŒì „ì‹œí‚¤ê¸° LookRotationì€ í•´ë‹¹ë²¡í„°ë¥¼ ë°”ë¼ë³´ëŠ” í•¨ìˆ˜
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
-        //ÇÃ·¹ÀÌ¾î¿Í ÀÏÁ¤°Å¸® ÀÌ»ó °¡±î¿öÁö¸é »óÅÂ¸¦ ¾îÅÃÀ¸·Î ÀüÈ¯ÇÑ´Ù
-        //ÀÏÁ¤°Å¸® ÀÌ»ó Á¼ÇôÁö¸é
-        if (distance < moveRange)
+        //í•´ë¨¸í™œì„±í™”
+        isHammer = true;
+        Quaternion originRot = hammer.transform.rotation;
+        Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
+
+        currentTime += Time.deltaTime;
+        if (currentTime < 3)
         {
-            //»óÅÂ¸¦ ¾îÅÃÀ¸·Î ÀüÈ¯ÇÑ´Ù
+            hammer.transform.localRotation = Quaternion.Lerp(originRot, secontRot, currentTime *20);
+            currentTime = 0;
+        }
+
+        //í”Œë ˆì´ì–´ì™€ ì¼ì •ê±°ë¦¬ ì´ìƒ ê°€ê¹Œì›Œì§€ë©´ ìƒíƒœë¥¼ ì–´íƒìœ¼ë¡œ ì „í™˜í•œë‹¤
+        //ì¼ì •ê±°ë¦¬ ì´ìƒ ì¢í˜€ì§€ë©´
+        if (distance < moveRange)
+        { 
+            //ìƒíƒœë¥¼ ì–´íƒìœ¼ë¡œ ì „í™˜í•œë‹¤
             m_state = BossState.Attack;
         }
 
     }
-    //Å¸°ÙÀÌ¶û ÀÏÁ¤°Å¸® ÀÌ»ó Á¼ÇôÁö¸é weaponÀ» µé¾î¼­ ³»·ÁÂï´Â´Ù
-    //ÇÊ¿ä¼Ó¼º : Hammer
+    //íƒ€ê²Ÿì´ëž‘ ì¼ì •ê±°ë¦¬ ì´ìƒ ì¢í˜€ì§€ë©´ weaponì„ ë“¤ì–´ì„œ ë‚´ë ¤ì°ëŠ”ë‹¤
+    //í•„ìš”ì†ì„± : Hammer
     public GameObject hammer;
     private void Attack()
     {
-        //ÇÃ·¹ÀÌ¾îÂÊÀ¸·Î ÀÌµ¿ÇÑ´Ù 
+        //í”Œë ˆì´ì–´ìª½ìœ¼ë¡œ ì´ë™í•œë‹¤ 
         Vector3 dir = target.transform.position - transform.position;
         float distance = dir.magnitude;
         dir.Normalize();
+        //ë°”ë‹¥ì— ë¶™ì–´ìžˆë„ë¡ í•œë‹¤
+        dir.y = 0;
         transform.position += dir * speed * Time.deltaTime;
-        //moveRange°¡ 1, moveRangeº¸´Ù ÇöÀç °Å¸®°¡ Á¼À¸¸é
-        moveRange = 2;
+        //moveRangeê°€ 1, moveRangeë³´ë‹¤ í˜„ìž¬ ê±°ë¦¬ê°€ ì¢ìœ¼ë©´
+        moveRange = 1.5f;
         if(distance < moveRange)
         {
-            Vector3 Angle = -Vector3.right;
+            //ê°€ê¹Œì´ ë‹¤ê°€ê°”ìœ¼ë©´ ë©ˆì¶”ê³  
+            speed = 0;
 
-            //Gameobject Hammer¸¦ xÃàÀ¸·Î -90µµ ±îÁö ¿Ã·È´Ù°¡ 
-            hammer.transform.Rotate(Angle * Time.deltaTime * 300);
-            //1ÃÊ°¡ Áö³ª¸é Hammer¸¦ xÃàÀ¸·Î 20µµ·Î º¯°æÇÑ´Ù.
+           //í•´ë¨¸í™œì„±í™”
+            isHammer = true;
+            Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
+            Quaternion thirdRot = Quaternion.Euler(20, 0, 0);
+
+            currentTime += Time.deltaTime;
+
+            if(currentTime < 3)
+            {
+                hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2)*20 );
+                //currentTime = 0;
+            }
+            //Invoke 2ì´ˆ
+            Invoke("TimeLimit", 2);
         }
+    }
+    void TimeLimit()
+    {
+        m_state = BossState.JumpSpin;
+    }
+    private void JumpSpin()
+    {
+
+        // í”Œë ˆì´ì–´ ìª½ìœ¼ë¡œ ë°”ë¼ë³´ê³  yì¶•ìœ¼ë¡œ ì í”„í•œë‹¤.
+        float jumpPower = 20;
+        Vector3 dir = Vector3.up;
+        dir.Normalize(); 
+        //ì í”„ë¥¼ í•œë‹¤
+        transform.position += dir * jumpPower * Time.deltaTime;
+
+
+        //í”Œë ˆì´ì–´ ë°©í–¥ìª½ìœ¼ë¡œ íšŒì „í•œë‹¤
+
+
+        
+
     }
 
     private void Attack2()

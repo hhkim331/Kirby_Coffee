@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ public class psw_AutoSnow : MonoBehaviour
         if (currentTime > makeTime)
         {
             GameObject snow = Instantiate(Snow);
-            snow.transform.position = SnowPosition.position;
+           snow.transform.position = SnowPosition.position;
             currentTime = 0;
         }
     }

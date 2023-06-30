@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class psw_rtmap : MonoBehaviour
+public class psw_rtmap_2 : MonoBehaviour
 {
     public float speed = 5;
     public float rotSpeed = 200;
-    float rz;
+    float rx;
     float currentTime;
     public bool Rotation = true;
     bool rotationDirection = true;
@@ -18,39 +18,34 @@ public class psw_rtmap : MonoBehaviour
 
     void CanRotation()
     {
-        rz = Mathf.Clamp(rz, -20, 20);
+        rx = Mathf.Clamp(rx, -20, 20);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //rz += Time.deltaTime * speed;
-        //transform.rotation = Quaternion.Euler(0, 0, rz );
-        //rz = Mathf.Clamp(rz, -20, 20);
-        
-        
-        if (Rotation)
+      if (Rotation)
         {
             currentTime += Time.deltaTime;
             if (currentTime > 2f)
             {
-                rotationDirection = !rotationDirection; // 회전 방향을 반대로 변경
+                rotationDirection = !rotationDirection;
                 currentTime = 0;
             }
 
-            // 회전 방향에 따라 rz 값 증가 또는 감소
             if (rotationDirection)
             {
-                rz += Time.deltaTime * speed;
+                rx += Time.deltaTime * speed;
             }
             else
             {
-                rz -= Time.deltaTime * speed;
+                rx -= Time.deltaTime * speed;
             }
 
-            // rz 값을 -20과 20 사이로 제한
-            rz = Mathf.Clamp(rz, -20, 20);
-            transform.rotation = Quaternion.Euler(0, 0, rz);
+            rx = Mathf.Clamp(rx, -20, 20);
+           // Vector3 Rotation = transform.rotation.eulerAngles;
+           //// transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, rx);
+
         }
     }
 }

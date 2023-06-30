@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class psw_Demap : MonoBehaviour
 
     void Start()
     {
-        Player = GameObject.Find("Player");
+        Player = PlayerManager.Instance.gameObject;
         cc = Player.GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
     }
@@ -35,15 +35,22 @@ public class psw_Demap : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void BreakGround()
     {
-        if (other.gameObject.CompareTag("Player")) //&& cc.isGrounded == false)
-        {
-            StartCoroutine(Delay());
-            StartCoroutine(HideRendererAfterDelay(4.5f));
-            StartCoroutine(SpawnObject(4.5f));
-        }
+        StartCoroutine(Delay());
+        StartCoroutine(HideRendererAfterDelay(4.5f));
+        StartCoroutine(SpawnObject(4.5f));
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player")) //&& cc.isGrounded == false)
+    //    { 
+    //        StartCoroutine(Delay());
+    //        StartCoroutine(HideRendererAfterDelay(4.5f));
+    //        StartCoroutine(SpawnObject(4.5f));
+    //    }
+    //}
 
     IEnumerator HideRendererAfterDelay(float delay)
     {

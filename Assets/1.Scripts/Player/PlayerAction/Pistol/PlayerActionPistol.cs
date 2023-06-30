@@ -142,6 +142,7 @@ public class PlayerActionPistol : PlayerAction
             isCharge = false;
             rightLine.enabled = false;
             leftLine.enabled = false;
+            imageAim.gameObject.SetActive(false);
             chargeTime = 0;
         }
         else if (Input.GetKeyUp(KeyCode.Z))
@@ -164,17 +165,15 @@ public class PlayerActionPistol : PlayerAction
     {
         isFire = true;
         isFireKey = false;
+        isAim = false;
+        rightLine.enabled = false;
+        leftLine.enabled = false;
+        imageAim.gameObject.SetActive(false);
+        chargeTime = 0;
         if (!isCharge)
             StartCoroutine(BasicFireCoroutine());
         else
-        {
-            isAim = false;
-            //에임 비활성화
-            rightLine.enabled = false;
-            leftLine.enabled = false;
-
             StartCoroutine(ChargeFireCoroutine());
-        }
     }
 
     IEnumerator BasicFireCoroutine()

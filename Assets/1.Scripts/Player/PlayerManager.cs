@@ -10,46 +10,89 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerData playerData;
     public PlayerData Data { get { return playerData; } }
 
-    public enum PlayerType
+    public enum ChangeType
     {
         Normal,
         Pistol,
     }
-    public PlayerType playerType;
+    public ChangeType changeType;
 
-    PlayerMovement playerMove;
+    PlayerMovement playerMovement;
+    public PlayerMovement PlayerMovement { get { return playerMovement; } }
     PlayerActionManager playerActionManager;
+    public PlayerActionManager PlayerActionManager { get { return playerActionManager; } }
+    [SerializeField] PlayerMouth playerMouth;
+    public PlayerMouth PlayerMouth { get { return playerMouth; } }
 
 
     private void Awake()
     {
         Instance = this;
-        playerType = PlayerType.Normal;
-        playerMove = GetComponent<PlayerMovement>();
+        changeType = ChangeType.Normal;
+        playerMovement = GetComponent<PlayerMovement>();
         playerActionManager = GetComponent<PlayerActionManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        playerMove.Set(this, playerData);
-        GameManager.Input.keyaction += playerMove.keyMove;
+        playerMovement.Set(playerData);
+        GameManager.Input.keyaction += playerMovement.keyMove;
 
-        playerActionManager.Set(playerType);
-        GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+        playerMouth.Set(changeType);
+        GameManager.Input.keyaction += playerMouth.KeyAction;
+
+        playerActionManager.Set(changeType);
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
     }
 
     //변신하면 호출되는 함수(나중에 사용)
-    public void ChangePlayer(PlayerType type)
+    public void Change(ChangeType type)
     {
-        if (type == playerType) return;
-        playerType = type;
+        if (type == changeType) return;
 
         //기존 액션 해제
-        GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
         //액션정보 변경
-        playerActionManager.Set(playerType);
+        changeType = type;
+        playerMouth.Set(changeType);
+        playerActionManager.Set(changeType);
         //새 액션 설정
-        GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+        if (changeType != ChangeType.Normal)
+            GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+
+        //변신 애니메이션
+        StartCoroutine(ChangeCoroutine());
+    }
+
+    IEnumerator ChangeCoroutine()
+    {
+        yield return null;
+        ChangeEnd();
+    }
+
+    public void ChangeStart()
+    {
+        //카메라 줌인
+        //카메라의 방향으로 부드럽게 회전한다.
+    }
+
+    public void ChangeEnd()
+    {
+        //카메라 줌아웃
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Item"))
+        {
+            ChangeItem item = hit.gameObject.GetComponent<ChangeItem>();
+            if (item != null)
+            {
+                item.GetItem();
+            }
+        }
     }
 }

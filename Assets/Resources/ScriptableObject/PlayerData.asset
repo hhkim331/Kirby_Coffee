@@ -15,9 +15,13 @@ MonoBehaviour:
   speed: 10
   rotateSpeed: 20
   jumpPower: 10
-  flyPower: 2
-  flyTime: 2
+  jumpFlagTime: 0.3
   gravity: -20
+  maxFallSpeed: -20
+  flyPower: 3
+  flyTime: 3
+  flyActionDelay: 0.2
+  maxFlyFallSpeed: -2
   suctionPower: 10
   suctionDelay: 0.5
   spitItemSpeed: 20

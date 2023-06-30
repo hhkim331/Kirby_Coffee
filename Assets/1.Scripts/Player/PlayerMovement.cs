@@ -1,15 +1,30 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    PlayerManager playerManager;
     PlayerData playerData;
 
-    bool jumpFlag;
+    bool isJump = false;
+    public bool IsJump { get { return isJump; } }
+    bool jumpFlag = false;
+    float jumpFlagTime;
+
+    //날기
     bool isFly = false;
+    public bool IsFly { get { return isFly; } }
+    bool flyFlag = false;
     bool isCanFly = true;
-    float flyActiveTime;
+    float flyActiveTime;    //비행 활성화 시간
+    float flyActionDelay;   //날개짓 딜레이
+
+    bool isBreathAttack = false;
+    float breathAttackDelay;    //내뱉기 공격 딜레이
+    [SerializeField] GameObject breathFactory;
+
+
 
     CharacterController cc;
     GroundChecker gc;
@@ -18,11 +33,12 @@ public class PlayerMovement : MonoBehaviour
     Vector3 lastFixedPosition;
     Quaternion lastFixedRotation;
     Vector3 nextFixedPosition;
+    public Vector3 NextFixedPosition { set { nextFixedPosition = value; } }
     Quaternion nextFixedRotation;
+    public Quaternion NextFixedRotation { set { nextFixedRotation = value; } }
 
-    public void Set(PlayerManager manager, PlayerData data)
+    public void Set(PlayerData data)
     {
-        playerManager = manager;
         playerData = data;
         cc = GetComponent<CharacterController>();
         gc = GetComponent<GroundChecker>();
@@ -43,6 +59,17 @@ public class PlayerMovement : MonoBehaviour
         if (!GameManager.Input.isInput)
         {
             planeVelocity = Vector3.zero;
+            jumpFlag = false;
+            flyFlag = false;
+        }
+
+        if (jumpFlag && jumpFlagTime > 0)
+        {
+            jumpFlagTime -= Time.deltaTime;
+            if (jumpFlagTime <= 0)
+            {
+                jumpFlag = false;
+            }
         }
 
         //날고 있는 상태
@@ -60,6 +87,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isBreathAttack) return;
+
         lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
@@ -76,35 +105,57 @@ public class PlayerMovement : MonoBehaviour
     /// </remarks>
     private float GetYVelocity()
     {
-        if (!gc.IsGrounded())
+        if (gc.IsGrounded())     //땅인 경우
         {
-            if(jumpFlag && isCanFly)
+            if (isFly)
             {
-                jumpFlag = false;
-                if (velocity.y < playerData.flyPower)
+                isFly = false;
+                StartCoroutine(BreathAttackCoroutine());
+            }
+
+            isJump = false;
+            isCanFly = true;
+            if (jumpFlag)
+            {
+                //시작 y높이 
+                isJump = true;
+                jumpFlagTime = playerData.jumpFlagTime;
+                return playerData.jumpPower;
+            }
+
+            return Mathf.Max(0.0f, velocity.y);
+        }
+        else                    //땅이 아닌 경우
+        {
+            if (jumpFlag)
+            {
+                return playerData.jumpPower;
+            }
+            if (flyFlag && isCanFly)
+            {
+                if (!isFly)
                 {
-                    if (!isFly)
+                    isFly = true;
+                    flyActiveTime = playerData.flyTime;
+                    return playerData.flyPower;
+                }
+                else
+                {
+                    flyActionDelay -= Time.deltaTime;
+                    if (flyActionDelay <= 0)
                     {
-                        isFly = true;
-                        flyActiveTime = playerData.flyTime;
+                        flyActionDelay = playerData.flyActionDelay;
+                        return playerData.flyPower;
                     }
-                    return velocity.y + playerData.flyPower;
                 }
             }
 
-            return velocity.y + playerData.gravity * Time.fixedDeltaTime;
-        }
-
-        isFly = false;
-        isCanFly = true;
-        if (jumpFlag)
-        {
-            jumpFlag = false;
-            return velocity.y + playerData.jumpPower;
-        }
-        else
-        {
-            return Mathf.Max(0.0f, velocity.y);
+            float fallSpeed = velocity.y + playerData.gravity * Time.fixedDeltaTime;
+            if (isFly && fallSpeed < playerData.maxFlyFallSpeed)
+                fallSpeed = playerData.maxFlyFallSpeed;
+            else if (fallSpeed < playerData.maxFallSpeed)
+                fallSpeed = playerData.maxFallSpeed;
+            return fallSpeed;
         }
     }
 
@@ -125,13 +176,62 @@ public class PlayerMovement : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = 0;
         dir.Normalize();
-        planeVelocity = dir * playerData.speed;
+        planeVelocity = dir * playerData.speed * GetMoveSpeedRatio();
 
         ////향하는 방향으로 균일한 속도로 회전
         //if (dir != Vector3.zero)
         //    transform.forward = Vector3.RotateTowards(transform.forward, dir, playerData.rotateSpeed * Time.deltaTime, 0f);
 
-        if (Input.GetKeyDown(KeyCode.X))
-            jumpFlag = true;
+        if (Input.GetKeyDown(KeyCode.X) && !PlayerManager.Instance.PlayerMouth.IsSuction)
+        {
+            //땅인경우 점프
+            if (gc.IsGrounded()) jumpFlag = true;
+            //입에 아무것도 없는 경우 날기가능
+            else if (PlayerManager.Instance.PlayerMouth.Stack == PlayerMouth.MouthStack.None)
+            {
+                flyFlag = true;
+                flyActionDelay = 0;
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.X))
+        {
+            jumpFlag = false;
+            flyFlag = false;
+        }
+
+        //날고있는 경우
+        if (isFly)
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+                StartCoroutine(BreathAttackCoroutine());
+        }
+    }
+
+    float GetMoveSpeedRatio()
+    {
+        if (PlayerManager.Instance.changeType != PlayerManager.ChangeType.Normal)
+        {
+            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsAction) return 0.3f;
+            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsHardAction) return 0f;
+        }
+        if (PlayerManager.Instance.PlayerMouth.IsSuction) return 0.3f;
+        if (isFly) return 0.5f;
+        return 1f;
+    }
+
+    IEnumerator BreathAttackCoroutine()
+    {
+        isBreathAttack = true;
+        breathAttackDelay = 0.2f;
+        //탄환 생성
+        Instantiate(breathFactory, transform.position, Quaternion.identity).GetComponent<PlayerBreath>().Set(transform.forward);
+
+        while (breathAttackDelay > 0f)
+        {
+            breathAttackDelay -= Time.deltaTime;
+            yield return null;
+        }
+        isFly = false;
+        isBreathAttack = false;
     }
 }

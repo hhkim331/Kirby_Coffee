@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    //ÀÎÇ²¸Å´ÏÀú
+    //ì¸í’‹ë§¤ë‹ˆì €
     InputManager input = new InputManager();
     public static InputManager Input { get { return Instance.input; } }
 

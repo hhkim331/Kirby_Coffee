@@ -23,6 +23,7 @@ public class SSB_Boss : MonoBehaviour
         Move,
         Attack, //1.
         JumpSpin,//2.
+        JumpStop,//2
         Attack2,//2.
         Damage,//3.
         Drop,//4.
@@ -34,16 +35,14 @@ public class SSB_Boss : MonoBehaviour
     //해머를 가지고 있는지
     bool isHammer = false;
     //첫번째 각도
-    Quaternion originRotation;
-
-    private void Awake()
-    {
-    }
+    Quaternion originRot;
 
     void Start()
     {   
         //리지드 바디
-        rb = GetComponent<Rigidbody>();     
+        rb = GetComponent<Rigidbody>();
+        //Move때 저장할 해머 초기 회전값
+        originRot = hammer.transform.rotation;
         
     }
 
@@ -63,6 +62,9 @@ public class SSB_Boss : MonoBehaviour
                 break;
             case BossState.JumpSpin:
                 JumpSpin();
+                break;
+            case BossState.JumpStop:
+                JumpStop();
                 break;
             case BossState.Attack2:
                 Attack2();
@@ -106,7 +108,7 @@ public class SSB_Boss : MonoBehaviour
     }
 
     //필요속성 : 일정거리 , 스피드
-    public float moveRange = 3;
+    public float moveRange = 5;
     public float speed = 10;
     private void Move()
     {
@@ -123,13 +125,13 @@ public class SSB_Boss : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         //해머활성화
         isHammer = true;
-        Quaternion originRot = hammer.transform.rotation;
+        
         Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
 
         currentTime += Time.deltaTime;
         if (currentTime < 3)
         {
-            hammer.transform.localRotation = Quaternion.Lerp(originRot, secontRot, currentTime *20);
+            hammer.transform.localRotation = Quaternion.Lerp(originRot, secontRot, currentTime *10);
             currentTime = 0;
         }
 
@@ -185,23 +187,28 @@ public class SSB_Boss : MonoBehaviour
     {
 
         // 플레이어 쪽으로 바라보고 y축으로 점프한다.
-        float jumpPower = 20;
+        float jumpPower = 10;
         Vector3 dir = Vector3.up;
         dir.Normalize(); 
         //점프를 한다
         transform.position += dir * jumpPower * Time.deltaTime;
+        //Invoke 1초
+        Invoke("JumpStop", 0.6f);
+    }
 
-
-        //플레이어 방향쪽으로 회전한다
-
-
-        
-
+    private void JumpStop()
+    {
+        m_state = BossState.Attack2;
     }
 
     private void Attack2()
     {
-
+        float jumpPower = 30;
+        Vector3 dir = target.transform.position - transform.position;
+        dir.Normalize();
+        transform.position += dir * jumpPower * Time.deltaTime;
+        dir.y = 0; //바닥으로 내려찍기
+        m_state = BossState.Damage;
     }
 
     private void Damage()

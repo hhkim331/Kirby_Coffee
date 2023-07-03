@@ -7,6 +7,16 @@ public class PlayerMovement : MonoBehaviour
 {
     PlayerData playerData;
 
+    //이동
+    Rigidbody rb;
+    GroundChecker gc;
+    Vector3 velocity;
+    Vector3 planeVelocity;  //xz plane velocity
+    Quaternion lastFixedRotation;
+    Quaternion nextFixedRotation;
+    public Quaternion NextFixedRotation { set { nextFixedRotation = value; } }
+
+    //점프
     bool isJump = false;
     public bool IsJump { get { return isJump; } }
     bool jumpFlag = false;
@@ -20,23 +30,15 @@ public class PlayerMovement : MonoBehaviour
     float flyActiveTime;    //비행 활성화 시간
     float flyActionDelay;   //날개짓 딜레이
 
+    //내뱉기
     bool isBreathAttack = false;
     float breathAttackDelay;    //내뱉기 공격 딜레이
     [SerializeField] GameObject breathFactory;
 
-
-
-    //CharacterController cc;
-    Rigidbody rb;
-    GroundChecker gc;
-    Vector3 velocity;
-    Vector3 planeVelocity;  //xz plane velocity
-    //Vector3 lastFixedPosition;
-    Quaternion lastFixedRotation;
-    //Vector3 nextFixedPosition;
-    //public Vector3 NextFixedPosition { set { nextFixedPosition = value; } }
-    Quaternion nextFixedRotation;
-    public Quaternion NextFixedRotation { set { nextFixedRotation = value; } }
+    //피격
+    bool isHit = false;
+    float hitTime; //밀려나는 시간
+    Vector3 hitDir; //밀려나는 방향
 
     public void Set(PlayerData data)
     {
@@ -89,7 +91,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isBreathAttack) return;
+        if (isBreathAttack)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+
+        if (isHit)
+        {
+            hitTime -= Time.fixedDeltaTime;
+            if (hitTime <= 0)
+            {
+                isHit = false;
+                planeVelocity = Vector3.zero;
+            }
+            else
+            {
+                planeVelocity = hitDir * playerData.hitPower;
+            }
+        }
 
         //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
@@ -97,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
         float yVelocity = GetYVelocity();
         velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
 
-        if (planeVelocity != Vector3.zero)
+        if (planeVelocity != Vector3.zero && !isHit)
             nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
         //nextFixedPosition += velocity * Time.fixedDeltaTime;
 
@@ -163,16 +183,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.rigidbody)
-        {
-            hit.rigidbody.AddForce(velocity / hit.rigidbody.mass);
-        }
-    }
-
     public void keyMove()
     {
+        if (isHit) return;
+
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
         float v = Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) ? 0 : Input.GetKey(KeyCode.UpArrow) ? 1 : Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
 
@@ -247,5 +261,13 @@ public class PlayerMovement : MonoBehaviour
         }
         isFly = false;
         isBreathAttack = false;
+    }
+
+    public void Hit(Vector3 hitDir)
+    {
+        isHit = true;
+        hitTime = playerData.hitTime;
+        velocity = Vector3.zero;
+        this.hitDir = hitDir;
     }
 }

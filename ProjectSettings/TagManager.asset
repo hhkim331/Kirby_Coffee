@@ -6,6 +6,8 @@ TagManager:
   tags:
   - DeleteMap
   - Snow
+  - Item
+  - Bubble
   layers:
   - Default
   - TransparentFX

@@ -8,7 +8,6 @@ public class PlayerMouth : MonoBehaviour
     {
         None,
         Object,
-        Enemy_Pistol,
     }
     MouthStack stack = MouthStack.None;
     public MouthStack Stack { get { return stack; } }
@@ -64,7 +63,7 @@ public class PlayerMouth : MonoBehaviour
 
         if (stack != MouthStack.None)
         {
-            //변신
+            //삼키기
             if (Input.GetKeyDown(KeyCode.A))
             {
                 switch (stack)
@@ -93,8 +92,6 @@ public class PlayerMouth : MonoBehaviour
                         //물건을 뱉은 후 쿨타임
                         canSuction = false;
                         suctionDelay = PlayerManager.Instance.Data.suctionDelay;
-                        break;
-                    case MouthStack.Enemy_Pistol:
                         break;
                 }
                 stack = MouthStack.None;

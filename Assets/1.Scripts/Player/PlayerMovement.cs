@@ -95,10 +95,10 @@ public class PlayerMovement : MonoBehaviour
         lastFixedRotation = nextFixedRotation;
 
         float yVelocity = GetYVelocity();
-        velocity = new Vector3(planeVelocity.x, yVelocity, planeVelocity.z);
+        velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
 
         if (planeVelocity != Vector3.zero)
-            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(planeVelocity), playerData.rotateSpeed * Time.fixedDeltaTime);
+            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
         //nextFixedPosition += velocity * Time.fixedDeltaTime;
 
         rb.velocity = velocity;
@@ -179,7 +179,17 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = 0;
-        dir.Normalize();
+        if (gc.IsGrounded() && gc.IsOnSlope())
+        {
+            dir = gc.AdjustDirectionToSlope(dir);
+            if (dir.y > 0) dir.y = 0;
+            dir.Normalize();
+        }
+        else
+        {
+            dir.Normalize();
+        }
+
         planeVelocity = dir * playerData.speed * GetMoveSpeedRatio();
 
         ////향하는 방향으로 균일한 속도로 회전

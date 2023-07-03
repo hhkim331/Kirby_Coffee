@@ -26,27 +26,29 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    CharacterController cc;
+    //CharacterController cc;
+    Rigidbody rb;
     GroundChecker gc;
     Vector3 velocity;
     Vector3 planeVelocity;  //xz plane velocity
-    Vector3 lastFixedPosition;
+    //Vector3 lastFixedPosition;
     Quaternion lastFixedRotation;
-    Vector3 nextFixedPosition;
-    public Vector3 NextFixedPosition { set { nextFixedPosition = value; } }
+    //Vector3 nextFixedPosition;
+    //public Vector3 NextFixedPosition { set { nextFixedPosition = value; } }
     Quaternion nextFixedRotation;
     public Quaternion NextFixedRotation { set { nextFixedRotation = value; } }
 
     public void Set(PlayerData data)
     {
         playerData = data;
-        cc = GetComponent<CharacterController>();
+        //cc = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
         gc = GetComponent<GroundChecker>();
 
         velocity = new Vector3(0, 0, 0);
-        lastFixedPosition = transform.position;
+        //lastFixedPosition = transform.position;
         lastFixedRotation = transform.rotation;
-        nextFixedPosition = transform.position;
+        //nextFixedPosition = transform.position;
         nextFixedRotation = transform.rotation;
 
         jumpFlag = false;
@@ -81,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float interpolationAlpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-        cc.Move(Vector3.Lerp(lastFixedPosition, nextFixedPosition, interpolationAlpha) - transform.position);
+        //cc.Move(Vector3.Lerp(lastFixedPosition, nextFixedPosition, interpolationAlpha) - transform.position);
         transform.rotation = Quaternion.Slerp(lastFixedRotation, nextFixedRotation, interpolationAlpha);
     }
 
@@ -89,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isBreathAttack) return;
 
-        lastFixedPosition = nextFixedPosition;
+        //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
         float yVelocity = GetYVelocity();
@@ -97,7 +99,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (planeVelocity != Vector3.zero)
             nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(planeVelocity), playerData.rotateSpeed * Time.fixedDeltaTime);
-        nextFixedPosition += velocity * Time.fixedDeltaTime;
+        //nextFixedPosition += velocity * Time.fixedDeltaTime;
+
+        rb.velocity = velocity;
     }
 
     /// <remarks>

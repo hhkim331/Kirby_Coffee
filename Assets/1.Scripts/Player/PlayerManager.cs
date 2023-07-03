@@ -84,11 +84,11 @@ public class PlayerManager : MonoBehaviour
         //카메라 줌아웃
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (hit.gameObject.CompareTag("Item"))
+        if (collision.gameObject.CompareTag("Item"))
         {
-            ChangeItem item = hit.gameObject.GetComponent<ChangeItem>();
+            ChangeItem item = collision.gameObject.GetComponent<ChangeItem>();
             if (item != null)
             {
                 item.GetItem();

@@ -48,9 +48,8 @@ public class FollowCamera : MonoBehaviour
         State = CameraState.Basic;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.deltaTime * 5);
+        transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.fixedDeltaTime * 5);
     }
 }

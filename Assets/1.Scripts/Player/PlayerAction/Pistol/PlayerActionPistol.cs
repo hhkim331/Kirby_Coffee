@@ -24,12 +24,12 @@ public class PlayerActionPistol : PlayerAction
     //차지 시간
     float chargeTime = 0.0f;
     //차지 최대 시간
-    float chargeMaxTime = 1.0f;
+    float chargeMaxTime = 0.5f;
 
     //에임 활성화
     bool isAim = false;
     //에임 활성화 시간
-    float aimTime = 0.1f;
+    float aimTime = 0.5f;
     //에임 이동 방향
     Vector3 aimDir = Vector3.zero;
     //에임 이동 속도

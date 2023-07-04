@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerData playerData;
     public PlayerData Data { get { return playerData; } }
 
+    FollowCamera followCamera;
+
     public enum ChangeType
     {
         Normal,
@@ -43,6 +45,7 @@ public class PlayerManager : MonoBehaviour
         changeType = ChangeType.Normal;
         playerMovement = GetComponent<PlayerMovement>();
         playerActionManager = GetComponent<PlayerActionManager>();
+        followCamera = Camera.main.GetComponent<FollowCamera>();
         maxHealth = playerData.health;
     }
 
@@ -160,6 +163,7 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeStart()
     {
+        followCamera.State = FollowCamera.CameraState.Zoomin;
         //카메라 줌인
         //카메라의 방향으로 부드럽게 회전한다.
     }
@@ -167,6 +171,7 @@ public class PlayerManager : MonoBehaviour
     public void ChangeEnd()
     {
         //카메라 줌아웃
+        followCamera.State = FollowCamera.CameraState.Basic;
     }
 
     //변신해제

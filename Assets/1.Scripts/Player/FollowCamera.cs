@@ -13,7 +13,7 @@ public class FollowCamera : MonoBehaviour
         MapView,
     }
     CameraState state;
-    CameraState State
+    public CameraState State
     {
         set
         {

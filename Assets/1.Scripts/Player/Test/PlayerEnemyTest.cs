@@ -6,8 +6,7 @@ public class PlayerEnemyTest : MonoBehaviour
 {
     private void Update()
     {
-        //위아래로 반복이동
-        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Time.time, 5));
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Time.time*3, 5));
     }
 
     private void OnCollisionEnter(Collision collision)

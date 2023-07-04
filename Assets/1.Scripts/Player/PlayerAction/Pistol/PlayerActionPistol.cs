@@ -35,6 +35,8 @@ public class PlayerActionPistol : PlayerAction
     float charge1Time = 0.5f;
     float charge2Time = 1.0f;
     float charge3Time = 1.5f;
+    [SerializeField] SpriteRenderer[] chargeSpriteRenderer;
+    [SerializeField] Sprite[] chargeSprite;
 
     //에임 활성화
     bool isAim = false;
@@ -83,23 +85,70 @@ public class PlayerActionPistol : PlayerAction
                     if (chargeTime > charge1Time)
                     {
                         chargeLevel = ChargeLevel.Level1;
+                        chargeSpriteRenderer[0].gameObject.SetActive(true);
+                        chargeSpriteRenderer[0].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[0].sprite = chargeSprite[0];
+                        chargeSpriteRenderer[0].color = Color.yellow;
+                        chargeSpriteRenderer[1].gameObject.SetActive(true);
+                        chargeSpriteRenderer[1].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[1].sprite = chargeSprite[0];
+                        chargeSpriteRenderer[1].color = Color.yellow;
                         //에임 활성화
                         if (!isAim) ActiveAim();
                     }
                     break;
                 case ChargeLevel.Level1:
-                    if (chargeTime > charge2Time)
                     {
-                        chargeLevel = ChargeLevel.Level2;
+                        //차지 연출
+                        //노란색원
+                        //0.3->0.1
+                        float percent = 1 - (chargeTime - charge1Time) / 0.2f;
+                        if (percent < 0) percent = 0;
+                        chargeSpriteRenderer[0].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[0].transform.localScale = Vector3.one * (percent * 0.2f + 0.1f);
+                        chargeSpriteRenderer[1].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[1].transform.localScale = Vector3.one * (percent * 0.2f + 0.1f);
+
+                        if (chargeTime > charge2Time)
+                        {
+                            chargeLevel = ChargeLevel.Level2;
+                            chargeSpriteRenderer[0].color = Color.white;
+                            chargeSpriteRenderer[1].color = Color.white;
+                        }
                     }
                     break;
                 case ChargeLevel.Level2:
-                    if (chargeTime > charge3Time)
                     {
-                        chargeLevel = ChargeLevel.Level3;
+                        //차지 연출
+                        //하얀색원
+                        //0.4->0.1
+                        float percent = 1 - (chargeTime - charge2Time) / 0.2f;
+                        if (percent < 0) percent = 0;
+                        chargeSpriteRenderer[0].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[0].transform.localScale = Vector3.one * (percent * 0.3f + 0.1f);
+                        chargeSpriteRenderer[1].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[1].transform.localScale = Vector3.one * (percent * 0.3f + 0.1f);
+
+                        if (chargeTime > charge3Time)
+                        {
+                            chargeLevel = ChargeLevel.Level3;
+                            chargeSpriteRenderer[0].sprite = chargeSprite[1];
+                            chargeSpriteRenderer[1].sprite = chargeSprite[1];
+                        }
                     }
                     break;
                 case ChargeLevel.Level3:
+                    {
+                        //차지 연출
+                        //하얀색별
+                        //0.5->0.1
+                        float percent = 1 - (chargeTime - charge3Time) / 0.2f;
+                        if (percent < 0) percent = 0;
+                        chargeSpriteRenderer[0].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[0].transform.localScale = Vector3.one * (percent * 0.4f + 0.1f);
+                        chargeSpriteRenderer[1].transform.LookAt(Camera.main.transform);
+                        chargeSpriteRenderer[1].transform.localScale = Vector3.one * (percent * 0.4f + 0.1f);
+                    }
                     break;
             }
 
@@ -129,6 +178,7 @@ public class PlayerActionPistol : PlayerAction
             isFireKey = true;
             IsHardAction = true;
             isAim = false;
+            isLockOn = false;
             chargeLevel = ChargeLevel.None;
             rightLine.enabled = false;
             leftLine.enabled = false;
@@ -185,6 +235,8 @@ public class PlayerActionPistol : PlayerAction
         aimRT.gameObject.SetActive(false);
         imageAim.gameObject.SetActive(false);
         imageLockOn.gameObject.SetActive(false);
+        chargeSpriteRenderer[0].gameObject.SetActive(false);
+        chargeSpriteRenderer[1].gameObject.SetActive(false);
         rightLine.enabled = false;
         leftLine.enabled = false;
     }
@@ -331,13 +383,13 @@ public class PlayerActionPistol : PlayerAction
         switch (chargeLevel)
         {
             case ChargeLevel.Level1:
-                StartCoroutine(Charge1FireCoroutine());
+                StartCoroutine(ChargeFireCoroutine(3));
                 break;
             case ChargeLevel.Level2:
-                StartCoroutine(Charge2FireCoroutine());
+                StartCoroutine(ChargeFireCoroutine(5));
                 break;
             case ChargeLevel.Level3:
-                StartCoroutine(Charge3FireCoroutine());
+                StartCoroutine(ChargeFireCoroutine(9));
                 break;
             default:
                 StartCoroutine(BasicFireCoroutine());
@@ -364,54 +416,29 @@ public class PlayerActionPistol : PlayerAction
         IsHardAction = false;
     }
 
-    IEnumerator Charge1FireCoroutine()
+    IEnumerator ChargeFireCoroutine(int bullet)
     {
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        isFire = false;
-        IsHardAction = false;
-    }
-
-    IEnumerator Charge2FireCoroutine()
-    {
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        isFire = false;
-        IsHardAction = false;
-    }
-
-    IEnumerator Charge3FireCoroutine()
-    {
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(leftAimDir);
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(rightAimDir);
+        for (int i = 0; i < bullet; i++)
+        {
+            yield return new WaitForSeconds(0.05f);
+            PistolBullet pistolBullet = Instantiate(bulletFactory).GetComponent<PistolBullet>();
+            if (i % 2 == 0)
+            {
+                pistolBullet.transform.position = rightFirePos.position;
+                if (isLockOn)
+                    pistolBullet.Set(lockOnTarget);
+                else
+                    pistolBullet.Set(rightAimDir);
+            }
+            else
+            {
+                pistolBullet.transform.position = leftFirePos.position;
+                if (isLockOn)
+                    pistolBullet.Set(lockOnTarget);
+                else
+                    pistolBullet.Set(leftAimDir);
+            }
+        }
         isFire = false;
         IsHardAction = false;
     }

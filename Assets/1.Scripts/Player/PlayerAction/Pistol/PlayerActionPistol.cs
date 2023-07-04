@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class PlayerActionPistol : PlayerAction
 {
@@ -13,7 +12,9 @@ public class PlayerActionPistol : PlayerAction
     [SerializeField] LineRenderer leftLine;
     [SerializeField] GameObject bulletFactory;
 
-    [SerializeField] RectTransform imageAim;
+    [SerializeField] RectTransform aimRT;
+    [SerializeField] Image imageAim;
+    [SerializeField] Image imageLockOn;
 
     enum ChargeLevel
     {
@@ -57,6 +58,7 @@ public class PlayerActionPistol : PlayerAction
     Vector3 lockOnReleaseVec = Vector3.zero;
     //락온 해제 거리
     float lockOnReleaseDistance = 60f;
+    Coroutine lockOnCoroutine = null;
 
 
 
@@ -153,7 +155,11 @@ public class PlayerActionPistol : PlayerAction
     void ActiveAim()
     {
         isAim = true;
+        aimRT.gameObject.SetActive(true);
         imageAim.gameObject.SetActive(true);
+        imageAim.color = Color.white;
+        imageLockOn.gameObject.SetActive(false);
+        imageLockOn.color = Color.red;
         rightLine.enabled = true;
         leftLine.enabled = true;
         //에임 초기위치 설정
@@ -164,21 +170,23 @@ public class PlayerActionPistol : PlayerAction
         {
             //월드좌표를 스크린좌표로 변환
             Vector3 imagePos = Camera.main.WorldToScreenPoint(hitInfo.point);
-            imageAim.position = imagePos;
+            aimRT.position = imagePos;
         }
         else
         {
             Vector3 imagePos = Camera.main.WorldToScreenPoint(ray.GetPoint(10f));
-            imageAim.position = imagePos;
+            aimRT.position = imagePos;
         }
     }
 
     void DeactiveAim()
     {
         isAim = false;
+        aimRT.gameObject.SetActive(false);
+        imageAim.gameObject.SetActive(false);
+        imageLockOn.gameObject.SetActive(false);
         rightLine.enabled = false;
         leftLine.enabled = false;
-        imageAim.gameObject.SetActive(false);
     }
 
     void UpdateAim()
@@ -189,31 +197,36 @@ public class PlayerActionPistol : PlayerAction
             if (lockOnReleaseVec.magnitude > lockOnReleaseDistance)
                 LockOnRelease();
             else
+            {
+                UpdateLockOn();
                 UpdateAimPlayer(lockOnTarget.bounds.center);
+            }
         }
         else
         {
-            imageAim.position += aimDir;
-            Ray ray = Camera.main.ScreenPointToRay(imageAim.position);
+            aimRT.position += aimDir;
+            Ray ray = Camera.main.ScreenPointToRay(aimRT.position);
             // Raycast를 수행하여 가장 먼저 만나는 Collider를 찾습니다.
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 UpdateAimPlayer(hit.point);
+                if (hit.transform.CompareTag("Enemy"))
+                {
+                    Collider collider = hit.collider;
+                    //콜라이더의 중심점을 구한다.
+                    Vector3 center = collider.bounds.center;
+                    //중심점의 위치를 구한다.
+                    Vector3 centerPos = Camera.main.WorldToScreenPoint(center);
+                    centerPos.z = 0;
+                    Vector3 imagePos = aimRT.position;
+                    imagePos.z = 0;
 
-                Collider collider = hit.collider;
-                //콜라이더의 중심점을 구한다.
-                Vector3 center = collider.bounds.center;
-                //중심점의 위치를 구한다.
-                Vector3 centerPos = Camera.main.WorldToScreenPoint(center);
-                centerPos.z = 0;
-                Vector3 imagePos = imageAim.position;
-                imagePos.z = 0;
-
-                //중심점과 광선과의 거리를 구한다.
-                float distance = Vector3.Distance(centerPos, imagePos);
-                if (distance < lockOnDistance)
-                    LockOn(hit.collider);
+                    //중심점과 광선과의 거리를 구한다.
+                    float distance = Vector3.Distance(centerPos, imagePos);
+                    if (distance < lockOnDistance)
+                        LockOn(hit.collider);
+                }
             }
         }
     }
@@ -247,8 +260,29 @@ public class PlayerActionPistol : PlayerAction
         isLockOn = true;
         lockOnTarget = lockOnCollider;
         lockOnReleaseVec = Vector3.zero;
+        if (lockOnCoroutine != null)
+            StopCoroutine(lockOnCoroutine);
+        lockOnCoroutine = StartCoroutine(LockOnCoroutine());
+    }
 
-        imageAim.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center);
+    IEnumerator LockOnCoroutine()
+    {
+        float lockOnTime = 0;
+        imageLockOn.gameObject.SetActive(true);
+        //에임 이미지를 락온타겟중심으로 이동
+        while (true)
+        {
+            yield return null;
+            aimRT.position = Vector3.Lerp(aimRT.position, Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center), 0.05f);
+            imageAim.color = new Color(1, 1, 1, 1 - lockOnTime * 2);
+            imageLockOn.color = new Color(1, 0, 0, lockOnTime * 2);
+            lockOnTime += Time.deltaTime;
+            if (lockOnTime > 0.5f)
+                break;
+        }
+
+        imageAim.gameObject.SetActive(false);
+        aimRT.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center);
     }
 
     /// <summary>
@@ -256,7 +290,7 @@ public class PlayerActionPistol : PlayerAction
     /// </summary>
     void UpdateLockOn()
     {
-
+        aimRT.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center);
     }
 
     /// <summary>
@@ -264,9 +298,30 @@ public class PlayerActionPistol : PlayerAction
     /// </summary>
     void LockOnRelease()
     {
-        imageAim.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center) + lockOnReleaseVec;  //거리보정
+        aimRT.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center) + lockOnReleaseVec;  //거리보정
         isLockOn = false;
         lockOnTarget = null;
+        if (lockOnCoroutine != null)
+            StopCoroutine(lockOnCoroutine);
+        lockOnCoroutine = StartCoroutine(LockOnReleaseCoroutine());
+
+    }
+
+    IEnumerator LockOnReleaseCoroutine()
+    {
+        float lockOnTime = 0;
+        imageAim.gameObject.SetActive(true);
+        //에임 이미지를 락온타겟중심으로 이동
+        while (true)
+        {
+            yield return null;
+            imageAim.color = new Color(1, 1, 1, lockOnTime * 2);
+            imageLockOn.color = new Color(1, 0, 0, 1 - lockOnTime * 2);
+            lockOnTime += Time.deltaTime;
+            if (lockOnTime > 0.5f)
+                break;
+        }
+        imageLockOn.gameObject.SetActive(false);
     }
     #endregion
 

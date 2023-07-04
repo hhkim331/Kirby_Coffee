@@ -8,6 +8,7 @@ TagManager:
   - Snow
   - Item
   - Bubble
+  - Enemy
   layers:
   - Default
   - TransparentFX

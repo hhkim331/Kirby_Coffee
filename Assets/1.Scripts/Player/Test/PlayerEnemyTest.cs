@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerEnemyTest : MonoBehaviour
 {
+    private void Update()
+    {
+        //위아래로 반복이동
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Time.time, 5));
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))

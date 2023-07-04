@@ -36,6 +36,7 @@ public class PlayerMouth : MonoBehaviour
 
     private void Update()
     {
+
         //인풋이 없는 경우
         if (!GameManager.Input.isInput)
             IsSuction = false;

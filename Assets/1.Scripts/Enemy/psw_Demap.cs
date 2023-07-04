@@ -42,16 +42,6 @@ public class psw_Demap : MonoBehaviour
         StartCoroutine(SpawnObject(4.5f));
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Player")) //&& cc.isGrounded == false)
-    //    { 
-    //        StartCoroutine(Delay());
-    //        StartCoroutine(HideRendererAfterDelay(4.5f));
-    //        StartCoroutine(SpawnObject(4.5f));
-    //    }
-    //}
-
     IEnumerator HideRendererAfterDelay(float delay)
     {
         yield return new WaitForSeconds(2f);

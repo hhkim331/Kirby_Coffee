@@ -16,9 +16,10 @@ public class psw_rtmap_2 : MonoBehaviour
         currentTime = 0;
     }
 
-    void CanRotation()
+    public void CanRotation()
     {
         rx = Mathf.Clamp(rx, -20, 20);
+        
     }
 
     // Update is called once per frame
@@ -43,8 +44,8 @@ public class psw_rtmap_2 : MonoBehaviour
             }
 
             rx = Mathf.Clamp(rx, -20, 20);
-           // Vector3 Rotation = transform.rotation.eulerAngles;
-           //// transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, rx);
+            Vector3 Rotation = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, 90, rx);
 
         }
     }

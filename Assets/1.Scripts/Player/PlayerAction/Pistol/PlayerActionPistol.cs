@@ -16,14 +16,14 @@ public class PlayerActionPistol : PlayerAction
     [SerializeField] Image imageAim;
     [SerializeField] Image imageLockOn;
 
-    enum ChargeLevel
+    enum CHARGELEVEL
     {
         None,
         Level1,
         Level2,
         Level3
     }
-    ChargeLevel chargeLevel = ChargeLevel.None;
+    CHARGELEVEL chargeLevel = CHARGELEVEL.None;
 
     //공격 시전중
     bool isFire = false;
@@ -81,10 +81,10 @@ public class PlayerActionPistol : PlayerAction
             chargeTime += Time.deltaTime;
             switch (chargeLevel)
             {
-                case ChargeLevel.None:
+                case CHARGELEVEL.None:
                     if (chargeTime > charge1Time)
                     {
-                        chargeLevel = ChargeLevel.Level1;
+                        chargeLevel = CHARGELEVEL.Level1;
                         chargeSpriteRenderer[0].gameObject.SetActive(true);
                         chargeSpriteRenderer[0].transform.LookAt(Camera.main.transform);
                         chargeSpriteRenderer[0].sprite = chargeSprite[0];
@@ -97,7 +97,7 @@ public class PlayerActionPistol : PlayerAction
                         if (!isAim) ActiveAim();
                     }
                     break;
-                case ChargeLevel.Level1:
+                case CHARGELEVEL.Level1:
                     {
                         //차지 연출
                         //노란색원
@@ -111,13 +111,13 @@ public class PlayerActionPistol : PlayerAction
 
                         if (chargeTime > charge2Time)
                         {
-                            chargeLevel = ChargeLevel.Level2;
+                            chargeLevel = CHARGELEVEL.Level2;
                             chargeSpriteRenderer[0].color = Color.white;
                             chargeSpriteRenderer[1].color = Color.white;
                         }
                     }
                     break;
-                case ChargeLevel.Level2:
+                case CHARGELEVEL.Level2:
                     {
                         //차지 연출
                         //하얀색원
@@ -131,13 +131,13 @@ public class PlayerActionPistol : PlayerAction
 
                         if (chargeTime > charge3Time)
                         {
-                            chargeLevel = ChargeLevel.Level3;
+                            chargeLevel = CHARGELEVEL.Level3;
                             chargeSpriteRenderer[0].sprite = chargeSprite[1];
                             chargeSpriteRenderer[1].sprite = chargeSprite[1];
                         }
                     }
                     break;
-                case ChargeLevel.Level3:
+                case CHARGELEVEL.Level3:
                     {
                         //차지 연출
                         //하얀색별
@@ -171,6 +171,7 @@ public class PlayerActionPistol : PlayerAction
     public override void KeyAction()
     {
         if (isFire) return;
+        if (PlayerManager.Instance.IsChange) return;
         if (PlayerManager.Instance.PlayerMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -179,7 +180,7 @@ public class PlayerActionPistol : PlayerAction
             IsHardAction = true;
             isAim = false;
             isLockOn = false;
-            chargeLevel = ChargeLevel.None;
+            chargeLevel = CHARGELEVEL.None;
             rightLine.enabled = false;
             leftLine.enabled = false;
             imageAim.gameObject.SetActive(false);
@@ -382,13 +383,13 @@ public class PlayerActionPistol : PlayerAction
     {
         switch (chargeLevel)
         {
-            case ChargeLevel.Level1:
+            case CHARGELEVEL.Level1:
                 StartCoroutine(ChargeFireCoroutine(3));
                 break;
-            case ChargeLevel.Level2:
+            case CHARGELEVEL.Level2:
                 StartCoroutine(ChargeFireCoroutine(5));
                 break;
-            case ChargeLevel.Level3:
+            case CHARGELEVEL.Level3:
                 StartCoroutine(ChargeFireCoroutine(9));
                 break;
             default:
@@ -400,7 +401,7 @@ public class PlayerActionPistol : PlayerAction
         isFireKey = false;
         DeactiveAim();
         chargeTime = 0;
-        chargeLevel = ChargeLevel.None;
+        chargeLevel = CHARGELEVEL.None;
     }
 
     IEnumerator BasicFireCoroutine()

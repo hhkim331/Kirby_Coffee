@@ -14,7 +14,7 @@ public class PlayerMouthCollider : MonoBehaviour
             //태그가 버블인 경우
             if (collision.gameObject.CompareTag("Bubble"))
             {
-                if (PlayerManager.Instance.changeType == PlayerManager.ChangeType.Normal)
+                if (PlayerManager.Instance.ChangeType == PlayerManager.CHANGETYPE.Normal)
                 {
                     PlayerManager.Instance.PlayerMouth.IsSuction = false;
                     collision.gameObject.GetComponent<ChangeBubble>().GetItem();

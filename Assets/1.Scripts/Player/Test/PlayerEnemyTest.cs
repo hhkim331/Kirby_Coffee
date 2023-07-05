@@ -17,7 +17,7 @@ public class PlayerEnemyTest : MonoBehaviour
             Vector3 dir = collision.transform.position - transform.position;
             dir.y = 0;
             dir.Normalize();
-            PlayerManager.Instance.Hit(dir, 1, true);
+            PlayerManager.Instance.PlayerHealth.Hit(dir, 1, true);
         }
     }
 }

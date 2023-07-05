@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerMouth : MonoBehaviour
 {
-    public enum MouthStack
+    public enum MOUTHSTACK
     {
         None,
         Object,
     }
-    MouthStack stack = MouthStack.None;
-    public MouthStack Stack { get { return stack; } }
+    MOUTHSTACK stack = MOUTHSTACK.None;
+    public MOUTHSTACK Stack { get { return stack; } }
 
     [SerializeField] GameObject suction;
     bool canUse = true;
@@ -48,9 +48,9 @@ public class PlayerMouth : MonoBehaviour
         }
     }
 
-    public void Set(PlayerManager.ChangeType type)
+    public void Set(PlayerManager.CHANGETYPE type)
     {
-        if (type == PlayerManager.ChangeType.Normal)
+        if (type == PlayerManager.CHANGETYPE.Normal)
             canUse = true;
         else
             canUse = false;
@@ -58,23 +58,24 @@ public class PlayerMouth : MonoBehaviour
 
     public void KeyAction()
     {
-        if (!canUse) return;
+        if (PlayerManager.Instance.IsChange) return;
         if (PlayerManager.Instance.PlayerMovement.IsFly) return;
+        if (!canUse) return;
 
-        if (stack != MouthStack.None)
+        if (stack != MOUTHSTACK.None)
         {
             //삼키기
             if (Input.GetKeyDown(KeyCode.A))
             {
                 switch (stack)
                 {
-                    case MouthStack.Object:
+                    case MOUTHSTACK.Object:
                         Destroy(stackObject);
                         break;
                         //case Stack.Enemy_Pistol:
                         //    break;
                 }
-                stack = MouthStack.None;
+                stack = MOUTHSTACK.None;
             }
 
             //뱉기(발사만 가능함)
@@ -82,7 +83,7 @@ public class PlayerMouth : MonoBehaviour
             {
                 switch (stack)
                 {
-                    case MouthStack.Object:
+                    case MOUTHSTACK.Object:
                         //바라보는 방향으로 물건 뱉기
                         stackObject.SetActive(true);
                         stackObject.transform.parent = null;
@@ -94,7 +95,7 @@ public class PlayerMouth : MonoBehaviour
                         suctionDelay = PlayerManager.Instance.Data.suctionDelay;
                         break;
                 }
-                stack = MouthStack.None;
+                stack = MOUTHSTACK.None;
             }
         }
         else
@@ -109,7 +110,7 @@ public class PlayerMouth : MonoBehaviour
 
     public void SetStack(GameObject suctionObejct)
     {
-        stack = MouthStack.Object;
+        stack = MOUTHSTACK.Object;
         stackObject = suctionObejct;
         //물건을 비활성화 상태로 가지고 있는다.
         suctionObejct.transform.parent = transform;

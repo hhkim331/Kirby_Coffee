@@ -114,12 +114,24 @@ public class PlayerMovement : MonoBehaviour
         //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
-        float yVelocity = GetYVelocity();
-        velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
+        if(PlayerManager.Instance.IsChange)
+        {
+            velocity = Vector3.zero;
+            //카메라를 바라보는 방향
+            Vector3 lookCameraVec = -Camera.main.transform.forward;
+            lookCameraVec.y = 0;
 
-        if (planeVelocity != Vector3.zero && !isHit)
-            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
-        //nextFixedPosition += velocity * Time.fixedDeltaTime;
+            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookCameraVec), playerData.rotateSpeed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            float yVelocity = GetYVelocity();
+            velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
+
+            if (planeVelocity != Vector3.zero && !isHit)
+                nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
+            //nextFixedPosition += velocity * Time.fixedDeltaTime;
+        }
 
         rb.velocity = velocity;
     }
@@ -185,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void keyMove()
     {
+        if (PlayerManager.Instance.IsChange) return;
         if (isHit) return;
 
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
@@ -215,7 +228,7 @@ public class PlayerMovement : MonoBehaviour
             //땅인경우 점프
             if (gc.IsGrounded()) jumpFlag = true;
             //입에 아무것도 없는 경우 날기가능
-            else if (PlayerManager.Instance.PlayerMouth.Stack == PlayerMouth.MouthStack.None)
+            else if (PlayerManager.Instance.PlayerMouth.Stack == PlayerMouth.MOUTHSTACK.None)
             {
                 flyFlag = true;
                 flyActionDelay = 0;
@@ -237,7 +250,7 @@ public class PlayerMovement : MonoBehaviour
 
     float GetMoveSpeedRatio()
     {
-        if (PlayerManager.Instance.changeType != PlayerManager.ChangeType.Normal)
+        if (PlayerManager.Instance.ChangeType != PlayerManager.CHANGETYPE.Normal)
         {
             if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsAction) return 0.3f;
             if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsHardAction) return 0f;

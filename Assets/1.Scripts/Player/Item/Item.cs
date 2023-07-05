@@ -5,14 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider),typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
-    public enum ItemType
+    public enum ITEMTYPE
     {
         None,       //물건
         Coin,       //코인
         Health,     //체력
         Change,     //변신
     }
-    public ItemType itemType;
+    public ITEMTYPE itemType;
 
     Collider coll;
     Rigidbody rigid;

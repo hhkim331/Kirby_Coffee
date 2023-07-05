@@ -37,9 +37,9 @@ public class FollowCamera : MonoBehaviour
     Vector3 curOffset;
 
     //기본 카메라
-    Vector3 basicOffset = new Vector3(0, 8, -8); //배치
+    Vector3 basicOffset = new Vector3(0, 7, -7); //배치
     //줌인 카메라
-    Vector3 zoomInOffset = new Vector3(0, 6, -6);  //배치
+    Vector3 zoomInOffset = new Vector3(0, 5, -5);  //배치
 
     // Start is called before the first frame update
     void Start()

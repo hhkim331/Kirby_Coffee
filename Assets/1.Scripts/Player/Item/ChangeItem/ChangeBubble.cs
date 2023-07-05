@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ChangeBubble : MonoBehaviour
 {
-    PlayerManager.ChangeType changeType;
+    PlayerManager.CHANGETYPE changeType;
 
     public void GetItem()
     {
-        if (changeType != PlayerManager.Instance.changeType)
+        if (changeType != PlayerManager.Instance.ChangeType)
         {
             //아이템을 먹으면 플레이어 변신
             PlayerManager.Instance.ChangeStart();
@@ -18,7 +18,7 @@ public class ChangeBubble : MonoBehaviour
     }
 
     //캐릭터가 피격되서 드랍
-    public void Set(PlayerManager.ChangeType changeType, Vector3 dropDir)
+    public void Set(PlayerManager.CHANGETYPE changeType, Vector3 dropDir)
     {
         this.changeType = changeType;
         Rigidbody rigid = GetComponent<Rigidbody>();

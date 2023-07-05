@@ -12,41 +12,35 @@ public class PlayerManager : MonoBehaviour
 
     FollowCamera followCamera;
 
-    public enum ChangeType
+    public enum CHANGETYPE
     {
         Normal,
         Pistol,
     }
-    public ChangeType changeType;
+    CHANGETYPE changeType;
+    public CHANGETYPE ChangeType { get { return changeType; } }
+    bool isChange = false;
+    public bool IsChange { get { return isChange; } }
     [SerializeField] GameObject[] changeBubbles;
-
+    [SerializeField] ParticleSystem changeEffect;
 
     PlayerMovement playerMovement;
     public PlayerMovement PlayerMovement { get { return playerMovement; } }
+    PlayerHealth playerHealth;
+    public PlayerHealth PlayerHealth { get { return playerHealth; } }
     PlayerActionManager playerActionManager;
     public PlayerActionManager PlayerActionManager { get { return playerActionManager; } }
     [SerializeField] PlayerMouth playerMouth;
     public PlayerMouth PlayerMouth { get { return playerMouth; } }
 
-    //현재 플레이어 정보
-    float health;
-    float maxHealth;
-    //무적
-    float hitDelay;
-    float hitBlinkTime;
-    [SerializeField] Renderer[] renderers;
-    [SerializeField] Material myMaterial;
-    Color curColor = Color.black;
-    Color blinkColor = new Color(0.5f, 0.5f, 0, 1);
-
     private void Awake()
     {
         Instance = this;
-        changeType = ChangeType.Normal;
+        changeType = CHANGETYPE.Normal;
         playerMovement = GetComponent<PlayerMovement>();
+        playerHealth = GetComponent<PlayerHealth>();
         playerActionManager = GetComponent<PlayerActionManager>();
         followCamera = Camera.main.GetComponent<FollowCamera>();
-        maxHealth = playerData.health;
     }
 
     // Start is called before the first frame update
@@ -57,98 +51,41 @@ public class PlayerManager : MonoBehaviour
         playerMovement.Set(playerData);
         GameManager.Input.keyaction += playerMovement.keyMove;
 
+        playerHealth.Set(playerData);
+
         playerMouth.Set(changeType);
         GameManager.Input.keyaction += playerMouth.KeyAction;
 
         playerActionManager.Set(changeType);
-        if (changeType != ChangeType.Normal)
+        if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
-    }
-
-    void Update()
-    {
-        //무적시간
-        if (hitDelay > 0f)
-        {
-            hitDelay -= Time.deltaTime;
-            hitBlinkTime += Time.deltaTime;
-            if (hitDelay < 0f)
-            {
-                hitDelay = 0f;
-                //emission으로 발광효과주기
-                //foreach (var renderer in renderers)
-                curColor= Color.black;
-                myMaterial.SetColor("_EmissionColor", Color.black);
-            }
-            else if (hitBlinkTime > playerData.hitBlinkDelay)
-            {
-                hitBlinkTime = 0f;
-                //foreach (var renderer in renderers)
-                {
-                    if (curColor == Color.black)
-                    {
-                        curColor = blinkColor;
-                        myMaterial.SetColor("_EmissionColor", blinkColor);
-
-                    }
-                    else
-                    {
-                        curColor = Color.black;
-                        myMaterial.SetColor("_EmissionColor", Color.black);
-                    }
-                }
-            }
-        }
     }
 
     void KeyAction()
     {
-        if (changeType == ChangeType.Normal) return;
+        if (isChange) return;
+        if (changeType == CHANGETYPE.Normal) return;
         if (Input.GetKeyDown(KeyCode.S))
         {
             UnChange(-transform.forward);
         }
     }
 
-    public void Hit(Vector3 hitDir, float damage, bool drop)
-    {
-        if (hitDelay > 0f) return; //무적상태
-        hitDelay = playerData.hitDelay; //무적시간 설정
-        playerData.health -= damage;
-        if (playerData.health <= 0f)
-            Die();
-        else
-        {
-            //피격 애니메이션 실행
-            playerMovement.Hit(hitDir);
-            //아이템 드롭
-            if (drop)
-            {
-                UnChange(hitDir);
-            }
-        }
-    }
-
-    void Die()
-    {
-
-    }
-
     #region 변신
     //변신하면 호출되는 함수(나중에 사용)
-    public void Change(ChangeType type)
+    public void Change(CHANGETYPE type)
     {
         if (type == changeType) return;
 
         //기존 액션 해제
-        if (changeType != ChangeType.Normal)
+        if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
         //액션정보 변경
         changeType = type;
         playerMouth.Set(changeType);
         playerActionManager.Set(changeType);
         //새 액션 설정
-        if (changeType != ChangeType.Normal)
+        if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
 
         //변신 애니메이션
@@ -157,34 +94,40 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
+        //파티클
+        changeEffect.Play();
+
+        yield return new WaitForSeconds(0.5f);
         ChangeEnd();
     }
 
     public void ChangeStart()
     {
-        followCamera.State = FollowCamera.CameraState.Zoomin;
+        isChange = true;
         //카메라 줌인
+        followCamera.State = FollowCamera.CameraState.Zoomin;
         //카메라의 방향으로 부드럽게 회전한다.
     }
 
     public void ChangeEnd()
     {
+        isChange = false;
         //카메라 줌아웃
         followCamera.State = FollowCamera.CameraState.Basic;
     }
 
     //변신해제
-    void UnChange(Vector3 bubbleDir)
+    public void UnChange(Vector3 bubbleDir)
     {
-        if (changeType == ChangeType.Normal) return;
+        if (changeType == CHANGETYPE.Normal) return;
 
         //버블 생성
         ChangeBubble bubble = Instantiate(changeBubbles[(int)changeType - 1], transform.position + Vector3.up, Quaternion.identity).GetComponent<ChangeBubble>();
         bubble.Set(changeType, bubbleDir);
 
         //기존 액션 해제
-        Change(ChangeType.Normal);
+        Change(CHANGETYPE.Normal);
     }
     #endregion
 

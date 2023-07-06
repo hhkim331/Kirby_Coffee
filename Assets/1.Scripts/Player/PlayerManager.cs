@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerData playerData;
     public PlayerData Data { get { return playerData; } }
 
-    FollowCamera followCamera;
+    [SerializeField] FollowCamera followCamera;
 
     public enum CHANGETYPE
     {
@@ -21,6 +21,8 @@ public class PlayerManager : MonoBehaviour
     public CHANGETYPE ChangeType { get { return changeType; } }
     bool isChange = false;
     public bool IsChange { get { return isChange; } }
+    bool isUnChange = false;
+    public bool IsUnChange { get { return isUnChange; } }
     [SerializeField] GameObject[] changeBubbles;
     [SerializeField] ParticleSystem changeEffect;
 
@@ -40,7 +42,6 @@ public class PlayerManager : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<PlayerHealth>();
         playerActionManager = GetComponent<PlayerActionManager>();
-        followCamera = Camera.main.GetComponent<FollowCamera>();
     }
 
     // Start is called before the first frame update
@@ -63,7 +64,7 @@ public class PlayerManager : MonoBehaviour
 
     void KeyAction()
     {
-        if (isChange) return;
+        if (isChange || isUnChange) return;
         if (changeType == CHANGETYPE.Normal) return;
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -86,10 +87,11 @@ public class PlayerManager : MonoBehaviour
         playerActionManager.Set(changeType);
         //새 액션 설정
         if (changeType != CHANGETYPE.Normal)
+        {
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
-
-        //변신 애니메이션
-        StartCoroutine(ChangeCoroutine());
+            //변신 애니메이션
+            StartCoroutine(ChangeCoroutine());
+        }
     }
 
     IEnumerator ChangeCoroutine()
@@ -97,7 +99,8 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         //파티클
         changeEffect.Play();
-
+        yield return new WaitForSeconds(0.5f);
+        ChangeEndEffect();
         yield return new WaitForSeconds(0.5f);
         ChangeEnd();
     }
@@ -106,28 +109,44 @@ public class PlayerManager : MonoBehaviour
     {
         isChange = true;
         //카메라 줌인
-        followCamera.State = FollowCamera.CameraState.Zoomin;
+        followCamera.DistanceState = FollowCamera.CameraDistanceState.Zoomin;
         //카메라의 방향으로 부드럽게 회전한다.
+
+        GameManager.Instance.PlayerChangeStart();
+    }
+
+    public void ChangeEndEffect()
+    {
+        followCamera.DistanceState = FollowCamera.CameraDistanceState.Basic;
+        GameManager.Instance.PlayerChangeEnd();
     }
 
     public void ChangeEnd()
     {
         isChange = false;
-        //카메라 줌아웃
-        followCamera.State = FollowCamera.CameraState.Basic;
     }
 
     //변신해제
     public void UnChange(Vector3 bubbleDir)
     {
+        if (isUnChange) return;
         if (changeType == CHANGETYPE.Normal) return;
 
+        isUnChange = true;
+        StartCoroutine(UnChangeCoroutine(bubbleDir));
+    }
+
+    IEnumerator UnChangeCoroutine(Vector3 bubbleDir)
+    {
+        yield return new WaitForSeconds(0.2f);
         //버블 생성
         ChangeBubble bubble = Instantiate(changeBubbles[(int)changeType - 1], transform.position + Vector3.up, Quaternion.identity).GetComponent<ChangeBubble>();
         bubble.Set(changeType, bubbleDir);
-
         //기존 액션 해제
         Change(CHANGETYPE.Normal);
+        changeEffect.Play();
+        yield return new WaitForSeconds(0.1f);
+        isUnChange = false;
     }
     #endregion
 

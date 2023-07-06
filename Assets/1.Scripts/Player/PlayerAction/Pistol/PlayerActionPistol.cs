@@ -49,7 +49,6 @@ public class PlayerActionPistol : PlayerAction
     //왼쪽 에임 방향
     Vector3 leftAimDir = Vector3.zero;
 
-
     //락온
     bool isLockOn = false;
     //락온 거리
@@ -171,7 +170,7 @@ public class PlayerActionPistol : PlayerAction
     public override void KeyAction()
     {
         if (isFire) return;
-        if (PlayerManager.Instance.IsChange) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
         if (PlayerManager.Instance.PlayerMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))

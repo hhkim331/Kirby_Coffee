@@ -6,50 +6,83 @@ public class FollowCamera : MonoBehaviour
 {
     Transform targetPlayer;
 
-    public enum CameraState
+    public enum CameraDistanceState
     {
         Basic,
         Zoomin,
-        MapView,
     }
-    CameraState state;
-    public CameraState State
+
+    public CameraDistanceState DistanceState
     {
         set
         {
-            state = value;
             switch (value)
             {
-                case CameraState.Basic:
-                    curOffset = basicOffset;
-                    Quaternion rot = Quaternion.LookRotation(Vector3.zero - basicOffset);
-                    transform.rotation = rot;
+                case CameraDistanceState.Basic:
+                    curDistance = basicDistance;
                     break;
-                case CameraState.Zoomin:
-                    curOffset = zoomInOffset;
-                    break;
-                case CameraState.MapView:
+                case CameraDistanceState.Zoomin:
+                    curDistance = zoomInDistance;
                     break;
             }
+            curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance;
         }
     }
 
-    Vector3 curOffset;
+    public enum CameraAngleState
+    {
+        Basic,
+        Left,
+        Right,
+    }
 
-    //기본 카메라
-    Vector3 basicOffset = new Vector3(0, 7, -7); //배치
-    //줌인 카메라
-    Vector3 zoomInOffset = new Vector3(0, 5, -5);  //배치
+    public CameraAngleState AngleState
+    {
+        set
+        {
+            switch (value)
+            {
+                case CameraAngleState.Basic:
+                    curAngle = basicAngle;
+                    break;
+                case CameraAngleState.Left:
+                    curAngle = leftAngle;
+                    break;
+                case CameraAngleState.Right:
+                    curAngle = rightAngle;
+                    break;
+            }
+            curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance;
+        }
+    }
+
+    //카메라 거리
+    readonly float basicDistance = 10f;
+    readonly float zoomInDistance = 7f;
+
+    //카메라 각도
+    readonly Vector3 basicAngle = new Vector3(45, 0, 0);  //바라보는 각도
+    readonly Vector3 leftAngle = new Vector3(45, 45, 0);  //왼쪽으로 바라보는 각도
+    readonly Vector3 rightAngle = new Vector3(45, -45, 0);  //왼쪽으로 바라보는 각도
+
+    float curDistance;
+    Vector3 curAngle;
+    Vector3 curOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         targetPlayer = PlayerManager.Instance.transform;
-        State = CameraState.Basic;
+        DistanceState = CameraDistanceState.Basic;
+        AngleState = CameraAngleState.Basic;
+
+        //transform.rotation = Quaternion.Euler(curAngle);
+        //transform.position = targetPlayer.position + curOffset;
     }
 
     private void FixedUpdate()
     {
         transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.fixedDeltaTime * 5);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.fixedDeltaTime * 5);
     }
 }

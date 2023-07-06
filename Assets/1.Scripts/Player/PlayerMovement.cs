@@ -123,6 +123,10 @@ public class PlayerMovement : MonoBehaviour
 
             nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookCameraVec), playerData.rotateSpeed * Time.fixedDeltaTime);
         }
+        else if(PlayerManager.Instance.IsUnChange && !isHit)
+        {
+            velocity = Vector3.zero;
+        }
         else
         {
             float yVelocity = GetYVelocity();
@@ -197,7 +201,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void keyMove()
     {
-        if (PlayerManager.Instance.IsChange) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
         if (isHit) return;
 
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;

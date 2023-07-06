@@ -58,7 +58,7 @@ public class PlayerMouth : MonoBehaviour
 
     public void KeyAction()
     {
-        if (PlayerManager.Instance.IsChange) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
         if (PlayerManager.Instance.PlayerMovement.IsFly) return;
         if (!canUse) return;
 

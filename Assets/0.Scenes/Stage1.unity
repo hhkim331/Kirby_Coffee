@@ -984,7 +984,7 @@ GameObject:
   - component: {fileID: 131913858}
   - component: {fileID: 131913860}
   m_Layer: 0
-  m_Name: Gamemaanger
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5496,8 +5496,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 46.22202, y: 14.831994, z: 66.747345}
-  m_Center: {x: -5.038698, y: -1.7040019, z: -5.8488903}
+  m_Size: {x: 49.338726, y: 18.315372, z: 66.747345}
+  m_Center: {x: -3.4803448, y: 0.0376873, z: -5.848892}
 --- !u!4 &1530023092
 Transform:
   m_ObjectHideFlags: 0
@@ -6595,7 +6595,7 @@ GameObject:
   - component: {fileID: 1812251003}
   m_Layer: 16
   m_Name: LookEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7036,8 +7036,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 42.87698, y: 32.288204, z: 35.72245}
-  m_Center: {x: -10.210173, y: 21.054907, z: -14.557358}
+  m_Size: {x: 42.87698, y: 28.438152, z: 35.72245}
+  m_Center: {x: -10.210173, y: 22.979933, z: -14.557358}
 --- !u!1001 &1910404042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7624,7 +7624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1980961590
 MeshCollider:
   m_ObjectHideFlags: 0

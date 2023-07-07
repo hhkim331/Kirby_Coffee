@@ -174,6 +174,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("CameraBasic"))
+        {
+            followCamera.AngleState = FollowCamera.CameraAngleState.Basic;
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("CameraBasic"))

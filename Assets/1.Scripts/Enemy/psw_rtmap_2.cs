@@ -14,11 +14,13 @@ public class psw_rtmap_2 : MonoBehaviour
     void Start()
     {
         currentTime = 0;
+        rx = -25;
     }
 
-    void CanRotation()
+    public void CanRotation()
     {
-        rx = Mathf.Clamp(rx, -20, 20);
+        rx = Mathf.Clamp(rx, -25, 25);
+        
     }
 
     // Update is called once per frame
@@ -27,7 +29,7 @@ public class psw_rtmap_2 : MonoBehaviour
       if (Rotation)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > 2f)
+            if (currentTime > 5f)
             {
                 rotationDirection = !rotationDirection;
                 currentTime = 0;
@@ -42,9 +44,9 @@ public class psw_rtmap_2 : MonoBehaviour
                 rx -= Time.deltaTime * speed;
             }
 
-            rx = Mathf.Clamp(rx, -20, 20);
-           // Vector3 Rotation = transform.rotation.eulerAngles;
-           //// transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, rx);
+            rx = Mathf.Clamp(rx, -25, 25);
+            Vector3 Rotation = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, 90, rx);
 
         }
     }

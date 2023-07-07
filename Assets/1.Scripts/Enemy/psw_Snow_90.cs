@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class psw_Snow : MonoBehaviour
+public class psw_Snow_90 : MonoBehaviour
 {
-
     Rigidbody rb;
 
-   
-    public string Player;
     public float speed = 5;
     public float sizespeed = 3;
     float size = 0;
-    public float maxsize = 3; 
-    public float slopeForce = 5; // 경사로 올라갈 때 가해지는 힘의 크기
+    public float maxsize = 3;
+    public float slopeForce = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,14 +31,12 @@ public class psw_Snow : MonoBehaviour
         {
             transform.localScale = Vector3.one * size;
             Vector3 dir = Vector3.right;
-            // dir의 크기를 1로 만들고싶다.
             dir.Normalize();
-            // 3. 그 방향으로 이동하고싶다. P = P + vt
             Vector3 velocity = dir * speed;
             rb.velocity = velocity;
         }
-        if (Mathf.Abs(rb.velocity.x) > 3) // 가속도가 3 이상이라면
-        rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * 3, rb.velocity.y); //가속도 제한
+        if (Mathf.Abs(rb.velocity.x) > 3)
+            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * 3, rb.velocity.y);
         if (rb.velocity.magnitude < 0.1f)
         {
             Destroy(gameObject);
@@ -49,12 +45,14 @@ public class psw_Snow : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        //Destroy(gameObject, delayTime);
-        var rb = other.gameObject.GetComponent<Rigidbody>();
+        //DestroySelf(other.gameObject);
+
+        Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
         if (rb != null)
         {
             Destroy(gameObject);
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -68,5 +66,12 @@ public class psw_Snow : MonoBehaviour
         }
     }
 
+    void DestroySelf(GameObject go)
+    {
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
-       

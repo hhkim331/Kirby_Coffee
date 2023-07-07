@@ -14,12 +14,13 @@ public class psw_rtmap : MonoBehaviour
     void Start()
     {
         currentTime = 0;
+        rz = -20;
     }
 
-    void CanRotation()
-    {
-        rz = Mathf.Clamp(rz, -20, 20);
-    }
+    //void CanRotation()
+    //{
+    //    rz = Mathf.Clamp(rz, -20, 20);
+    //}
 
     // Update is called once per frame
     void Update()
@@ -32,7 +33,7 @@ public class psw_rtmap : MonoBehaviour
         if (Rotation)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > 2f)
+            if (currentTime > 5f)
             {
                 rotationDirection = !rotationDirection; // 회전 방향을 반대로 변경
                 currentTime = 0;

@@ -7,56 +7,99 @@ public class psw_Demap : MonoBehaviour
     public GameObject objectPrefab;
     public Transform spawnPosition;
     private GameObject Player;
-    CharacterController cc;
     BoxCollider boxCollider;
-
+    float currentTime;
+    //사라질때 시간 체크 시작
+    bool startDisappear = false;
+    bool startBox = true;
+    public Animator animator;
     void Start()
     {
         Player = PlayerManager.Instance.gameObject;
-        cc = Player.GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
+        //2번키를 누르면
+        //사라질때 시간체크 해제
+        //나타날때 시간체크 설정
+
+
+        
+        if(startDisappear == true)
+        {
+            //시간을 흐르게 한다.
+            currentTime += Time.deltaTime;
+            //1초가 지나면
+            if (currentTime > 3)
+            {
+                //사라지게 하자.
+                MeshRenderer mr = this.GetComponent<MeshRenderer>();
+                mr.enabled = false;
+
+                BoxCollider bx = this.GetComponent<BoxCollider>();
+                bx.enabled = false;
+               // animator.Play("Spin");
+                currentTime = 0;
+                startDisappear = false;
+                startBox = false;
+            }
+        }
+
+        
+        if (startBox == false)
+        {
+            //시간을 흐르게 한다.
+            currentTime += Time.deltaTime;
+            //1초가 지나면
+            if (currentTime > 2)
+            {
+                //사라지게 하자.
+                MeshRenderer mr = this.GetComponent<MeshRenderer>();
+                mr.enabled = true;
+
+                BoxCollider bx = this.GetComponent<BoxCollider>();
+                bx.enabled = true;
+                currentTime = 0;
+                startBox = true;
+            }
+        }
 
     }
-
-    IEnumerator SpawnObject(float delay)
-    {
-        yield return new WaitForSeconds(delay + 3f);
-        this.GetComponent<MeshRenderer>().enabled = true;
-        this.GetComponent<BoxCollider>().enabled = true;
-
-    }
-
-    IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(2.5f);
-    }
-
     public void BreakGround()
     {
-        StartCoroutine(Delay());
-        StartCoroutine(HideRendererAfterDelay(4.5f));
-        StartCoroutine(SpawnObject(4.5f));
+        //MeshRenderer mr = this.GetComponent<MeshRenderer>();
+        //mr.enabled = false;
+
+        //BoxCollider bx = this.GetComponent<BoxCollider>();
+        //bx.enabled = false;
+
+        //StartCoroutine(Delay());
+        //StartCoroutine(HideRendererAfterDelay(4.5f));
+        //StartCoroutine(SpawnObject(4.5f));
+        startDisappear = true;
     }
 
-    //private void OnTriggerEnter(Collider other)
+    //IEnumerator SpawnObject(float delay)
     //{
-    //    if (other.gameObject.CompareTag("Player")) //&& cc.isGrounded == false)
-    //    { 
-    //        StartCoroutine(Delay());
-    //        StartCoroutine(HideRendererAfterDelay(4.5f));
-    //        StartCoroutine(SpawnObject(4.5f));
-    //    }
+    //    yield return new WaitForSeconds(delay + 3f);
+    //    this.GetComponent<MeshRenderer>().enabled = true;
+    //    this.GetComponent<BoxCollider>().enabled = true;
     //}
 
-    IEnumerator HideRendererAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(2f);
-        this.GetComponent<MeshRenderer>().enabled = false;
-        boxCollider.enabled = false;
-    }
+    //IEnumerator Delay()
+    //{
+    //    yield return new WaitForSeconds(2.5f);
+    //}
+
+
+    //IEnumerator HideRendererAfterDelay(float delay)
+    //{
+    //    yield return new WaitForSeconds(2f);
+    //    this.GetComponent<MeshRenderer>().enabled = false;
+    //    boxCollider.enabled = false;
+    //}
 }
 

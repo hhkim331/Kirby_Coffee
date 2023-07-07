@@ -6,6 +6,9 @@ TagManager:
   tags:
   - DeleteMap
   - Snow
+  - Item
+  - Bubble
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - PlayerUI
   - MoveableObj
   - PlayerBullet
   - 

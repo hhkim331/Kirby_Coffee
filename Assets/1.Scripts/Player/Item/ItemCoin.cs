@@ -15,6 +15,8 @@ public class ItemCoin : Item
     public override void GetItem()
     {
         base.GetItem();
+        StartCoroutine(PlayAnimationDelayed(0f));
+        Destroy(gameObject, 0.6f);
         switch (coinType)
         {
             case CoinType.Coin1:
@@ -27,6 +29,13 @@ public class ItemCoin : Item
                 PlayerManager.Instance.PCoin.Coin += 10;
                 break;
         }
-        Destroy(gameObject);
+    }
+
+    private IEnumerator PlayAnimationDelayed(float delay)
+    {
+        Animation animation = this.gameObject.GetComponent<Animation>();
+        animation.Play();
+        //yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay);
     }
 }

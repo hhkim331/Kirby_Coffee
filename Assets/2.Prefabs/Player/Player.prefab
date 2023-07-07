@@ -1605,11 +1605,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5050361922567872733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 351dbc762991413408dc4a0cb7118237, type: 3}
+  m_Script: {fileID: 11500000, guid: 07bce36b9422b764db66a3ed8838651b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suction: {fileID: 0}
-  mouthTransform: {fileID: 0}
+  actionNormal: {fileID: 6936404096049388833}
 --- !u!1 &5050361922744994029
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,9 +1698,9 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 4c610a10bf95d7041adcc5db34c1cfdd, type: 2}
   followCamera: {fileID: 0}
   changeBubbles:
-  - {fileID: 3199986949003874449, guid: 21d5a65d3b7cc19468cd291f9983f284, type: 3}
+  - {fileID: 3199986949003874449, guid: 8e2b87a6df93ec048868380e79479f83, type: 3}
   changeEffect: {fileID: 4796290218373706302}
-  playerMouth: {fileID: 5050361923597819769}
+  playerMouth: {fileID: 6936404096049388833}
 --- !u!114 &5050361922744994021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1787,7 +1786,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5050361923597819768}
-  - component: {fileID: 5050361923597819769}
+  - component: {fileID: 6936404096049388833}
   m_Layer: 6
   m_Name: Mouth
   m_TagString: Untagged
@@ -1811,7 +1810,7 @@ Transform:
   m_Father: {fileID: 5050361922744994018}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5050361923597819769
+--- !u!114 &6936404096049388833
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1820,7 +1819,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5050361923597819771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 351dbc762991413408dc4a0cb7118237, type: 3}
+  m_Script: {fileID: 11500000, guid: 2381ee5eac05df04c92c9a4d75a356a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   suction: {fileID: 5050361923841243319}
@@ -2451,7 +2450,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5017
+  m_VersionIndex: 5020
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

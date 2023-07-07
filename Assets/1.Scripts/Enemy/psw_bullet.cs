@@ -30,10 +30,21 @@ public class psw_bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        var rb = other.gameObject.GetComponent<Rigidbody>();
-        if (rb != null)
+        //var rb = other.gameObject.GetComponent<Rigidbody>();
+        //if (rb != null)
+        //{
+        //Destroy(gameObject);
+        //}
+
+        if (other.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            //적의 반대를 향하는 벡터
+            Vector3 dir = other.transform.position - transform.position;
+            dir.y = 0;
+            dir.Normalize();
+            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
         }
+
+        Destroy(gameObject);
     }
 }

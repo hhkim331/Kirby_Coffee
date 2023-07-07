@@ -74,7 +74,7 @@ public class FollowCamera : MonoBehaviour
     {
         targetPlayer = PlayerManager.Instance.transform;
         DistanceState = CameraDistanceState.Basic;
-        AngleState = CameraAngleState.Basic;
+        AngleState = CameraAngleState.Right;
 
         //transform.rotation = Quaternion.Euler(curAngle);
         //transform.position = targetPlayer.position + curOffset;

@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     bool jumpFlag = false;
     float jumpFlagTime;
 
+    Vector3 lastSafeAreaPosition;   //마지막 안전지대 위치
+
     //날기
     bool isFly = false;
     public bool IsFly { get { return isFly; } }
@@ -84,9 +86,22 @@ public class PlayerMovement : MonoBehaviour
                 isCanFly = false;
         }
 
-        float interpolationAlpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-        //cc.Move(Vector3.Lerp(lastFixedPosition, nextFixedPosition, interpolationAlpha) - transform.position);
-        transform.rotation = Quaternion.Slerp(lastFixedRotation, nextFixedRotation, interpolationAlpha);
+        if (PlayerManager.Instance.IsChange)
+        {
+            velocity = Vector3.zero;
+            //카메라를 바라보는 방향
+            Vector3 lookCameraVec = -Camera.main.transform.forward;
+            lookCameraVec.y = 0;
+
+            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookCameraVec), playerData.rotateSpeed * Time.unscaledDeltaTime);
+            transform.rotation = nextFixedRotation;
+        }
+        else
+        {
+            float interpolationAlpha = (Time.time - Time.fixedTime) / Time.fixedUnscaledDeltaTime;
+            //cc.Move(Vector3.Lerp(lastFixedPosition, nextFixedPosition, interpolationAlpha) - transform.position);
+            transform.rotation = Quaternion.Slerp(lastFixedRotation, nextFixedRotation, interpolationAlpha);
+        }
     }
 
     private void FixedUpdate()
@@ -114,16 +129,7 @@ public class PlayerMovement : MonoBehaviour
         //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
-        if(PlayerManager.Instance.IsChange)
-        {
-            velocity = Vector3.zero;
-            //카메라를 바라보는 방향
-            Vector3 lookCameraVec = -Camera.main.transform.forward;
-            lookCameraVec.y = 0;
-
-            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookCameraVec), playerData.rotateSpeed * Time.fixedDeltaTime);
-        }
-        else if(PlayerManager.Instance.IsUnChange && !isHit)
+        if(PlayerManager.Instance.IsUnChange && !isHit)
         {
             velocity = Vector3.zero;
         }
@@ -146,6 +152,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (gc.IsGrounded())     //땅인 경우
         {
+            if (gc.IsSafeGround)
+                lastSafeAreaPosition = transform.position;
+
             if (isFly)
             {
                 isFly = false;
@@ -285,5 +294,7 @@ public class PlayerMovement : MonoBehaviour
         hitTime = playerData.hitTime;
         velocity = Vector3.zero;
         this.hitDir = hitDir;
+        if (hitDir == Vector3.zero)
+            transform.position = lastSafeAreaPosition;
     }
 }

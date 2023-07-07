@@ -80,6 +80,16 @@ public class FollowCamera : MonoBehaviour
         //transform.position = targetPlayer.position + curOffset;
     }
 
+    //변신할때만 사용
+    private void Update()
+    {
+        if(PlayerManager.Instance.IsChange)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.unscaledDeltaTime * 5);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.unscaledDeltaTime * 5);
+        }
+    }
+
     private void FixedUpdate()
     {
         transform.position = Vector3.Lerp(transform.position, targetPlayer.position + curOffset, Time.fixedDeltaTime * 5);

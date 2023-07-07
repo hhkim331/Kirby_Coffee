@@ -10,6 +10,8 @@ TagManager:
   - Bubble
   - Enemy
   - CameraBasic
+  - SafeGround
+  - FallPlane
   layers:
   - Default
   - TransparentFX

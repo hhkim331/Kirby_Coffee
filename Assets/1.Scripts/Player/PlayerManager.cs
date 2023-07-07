@@ -100,13 +100,15 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(0.5f);
         //파티클
         changeEffect.Play();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSecondsRealtime(0.5f);
         ChangeEndEffect();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSecondsRealtime(0.5f);
         ChangeEnd();
+        Time.timeScale = 1;
     }
 
     public void ChangeStart()

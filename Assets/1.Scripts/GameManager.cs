@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         Color postColor = colorGrading.colorFilter.value;
         while (postColor.r > 0.5f)
         {
-            postColor = new Color(postColor.r - Time.deltaTime, postColor.g - Time.deltaTime, postColor.b - Time.deltaTime); ;
+            postColor = new Color(postColor.r - Time.unscaledDeltaTime, postColor.g - Time.unscaledDeltaTime, postColor.b - Time.unscaledDeltaTime);
             colorGrading.colorFilter.value = postColor;
             yield return null;
         }
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         Color postColor = colorGrading.colorFilter.value;
         while (postColor.r < 1f)
         {
-            postColor = new Color(postColor.r + Time.deltaTime, postColor.g + Time.deltaTime, postColor.b + Time.deltaTime); ;
+            postColor = new Color(postColor.r + Time.unscaledDeltaTime, postColor.g + Time.unscaledDeltaTime, postColor.b + Time.unscaledDeltaTime); ;
             colorGrading.colorFilter.value = postColor;
             yield return null;
         }

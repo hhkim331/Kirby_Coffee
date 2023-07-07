@@ -134,7 +134,7 @@ public class PlayerHealth : MonoBehaviour
             //아이템 드롭
             if (drop)
             {
-                PlayerManager.Instance.UnChange(hitDir);
+                PlayerManager.Instance.UnChange(hitDir, true);
             }
         }
     }

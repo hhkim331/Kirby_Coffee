@@ -34,7 +34,7 @@ public class PlayerSuction : MonoBehaviour
             //당기는 상대를 일시적으로 버티는 상태로 만든이후
             colliderDic[other.transform] += Time.fixedDeltaTime;
             //일정시간이 지나면
-            if (colliderDic[other.transform] >= 1f)
+            if (colliderDic[other.transform] >= 0.3f)
             {
                 //상대를 목표지점으로 이동시킨다
                 other.transform.position = Vector3.MoveTowards(other.transform.position, mouth.position, Time.fixedDeltaTime * PlayerManager.Instance.Data.suctionPower);

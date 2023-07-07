@@ -23,7 +23,7 @@ MonoBehaviour:
   flyTime: 3
   flyActionDelay: 0.2
   maxFlyFallSpeed: -2
-  suctionPower: 10
+  suctionPower: 15
   suctionDelay: 0.5
   spitItemSpeed: 20
   hitPower: 20

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerManager;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -72,7 +71,7 @@ public class PlayerManager : MonoBehaviour
         if (changeType == CHANGETYPE.Normal) return;
         if (Input.GetKeyDown(KeyCode.S))
         {
-            UnChange(-transform.forward);
+            UnChange(-transform.forward, false);
         }
     }
 
@@ -133,13 +132,23 @@ public class PlayerManager : MonoBehaviour
     }
 
     //변신해제
-    public void UnChange(Vector3 bubbleDir)
+    public void UnChange(Vector3 bubbleDir, bool isHit)
     {
         if (isUnChange) return;
         if (changeType == CHANGETYPE.Normal) return;
 
-        isUnChange = true;
-        StartCoroutine(UnChangeCoroutine(bubbleDir));
+        if (isHit)
+        {
+            ChangeBubble bubble = Instantiate(changeBubbles[(int)changeType - 1], transform.position + Vector3.up, Quaternion.identity).GetComponent<ChangeBubble>();
+            bubble.Set(changeType, bubbleDir);
+            //기존 액션 해제
+            Change(CHANGETYPE.Normal);
+        }
+        else
+        {
+            isUnChange = true;
+            StartCoroutine(UnChangeCoroutine(bubbleDir));
+        }
     }
 
     IEnumerator UnChangeCoroutine(Vector3 bubbleDir)

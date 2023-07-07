@@ -131,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
         {
             float yVelocity = GetYVelocity();
             velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
-
             if (planeVelocity != Vector3.zero && !isHit)
                 nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
             //nextFixedPosition += velocity * Time.fixedDeltaTime;

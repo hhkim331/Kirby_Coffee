@@ -1807,7 +1807,7 @@ GameObject:
   - component: {fileID: 398179091}
   - component: {fileID: 398179090}
   - component: {fileID: 398179089}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1904,7 +1904,7 @@ GameObject:
   - component: {fileID: 441180957}
   - component: {fileID: 441180956}
   - component: {fileID: 441180955}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2324,7 +2324,7 @@ GameObject:
   - component: {fileID: 506479298}
   - component: {fileID: 506479297}
   - component: {fileID: 506479296}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3051,9 +3051,9 @@ GameObject:
   - component: {fileID: 661789922}
   - component: {fileID: 661789921}
   - component: {fileID: 661789927}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: LookEnemy (2)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3481,7 +3481,7 @@ GameObject:
   - component: {fileID: 787513299}
   m_Layer: 18
   m_Name: SnowEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3893,9 +3893,9 @@ GameObject:
   - component: {fileID: 962616480}
   - component: {fileID: 962616479}
   - component: {fileID: 962616478}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: LookEnemy (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6028,9 +6028,9 @@ GameObject:
   - component: {fileID: 1686005038}
   - component: {fileID: 1686005037}
   - component: {fileID: 1686005036}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: SnowEnemy (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6593,7 +6593,7 @@ GameObject:
   - component: {fileID: 1812250999}
   - component: {fileID: 1812250998}
   - component: {fileID: 1812251003}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: LookEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -8205,7 +8205,7 @@ GameObject:
   - component: {fileID: 2104614924}
   - component: {fileID: 2104614923}
   - component: {fileID: 2104614922}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

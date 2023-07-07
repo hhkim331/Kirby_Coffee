@@ -1773,7 +1773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816d3ec217eb1e64d9f86f6b54ead136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  boxSize: {x: 0.5, y: 0.12, z: 0.5}
   groundLayer:
     serializedVersion: 2
     m_Bits: 65664

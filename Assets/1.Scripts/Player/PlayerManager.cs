@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] FollowCamera followCamera;
 
+    //변신
     public enum CHANGETYPE
     {
         Normal,
@@ -27,13 +28,15 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] ParticleSystem changeEffect;
 
     PlayerMovement playerMovement;
-    public PlayerMovement PlayerMovement { get { return playerMovement; } }
+    public PlayerMovement PMovement { get { return playerMovement; } }
     PlayerHealth playerHealth;
-    public PlayerHealth PlayerHealth { get { return playerHealth; } }
+    public PlayerHealth PHealth { get { return playerHealth; } }
+    PlayerCoin playerCoin;
+    public PlayerCoin PCoin { get { return playerCoin; } }
     PlayerActionManager playerActionManager;
-    public PlayerActionManager PlayerActionManager { get { return playerActionManager; } }
+    public PlayerActionManager PActionManager { get { return playerActionManager; } }
     [SerializeField] PlayerMouth playerMouth;
-    public PlayerMouth PlayerMouth { get { return playerMouth; } }
+    public PlayerMouth PMouth { get { return playerMouth; } }
 
     private void Awake()
     {
@@ -41,6 +44,7 @@ public class PlayerManager : MonoBehaviour
         changeType = CHANGETYPE.Normal;
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<PlayerHealth>();
+        playerCoin = GetComponent<PlayerCoin>();
         playerActionManager = GetComponent<PlayerActionManager>();
     }
 
@@ -154,7 +158,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Item"))
         {
-            ChangeItem item = collision.gameObject.GetComponent<ChangeItem>();
+            Item item = collision.gameObject.GetComponent<Item>();
             if (item != null)
             {
                 item.GetItem();

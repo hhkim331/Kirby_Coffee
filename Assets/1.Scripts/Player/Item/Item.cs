@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider),typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
     public enum ITEMTYPE
@@ -14,13 +14,13 @@ public class Item : MonoBehaviour
     }
     public ITEMTYPE itemType;
 
-    Collider coll;
+    [SerializeField] Collider coll;
     Rigidbody rigid;
 
     private void Awake()
     {
-        coll=GetComponent<Collider>();
-        rigid=GetComponent<Rigidbody>();
+        //coll = GetComponent<Collider>();
+        rigid = GetComponent<Rigidbody>();
     }
 
     public virtual void GetItem()

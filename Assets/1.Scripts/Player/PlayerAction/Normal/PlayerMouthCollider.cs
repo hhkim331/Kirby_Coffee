@@ -16,7 +16,7 @@ public class PlayerMouthCollider : MonoBehaviour
             {
                 if (PlayerManager.Instance.ChangeType == PlayerManager.CHANGETYPE.Normal)
                 {
-                    PlayerManager.Instance.PlayerMouth.IsSuction = false;
+                    PlayerManager.Instance.PMouth.IsSuction = false;
                     collision.gameObject.GetComponent<ChangeBubble>().GetItem();
                 }
                 Destroy(collision.gameObject);

@@ -171,7 +171,7 @@ public class PlayerActionPistol : PlayerAction
     {
         if (isFire) return;
         if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
-        if (PlayerManager.Instance.PlayerMovement.IsFly) return;
+        if (PlayerManager.Instance.PMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -289,7 +289,7 @@ public class PlayerActionPistol : PlayerAction
         Vector3 dir = lookPoint - PlayerManager.Instance.transform.position;
         dir.Normalize();
         float rotY = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        PlayerManager.Instance.PlayerMovement.NextFixedRotation = Quaternion.Euler(0, rotY, 0);
+        PlayerManager.Instance.PMovement.NextFixedRotation = Quaternion.Euler(0, rotY, 0);
 
         //라인그리기
         rightLine.SetPosition(0, rightFirePos.position);

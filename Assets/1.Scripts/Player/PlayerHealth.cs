@@ -127,7 +127,7 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             //피격 애니메이션 실행
-            PlayerManager.Instance.PlayerMovement.Hit(hitDir);
+            PlayerManager.Instance.PMovement.Hit(hitDir);
 
             //피격UI
 

@@ -227,12 +227,12 @@ public class PlayerMovement : MonoBehaviour
         //if (dir != Vector3.zero)
         //    transform.forward = Vector3.RotateTowards(transform.forward, dir, playerData.rotateSpeed * Time.deltaTime, 0f);
 
-        if (Input.GetKeyDown(KeyCode.X) && !PlayerManager.Instance.PlayerMouth.IsSuction)
+        if (Input.GetKeyDown(KeyCode.X) && !PlayerManager.Instance.PMouth.IsSuction)
         {
             //땅인경우 점프
             if (gc.IsGrounded()) jumpFlag = true;
             //입에 아무것도 없는 경우 날기가능
-            else if (PlayerManager.Instance.PlayerMouth.Stack == PlayerMouth.MOUTHSTACK.None)
+            else if (PlayerManager.Instance.PMouth.Stack == PlayerMouth.MOUTHSTACK.None)
             {
                 flyFlag = true;
                 flyActionDelay = 0;
@@ -256,10 +256,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (PlayerManager.Instance.ChangeType != PlayerManager.CHANGETYPE.Normal)
         {
-            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsAction) return 0.3f;
-            if (PlayerManager.Instance.PlayerActionManager.GetCurAction().IsHardAction) return 0f;
+            if (PlayerManager.Instance.PActionManager.GetCurAction().IsAction) return 0.3f;
+            if (PlayerManager.Instance.PActionManager.GetCurAction().IsHardAction) return 0f;
         }
-        if (PlayerManager.Instance.PlayerMouth.IsSuction) return 0.3f;
+        if (PlayerManager.Instance.PMouth.IsSuction) return 0.3f;
         if (isFly) return 0.5f;
         return 1f;
     }

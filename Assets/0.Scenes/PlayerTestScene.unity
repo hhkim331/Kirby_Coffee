@@ -1457,27 +1457,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 898941582}
-    - target: {fileID: 5092343646674389960, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5092343646674389960, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5505450797716008302, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5505450797716008302, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950772045561931482, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950772045561931482, guid: 646e50bfdb400c145b559b07010a3a46, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour
+public class psw_CheckPoint : MonoBehaviour
 {
     // 플레이어를 가져온다.
     public GameObject player;

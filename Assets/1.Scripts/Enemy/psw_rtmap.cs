@@ -17,10 +17,10 @@ public class psw_rtmap : MonoBehaviour
         rz = -20;
     }
 
-    void CanRotation()
-    {
-        rz = Mathf.Clamp(rz, -20, 20);
-    }
+    //void CanRotation()
+    //{
+    //    rz = Mathf.Clamp(rz, -20, 20);
+    //}
 
     // Update is called once per frame
     void Update()

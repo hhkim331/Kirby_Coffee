@@ -13,7 +13,7 @@ public class psw_DestroyZone : MonoBehaviour
         }
         else
         {
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
     }
 

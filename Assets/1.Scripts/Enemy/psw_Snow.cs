@@ -50,6 +50,15 @@ public class psw_Snow : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         //Destroy(gameObject, delayTime);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            //적의 반대를 향하는 벡터
+            Vector3 dir = other.transform.position - transform.position;
+            dir.y = 0;
+            dir.Normalize();
+            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
+        }
+
         var rb = other.gameObject.GetComponent<Rigidbody>();
         if (rb != null)
         {

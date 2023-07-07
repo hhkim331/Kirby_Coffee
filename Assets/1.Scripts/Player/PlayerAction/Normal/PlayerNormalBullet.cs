@@ -26,6 +26,7 @@ public class PlayerNormalBullet : MonoBehaviour
         //레이어 변경
         gameObject.layer = LayerMask.NameToLayer("PlayerBullet");
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -38,19 +39,18 @@ public class PlayerNormalBullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //레이어가 스테이지 인경우
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             //닿은 지점의 법선벡터를 구한다
             Vector3 normal = collision.contacts[0].normal;
             //법선벡터가 위방향을 가리키지 않는 경우
-            if(normal.y < 0.9f)
+            if (normal.y < 0.9f)
                 Destroy(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-
 
         //충돌한 대상이 적인 경우
         //적에게 데미지를 준다.

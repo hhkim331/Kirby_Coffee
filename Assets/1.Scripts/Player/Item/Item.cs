@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider),typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
-    public enum ItemType
+    public enum ITEMTYPE
     {
         None,       //물건
         Coin,       //코인
         Health,     //체력
         Change,     //변신
     }
-    public ItemType itemType;
+    public ITEMTYPE itemType;
 
-    Collider coll;
+    [SerializeField] Collider coll;
     Rigidbody rigid;
 
     private void Awake()
     {
-        coll=GetComponent<Collider>();
-        rigid=GetComponent<Rigidbody>();
+        //coll = GetComponent<Collider>();
+        rigid = GetComponent<Rigidbody>();
     }
 
     public virtual void GetItem()

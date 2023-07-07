@@ -6,6 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Object/PlayerData")]
 public class PlayerData : ScriptableObject
 {
+    [Header("-----기본정보-----")]
+    [Header("체력")]
+    public float health;
     [Header("속도")]
     public float speed;
     [Header("회전속도")]
@@ -27,11 +30,21 @@ public class PlayerData : ScriptableObject
     [Header("비행최대하강속도")]
     public float maxFlyFallSpeed;
 
-    [Space]
+    [Header("-----빨아들이기-----")]
     [Header("빨아들이는 힘")]
     public float suctionPower;
     [Header("빨아들이기 준비시간")]
     public float suctionDelay;
     [Header("뱉은 물건의 속도")]
     public float spitItemSpeed;
+
+    [Header("-----피격-----")]
+    [Header("밀려나는 힘")]
+    public float hitPower;
+    [Header("밀려나는 시간")]
+    public float hitTime;
+    [Header("무적시간")]
+    public float hitDelay;
+    [Header("피격무적깜빡임시간")]
+    public float hitBlinkDelay;
 }

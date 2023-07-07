@@ -6,11 +6,20 @@ public class PistolBullet : MonoBehaviour
 {
     [SerializeField] float bulletSpeed = 10f;
     [SerializeField] float lifeTime = 3f;
+    bool isGuide = false;   //유도
     Vector3 moveDir;
+    Collider targetCollider;
 
     public void Set(Vector3 dir)
     {
+        isGuide = false;
         moveDir = dir;
+    }
+
+    public void Set(Collider target)
+    {
+        isGuide = true;
+        targetCollider = target;
     }
 
     private void Start()
@@ -21,8 +30,16 @@ public class PistolBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //정해진 방향으로 이동
-        transform.position += moveDir * Time.deltaTime * bulletSpeed;
+        if(isGuide)
+        {
+            moveDir = targetCollider.bounds.center - transform.position;
+            transform.position += moveDir.normalized * Time.deltaTime * bulletSpeed;
+        }
+        else
+        {
+            //정해진 방향으로 이동
+            transform.position += moveDir * Time.deltaTime * bulletSpeed;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

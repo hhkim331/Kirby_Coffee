@@ -4,15 +4,38 @@ using UnityEngine;
 
 public class ItemCoin : Item
 {
-    // Start is called before the first frame update
-    void Start()
+    enum CoinType
     {
-        
+        Coin1,
+        Coin5,
+        Coin10,
+    }
+    [SerializeField] CoinType coinType;
+
+    public override void GetItem()
+    {
+        base.GetItem();
+        StartCoroutine(PlayAnimationDelayed(0f));
+        Destroy(gameObject, 0.6f);
+        switch (coinType)
+        {
+            case CoinType.Coin1:
+                PlayerManager.Instance.PCoin.Coin += 1;
+                break;
+            case CoinType.Coin5:
+                PlayerManager.Instance.PCoin.Coin += 5;
+                break;
+            case CoinType.Coin10:
+                PlayerManager.Instance.PCoin.Coin += 10;
+                break;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator PlayAnimationDelayed(float delay)
     {
-        
+        Animation animation = this.gameObject.GetComponent<Animation>();
+        animation.Play();
+        //yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay);
     }
 }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1501c785d1415af4ea05fa9d5244fcc1, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  health: 13
   speed: 10
   rotateSpeed: 20
   jumpPower: 10
@@ -22,6 +23,10 @@ MonoBehaviour:
   flyTime: 3
   flyActionDelay: 0.2
   maxFlyFallSpeed: -2
-  suctionPower: 10
+  suctionPower: 15
   suctionDelay: 0.5
   spitItemSpeed: 20
+  hitPower: 20
+  hitTime: 0.2
+  hitDelay: 1
+  hitBlinkDelay: 0.05

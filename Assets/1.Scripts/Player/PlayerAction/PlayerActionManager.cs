@@ -9,7 +9,7 @@ public class PlayerActionManager : MonoBehaviour
     PlayerAction curAction;
 
     // Start is called before the first frame update
-    public void Set(PlayerManager.ChangeType type)
+    public void Set(PlayerManager.CHANGETYPE type)
     {
         //기존 액션 설정해제
         if (curAction != null)
@@ -17,10 +17,10 @@ public class PlayerActionManager : MonoBehaviour
 
         switch (type)
         {
-            case PlayerManager.ChangeType.Normal:
+            case PlayerManager.CHANGETYPE.Normal:
                 curAction = null;
                 break;
-            case PlayerManager.ChangeType.Pistol:
+            case PlayerManager.CHANGETYPE.Pistol:
                 curAction = actionPistol;
                 break;
         }

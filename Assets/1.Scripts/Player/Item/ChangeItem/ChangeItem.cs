@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ChangeItem : Item
 {
-    [SerializeField] PlayerManager.ChangeType changeType;
+    [SerializeField] PlayerManager.CHANGETYPE changeType;
     [SerializeField] GameObject itemContents;
     [SerializeField] Renderer itemBorderRenderer;
 
     public override void GetItem()
     {
-        if (changeType != PlayerManager.Instance.changeType)
+        if (changeType != PlayerManager.Instance.ChangeType)
         {
             base.GetItem();
             itemContents.SetActive(false);

@@ -30,7 +30,7 @@ public class PistolBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isGuide)
+        if (isGuide && targetCollider != null)
         {
             moveDir = targetCollider.bounds.center - transform.position;
             transform.position += moveDir.normalized * Time.deltaTime * bulletSpeed;
@@ -44,6 +44,10 @@ public class PistolBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Boss") || other.gameObject.layer == LayerMask.NameToLayer("Hammer"))
+        {
+            other.transform.root.GetComponent<SSB_Boss1>().DamageProcess();
+        }
         Destroy(gameObject);
     }
 }

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 //체력이 변경되면 UI로 표현하고싶다.
 public class SSB_BossHP : MonoBehaviour
 {
+    bool isChange = false;//체력이 변경되었는지
     //현재체력
     int hp;
     //최대체력
@@ -18,7 +19,10 @@ public class SSB_BossHP : MonoBehaviour
     public int HP //함수인데 변수처럼 쓸 수 있는 property를 만든다
     {
         get { return hp; }//쓸 때 
-        set {
+        set 
+        {
+            if (isChange) return;
+            isChange = true;
             hp = value;
             //체력이 변경되면 UI로 표현하고싶다.
             sliderHP.value = hp;
@@ -35,6 +39,9 @@ public class SSB_BossHP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(isChange)
+        {
+            isChange = false;
+        }
     }
 }

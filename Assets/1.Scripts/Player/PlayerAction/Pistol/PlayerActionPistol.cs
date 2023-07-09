@@ -248,7 +248,7 @@ public class PlayerActionPistol : PlayerAction
             lockOnReleaseVec += aimDir;
             if (lockOnReleaseVec.magnitude > lockOnReleaseDistance)
                 LockOnRelease();
-            else
+            else if (lockOnTarget != null)
             {
                 UpdateLockOn();
                 UpdateAimPlayer(lockOnTarget.bounds.center);
@@ -263,7 +263,7 @@ public class PlayerActionPistol : PlayerAction
             if (Physics.Raycast(ray, out hit))
             {
                 UpdateAimPlayer(hit.point);
-                if (hit.transform.CompareTag("Enemy"))
+                if (hit.transform.CompareTag("Enemy") || hit.transform.CompareTag("Boss"))
                 {
                     Collider collider = hit.collider;
                     //콜라이더의 중심점을 구한다.
@@ -325,6 +325,9 @@ public class PlayerActionPistol : PlayerAction
         while (true)
         {
             yield return null;
+            if (lockOnTarget == null)
+                break;
+
             aimRT.position = Vector3.Lerp(aimRT.position, Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center), 0.05f);
             imageAim.color = new Color(1, 1, 1, 1 - lockOnTime * 2);
             imageLockOn.color = new Color(1, 0, 0, lockOnTime * 2);
@@ -342,7 +345,8 @@ public class PlayerActionPistol : PlayerAction
     /// </summary>
     void UpdateLockOn()
     {
-        aimRT.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center);
+        if (lockOnTarget != null)
+            aimRT.position = Camera.main.WorldToScreenPoint(lockOnTarget.bounds.center);
     }
 
     /// <summary>

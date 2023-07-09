@@ -12,6 +12,7 @@ TagManager:
   - CameraBasic
   - SafeGround
   - FallPlane
+  - Boss
   layers:
   - Default
   - TransparentFX

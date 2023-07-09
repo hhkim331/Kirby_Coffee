@@ -30,6 +30,7 @@ public class SSB_Boss1 : MonoBehaviour
         JumpStop,//2
         Move2,//2.
         Attack2,//2.
+        HammerMove,//2
         Back,//2-1.
         Damage,//3.
         Drop,//4.
@@ -71,6 +72,9 @@ public class SSB_Boss1 : MonoBehaviour
             case BossState.Attack:
                 Attack();
                 break;
+            case BossState.HammerMove:
+                HammerMove();
+                break;
             case BossState.TimeLimit:
                 TimeLimit();
                 break;
@@ -104,8 +108,6 @@ public class SSB_Boss1 : MonoBehaviour
 
         }
     }
-
-
 
     //플레이어와 일정거리 이상 가까워지면 상태를 Move로 변경한다
     //필요속성 : 타겟, 일정시간 , 현재시간
@@ -180,25 +182,34 @@ public class SSB_Boss1 : MonoBehaviour
         {
             //가까이 다가갔으면 멈추고 
             speed = 0;
-
-            //해머활성화
-            isHammer = true;
-            Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
-            Quaternion thirdRot = Quaternion.Euler(20, 0, 0);
-
-            currentTime += Time.deltaTime;
-
-            if (currentTime < 2)
-            {
-                hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);    
-            }
-            //3초 뒤에 TimeLimit
-            if(currentTime >= 3)
-            {
-                m_state = BossState.TimeLimit;
-            }
+            m_state = BossState.HammerMove;
         }
     }
+    private void HammerMove()
+    {
+        Vector3 dir = target.transform.position - transform.position;
+        dir.Normalize();
+
+        //해머활성화
+        isHammer = true;
+        Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
+        Quaternion thirdRot = Quaternion.Euler(20, 0, 0);
+        currentTime += Time.deltaTime;
+
+        //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+
+        if (currentTime < 2)
+        {
+            hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);
+        }
+        //3초 뒤에 TimeLimit
+        if (currentTime >= 3)
+        {
+            m_state = BossState.TimeLimit;
+        }
+    }
+
     void TimeLimit()
     {
         m_state = BossState.JumpSpin;

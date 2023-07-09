@@ -159,7 +159,7 @@ public class SSB_Boss1 : MonoBehaviour
     //타겟이랑 일정거리 이상 좁혀지면 weapon을 들어서 내려찍는다
     //필요속성 : Hammer
     public GameObject hammer;
-     float attackRange = 1.5f;
+     float attackRange = 2f;
     private void Attack()
     {
         //플레이어쪽으로 이동한다 
@@ -190,27 +190,29 @@ public class SSB_Boss1 : MonoBehaviour
 
             if (currentTime < 2)
             {
-                hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);
-                //currentTime = 0;
+                hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);    
             }
-            //Invoke 3초
-            Invoke("TimeLimit", 3);
+            //3초 뒤에 TimeLimit
+            if(currentTime >= 3)
+            {
+                m_state = BossState.TimeLimit;
+            }
         }
     }
     void TimeLimit()
     {
         m_state = BossState.JumpSpin;
-    }
-    Vector3 jumpPos;
-    float jumpPower = 5;
-    private void JumpSpin()
-    {
         // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
         jumpPos = transform.position + Vector3.up * jumpPower;
+    }
+    Vector3 jumpPos;
+    float jumpPower = 5.5f;
+    private void JumpSpin()
+    {
         //lerp로 현재위치에서 위로 5만큼 속도로 점프한다.
         transform.position = Vector3.Lerp(transform.position, jumpPos, 6 * Time.deltaTime);
         //위치를 비교했을때 현재위치와 위로 5로 떨어진 지점이 0.1보다 가까워졌다면
-        if(Vector3.Distance(transform.position,jumpPos) <5f)
+        if(transform.position.y >= jumpPos.y -0.1f && transform.position.y >=5)//jumpPos.y보다 내 y가 올라갔다면
         {
             m_state = BossState.JumpStop;
         }

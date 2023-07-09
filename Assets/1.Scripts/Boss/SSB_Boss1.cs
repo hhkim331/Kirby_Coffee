@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SSB_Boss : MonoBehaviour
+public class SSB_Boss1 : MonoBehaviour
 {
     // state 구성
     //1.플레이어에게 다가가서 망치로 내려찍기 내려찍으면 별이 나온다
@@ -18,11 +18,14 @@ public class SSB_Boss : MonoBehaviour
     //9.옆쪽으로 휙 무기를 커비 방향으로 휘두른다
     //10.anystate - Die
 
+    SSB_BossHP bossHP;
+
     public enum BossState
     {
         Idle,
         Move,
         Attack, //1.
+        TimeLimit,
         JumpSpin,//2.
         JumpStop,//2
         Move2,//2.
@@ -49,31 +52,14 @@ public class SSB_Boss : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         //Move때 저장할 해머 초기 회전값
         originRot = hammer.transform.rotation;
+        //컴포넌트 가져오기
+        bossHP = GetComponent<SSB_BossHP>();
 
     }
     Vector3 jumpUpPos;
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            m_state = BossState.JumpSpin;
-            // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
-            jumpUpPos = transform.position + Vector3.up * 5;
-        }
-
-        switch(m_state)
-        {
-            case BossState.JumpSpin:
-                JumpSpin();
-                break;
-            case BossState.Move2:
-                Move2();
-                break;
-        }
-
-        return;
-
         switch (m_state)
         {
             case BossState.Idle:
@@ -85,9 +71,12 @@ public class SSB_Boss : MonoBehaviour
             case BossState.Attack:
                 Attack();
                 break;
+            case BossState.TimeLimit:
+                TimeLimit();
+                break;
             case BossState.JumpSpin:
                 JumpSpin();
-                break;
+                break;  
             case BossState.JumpStop:
                 JumpStop();
                 break;
@@ -170,7 +159,7 @@ public class SSB_Boss : MonoBehaviour
     //타겟이랑 일정거리 이상 좁혀지면 weapon을 들어서 내려찍는다
     //필요속성 : Hammer
     public GameObject hammer;
-     float attackRange = 2;
+     float attackRange = 1.5f;
     private void Attack()
     {
         //플레이어쪽으로 이동한다 
@@ -204,45 +193,41 @@ public class SSB_Boss : MonoBehaviour
                 hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);
                 //currentTime = 0;
             }
-            //Invoke 2초
-            Invoke("TimeLimit", 2);
+            //Invoke 3초
+            Invoke("TimeLimit", 3);
         }
     }
     void TimeLimit()
     {
         m_state = BossState.JumpSpin;
     }
+    Vector3 jumpPos;
+    float jumpPower = 5;
     private void JumpSpin()
     {
-
-        transform.position = Vector3.Lerp(transform.position, jumpUpPos, 10 * Time.deltaTime);
-
-        if(Vector3.Distance(transform.position, jumpUpPos)  < 0.1f)
+        // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
+        jumpPos = transform.position + Vector3.up * jumpPower;
+        //lerp로 현재위치에서 위로 5만큼 속도로 점프한다.
+        transform.position = Vector3.Lerp(transform.position, jumpPos, 6 * Time.deltaTime);
+        //위치를 비교했을때 현재위치와 위로 5로 떨어진 지점이 0.1보다 가까워졌다면
+        if(Vector3.Distance(transform.position,jumpPos) <5f)
         {
-            JumpStop();
+            m_state = BossState.JumpStop;
         }
-
-        //// 플레이어 쪽으로 바라보고 y축으로 점프한다.
-        //float jumpPower = 10;
-        //Vector3 dir = Vector3.up;
-        //dir.Normalize();
-        ////점프를 한다
-        //transform.position += dir * jumpPower * Time.deltaTime;
-        ////rb.MovePosition(rb.position + dir * jumpPower * Time.deltaTime);
-        ////Invoke 1초
-        //Invoke(nameof(JumpStop), 0.6f);
     }
 
     private void JumpStop()
     {
-        m_state = BossState.Move2;
+        //currentTime += Time.deltaTime;
+        //if( currentTime >2)
+        //{   //2초동안 움직이지 않게
+            m_state = BossState.Move2;
+        //}
     }
-
+        
     private void Move2()
     {
-
-
-        //만약 플레이어와의 거리가 일정거리 이상 가까워지면  
+     //만약 플레이어와의 거리가 일정거리 이상 가까워지면  
         float distance = Vector3.Distance(this.transform.position, target.transform.position);
         currentTime += Time.deltaTime;
         // 플레이어의 현재위치를 저장한다
@@ -258,21 +243,6 @@ public class SSB_Boss : MonoBehaviour
                 currentTime = 0;
                 m_state = BossState.Attack2;
             }
-
-            //float speed = 10;
-            //Vector3 dir = target.transform.position - transform.position;
-            ////이동하기
-            //dir.Normalize();
-            //transform.position += dir * speed * Time.deltaTime;
-                        
-
-            ////만약에 거리가 1보다 작으면
-            //if (distance < 1)
-            //{
-            //    //상태를 attack2로 바꾸자
-            //    currentTime = 0;
-            //    m_state = BossState.Attack2;
-            //}
         }
     }
 
@@ -305,16 +275,32 @@ public class SSB_Boss : MonoBehaviour
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);                                  
             m_state = BossState.Back;
-            //if(dir.y <= 0)
-            //{
-            //rb.isKinematic = true;
-            //}
         }
     }
 
     private void Back()
     {
        // transform.position = Vector3.Lerp(transform.localPosition, transform.localPosition - V)
+    }
+
+    public void DamageProcess()
+    {
+        //적 체력을 1 감소하고 싶다
+        bossHP.HP--;
+        //만약 체력이 0 이하라면
+        if(bossHP.HP <=0)
+        {
+            print("체력 0");
+            //state 변경하기
+            //m_state = BossState.Die;
+            //파괴하고싶다.3초 뒤에
+            Destroy(gameObject, 3);
+            //anim.SetTrigger("Die");
+        }
+        else
+        {
+
+        }
     }
 
     private void Damage()

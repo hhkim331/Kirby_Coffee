@@ -47,4 +47,8 @@ public class PlayerData : ScriptableObject
     public float hitDelay;
     [Header("피격무적깜빡임시간")]
     public float hitBlinkDelay;
+    [Header("체력경고비율")]
+    public float healthWarningRatio;
+    [Header("체력경고깜빡임시간")]
+    public float healthWarningBlinkDelay;
 }

@@ -22,14 +22,14 @@ public class PlayerHealth : MonoBehaviour
 
     float maxHP;
 
-    //무적
-    float hitDelay;
-    float hitBlinkTime;
+    Color curColor = Color.black;
     [SerializeField] Renderer[] renderers;
     [SerializeField] Material myMaterial;
-    Color curColor = Color.black;
-    Color blinkColor = new Color(0.5f, 0.5f, 0, 1);
 
+    //피격
+    float hitDelay;
+    float hitBlinkTime = 0f;
+    Color blinkColor = new Color(0.5f, 0.5f, 0, 1);
     //피격UI
     [SerializeField] Slider mainHPSlider;
     [SerializeField] Slider subHPSlider;
@@ -41,6 +41,9 @@ public class PlayerHealth : MonoBehaviour
     Color subUICurColor = Color.white;
     Color subUIBlinkColor = new Color(1, 1, 0.4f, 1);
 
+    //체력경고
+    float warningBlinkTime = 0f;
+    Color warningColor = new Color(1, 0, 0, 1);
 
     void Update()
     {
@@ -104,6 +107,31 @@ public class PlayerHealth : MonoBehaviour
                 }
             }
         }
+        //체력 경고
+        else if ((float)hp / maxHP <= playerData.healthWarningRatio)
+        {
+            //발광효과주기
+            warningBlinkTime += Time.deltaTime;
+            if (curColor == Color.black)
+            {
+                Color newColor = new Color(warningBlinkTime/ playerData.healthWarningBlinkDelay, 0, 0);
+                myMaterial.SetColor("_EmissionColor", newColor);
+            }
+            else
+            {
+                Color newColor = new Color(1-warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
+                myMaterial.SetColor("_EmissionColor", newColor);
+            }
+
+            if (warningBlinkTime > playerData.healthWarningBlinkDelay)
+            {
+                warningBlinkTime = 0f;
+                if (curColor == Color.black)
+                    curColor = warningColor;
+                else
+                    curColor = Color.black;
+            }
+        }
     }
 
     public void Set(PlayerData playerData)
@@ -141,6 +169,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-
+        Time.timeScale = 0f;
+        //게임오버 연출
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

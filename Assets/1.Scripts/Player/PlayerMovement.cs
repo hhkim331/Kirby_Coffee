@@ -7,6 +7,11 @@ public class PlayerMovement : MonoBehaviour
 {
     PlayerData playerData;
 
+    Vector3 cameraViewPoint;
+    public Vector3 CameraViewPoint { get { return cameraViewPoint; } }
+    Vector3 screenBounds;
+    float objectHeight = 1.5f;
+
     //이동
     Rigidbody rb;
     GroundChecker gc;
@@ -38,21 +43,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject breathFactory;
 
     //피격
-    bool isHit = false;
-    float hitTime; //밀려나는 시간
     Vector3 hitDir; //밀려나는 방향
 
     public void Set(PlayerData data)
     {
         playerData = data;
-        //cc = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         gc = GetComponent<GroundChecker>();
 
         velocity = new Vector3(0, 0, 0);
-        //lastFixedPosition = transform.position;
+        cameraViewPoint = transform.position;
         lastFixedRotation = transform.rotation;
-        //nextFixedPosition = transform.position;
         nextFixedRotation = transform.rotation;
 
         jumpFlag = false;
@@ -88,6 +89,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (PlayerManager.Instance.IsChange)
         {
+            //상태 해제
+            isJump = false;
+            isFly = false;
+            isBreathAttack = false;
+            PlayerManager.Instance.Anim.SetBool("Run", false);
+            PlayerManager.Instance.Anim.SetBool("Jump", false);
+
             velocity = Vector3.zero;
             //카메라를 바라보는 방향
             Vector3 lookCameraVec = -Camera.main.transform.forward;
@@ -112,24 +120,15 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (isHit)
+        if (PlayerManager.Instance.IsHit)
         {
-            hitTime -= Time.fixedDeltaTime;
-            if (hitTime <= 0)
-            {
-                isHit = false;
-                planeVelocity = Vector3.zero;
-            }
-            else
-            {
-                planeVelocity = hitDir * playerData.hitPower;
-            }
+            planeVelocity = hitDir * playerData.hitPower;
         }
 
         //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
-        if(PlayerManager.Instance.IsUnChange && !isHit)
+        if (PlayerManager.Instance.IsUnChange && !PlayerManager.Instance.IsHit)
         {
             velocity = Vector3.zero;
         }
@@ -137,21 +136,50 @@ public class PlayerMovement : MonoBehaviour
         {
             float yVelocity = GetYVelocity();
             velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
-            if (planeVelocity != Vector3.zero && !isHit)
+            if (planeVelocity != Vector3.zero && !PlayerManager.Instance.IsHit)
                 nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
             //nextFixedPosition += velocity * Time.fixedDeltaTime;
         }
 
+        if (planeVelocity == Vector3.zero)
+            PlayerManager.Instance.Anim.SetBool("Run", false);
+        else
+            PlayerManager.Instance.Anim.SetBool("Run", true);
+
         rb.velocity = velocity;
     }
 
-    /// <remarks>
-    /// This function must be called only in FixedUpdate()
-    /// </remarks>
+    void LateUpdate()
+    {
+        //카메라가 봐야할 위치
+        if (isJump || isFly)
+        {
+            cameraViewPoint.x = transform.position.x;
+            cameraViewPoint.z = transform.position.z;
+        }
+        else
+        {
+            cameraViewPoint.x = transform.position.x;
+            cameraViewPoint.y = transform.position.y;
+            cameraViewPoint.z = transform.position.z;
+        }
+
+        if(isFly)
+        {
+            screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+            Vector3 viewPos = transform.position;
+            if (viewPos.y > screenBounds.y - objectHeight)
+                viewPos.y = screenBounds.y - objectHeight;
+            transform.position = viewPos;
+        }
+    }
+
     private float GetYVelocity()
     {
         if (gc.IsGrounded())     //땅인 경우
         {
+            PlayerManager.Instance.Anim.SetBool("Ground", true);  
+
             if (gc.IsSafeGround)
                 lastSafeAreaPosition = transform.position;
 
@@ -162,11 +190,13 @@ public class PlayerMovement : MonoBehaviour
             }
 
             isJump = false;
+            PlayerManager.Instance.Anim.SetBool("Jump", false);
             isCanFly = true;
             if (jumpFlag)
             {
                 //시작 y높이 
                 isJump = true;
+                PlayerManager.Instance.Anim.SetBool("Jump", true);
                 jumpFlagTime = playerData.jumpFlagTime;
                 return playerData.jumpPower;
             }
@@ -175,6 +205,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else                    //땅이 아닌 경우
         {
+            PlayerManager.Instance.Anim.SetBool("Ground", false);
+
             if (jumpFlag)
             {
                 return playerData.jumpPower;
@@ -184,6 +216,9 @@ public class PlayerMovement : MonoBehaviour
                 if (!isFly)
                 {
                     isFly = true;
+                    flyActionDelay = playerData.flyActionDelay;
+                    PlayerManager.Instance.Anim.SetTrigger("Fly");
+                    PlayerManager.Instance.Anim.SetBool("Jump", false);
                     flyActiveTime = playerData.flyTime;
                     return playerData.flyPower;
                 }
@@ -193,6 +228,7 @@ public class PlayerMovement : MonoBehaviour
                     if (flyActionDelay <= 0)
                     {
                         flyActionDelay = playerData.flyActionDelay;
+                        PlayerManager.Instance.Anim.SetTrigger("Fly");
                         return playerData.flyPower;
                     }
                 }
@@ -209,8 +245,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void keyMove()
     {
-        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
-        if (isHit) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit) return;
 
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
         float v = Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) ? 0 : Input.GetKey(KeyCode.UpArrow) ? 1 : Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
@@ -256,7 +291,10 @@ public class PlayerMovement : MonoBehaviour
         if (isFly)
         {
             if (Input.GetKeyDown(KeyCode.Z))
+            {
+                PlayerManager.Instance.Anim.SetTrigger("FlyCancel");
                 StartCoroutine(BreathAttackCoroutine());
+            }
         }
     }
 
@@ -290,8 +328,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void Hit(Vector3 hitDir)
     {
-        isHit = true;
-        hitTime = playerData.hitTime;
         velocity = Vector3.zero;
         this.hitDir = hitDir;
         if (hitDir == Vector3.zero)

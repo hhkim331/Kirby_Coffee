@@ -154,10 +154,11 @@ public class PlayerHealth : MonoBehaviour
             Die();
         else
         {
+            PlayerManager.Instance.Hit();
             //피격 애니메이션 실행
             PlayerManager.Instance.PMovement.Hit(hitDir);
 
-            //피격UI
+            //피격UI?
 
             //아이템 드롭
             if (drop)

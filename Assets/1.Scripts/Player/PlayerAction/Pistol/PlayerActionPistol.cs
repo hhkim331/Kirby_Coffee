@@ -164,13 +164,20 @@ public class PlayerActionPistol : PlayerAction
 
     public override void Unset()
     {
+        isFire = false;
+        IsAction = false;
+        IsHardAction = false;
+        isFireKey = false;
+        DeactiveAim();
+        chargeTime = 0;
+        chargeLevel = CHARGELEVEL.None;
         gameObject.SetActive(false);
     }
 
     public override void KeyAction()
     {
         if (isFire) return;
-        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit) return;
         if (PlayerManager.Instance.PMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -424,7 +431,7 @@ public class PlayerActionPistol : PlayerAction
     {
         for (int i = 0; i < bullet; i++)
         {
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.1f);
             PistolBullet pistolBullet = Instantiate(bulletFactory).GetComponent<PistolBullet>();
             if (i % 2 == 0)
             {
@@ -442,6 +449,7 @@ public class PlayerActionPistol : PlayerAction
                 else
                     pistolBullet.Set(leftAimDir);
             }
+            PlayerManager.Instance.FCamera.CameraShakeOnce(0.1f);
         }
         isFire = false;
         IsHardAction = false;

@@ -10,6 +10,15 @@ public class PlayerManager : MonoBehaviour
     public PlayerData Data { get { return playerData; } }
 
     [SerializeField] FollowCamera followCamera;
+    public FollowCamera FCamera { get { return followCamera; } }
+
+    [SerializeField] Animator anim;
+    public Animator Anim { get { return anim; } }
+
+    //피격상태
+    bool isHit = false;
+    public bool IsHit { get { return isHit; } }
+    float hitTime; //조작불가능시간,밀려나는 시간
 
     //변신
     public enum CHANGETYPE
@@ -26,6 +35,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject[] changeBubbles;
     [SerializeField] ParticleSystem changeEffect;
 
+    //캐릭터 컴포넌트
     PlayerMovement playerMovement;
     public PlayerMovement PMovement { get { return playerMovement; } }
     PlayerHealth playerHealth;
@@ -47,7 +57,6 @@ public class PlayerManager : MonoBehaviour
         playerActionManager = GetComponent<PlayerActionManager>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         GameManager.Input.keyaction += KeyAction;
@@ -63,6 +72,18 @@ public class PlayerManager : MonoBehaviour
         playerActionManager.Set(changeType);
         if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+
+        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+    }
+
+    private void Update()
+    {
+        if (isHit)
+        {
+            hitTime -= Time.deltaTime;
+            if (hitTime <= 0)
+                isHit = false;
+        }
     }
 
     void KeyAction()
@@ -73,6 +94,12 @@ public class PlayerManager : MonoBehaviour
         {
             UnChange(-transform.forward, false);
         }
+    }
+
+    public void Hit()
+    {
+        isHit = true;
+        hitTime = playerData.hitTime;
     }
 
     #region 변신
@@ -100,11 +127,13 @@ public class PlayerManager : MonoBehaviour
     IEnumerator ChangeCoroutine()
     {
         Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(0.5f);
+        anim.SetTrigger("ChangeStart");
+        yield return new WaitForSecondsRealtime(0.75f);
         //파티클
         changeEffect.Play();
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
         ChangeEndEffect();
+        anim.SetTrigger("ChangeEnd");
         yield return new WaitForSecondsRealtime(0.5f);
         ChangeEnd();
         Time.timeScale = 1;

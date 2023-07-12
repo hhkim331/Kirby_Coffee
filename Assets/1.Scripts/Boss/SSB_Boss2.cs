@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SSB_Boss1 : MonoBehaviour
+public class SSB_Boss2 : MonoBehaviour
 {
     // state 구성
     //1.플레이어에게 다가가서 망치로 내려찍기 내려찍으면 별이 나온다
     //2.공중에서 점프 후 빙글빙글 돌다가 내려찍으면 원형으로 퍼지는 원거리 공격
-    //2-1.뒤로 점프해서 원래 있던 자리로 간다
     //3.anystate - 플레이어의 공격을 받으면 넘어진다
     //4.HP가 40%남으면 무기1을 떨어뜨린다
     //5.공중에 떴다가 커비 방향으로 망치 무기1을 내려찍는다
@@ -31,8 +30,8 @@ public class SSB_Boss1 : MonoBehaviour
         Move2,//2.
         Attack2,//2.
         HammerMove,//2
-        Back,//2-1.
-        Back2,//2-1.
+        Move3,//2
+        Charge,//2
         Damage,//3.
         Drop,//4.
     };
@@ -91,11 +90,11 @@ public class SSB_Boss1 : MonoBehaviour
             case BossState.Attack2:
                 Attack2();
                 break;
-            case BossState.Back:
-                Back();
+            case BossState.Move3:
+                Move3();
                 break;
-            case BossState.Back2:
-                Back2();
+            case BossState.Charge:
+                Charge();
                 break;
             case BossState.Damage:
                 Damage();
@@ -112,6 +111,8 @@ public class SSB_Boss1 : MonoBehaviour
 
         }
     }
+
+
 
     //플레이어와 일정거리 이상 가까워지면 상태를 Move로 변경한다
     //필요속성 : 타겟, 일정시간 , 현재시간
@@ -188,7 +189,7 @@ public class SSB_Boss1 : MonoBehaviour
             speed = 0;
             m_state = BossState.HammerMove;
             noJumpPos = transform.position; //점프 전 위치를 저장한다
-            
+
         }
     }
     //현재 위치를 저장한다
@@ -198,7 +199,7 @@ public class SSB_Boss1 : MonoBehaviour
 
     private void HammerMove()
     {
-    
+
 
         Vector3 dir = target.transform.position - transform.position;
         dir.Normalize();
@@ -223,7 +224,7 @@ public class SSB_Boss1 : MonoBehaviour
         //3초 뒤에 TimeLimit
         if (currentTime >= 3)
         {
-           
+
             m_state = BossState.TimeLimit;
         }
     }
@@ -231,28 +232,48 @@ public class SSB_Boss1 : MonoBehaviour
 
     void TimeLimit()
     {
-
+        //yVelocity = 20;
         m_state = BossState.JumpSpin;
         // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
         jumpPos = transform.position + Vector3.up * jumpPower;
+
     }
+
     Vector3 jumpPos;
     float jumpPower = 5.5f;
+
+    bool isJump = false; //점프를 한다
+    Vector3 startPos; //시작
+    Vector3 endPos; //끝
+    Vector3 center; //가운데
+    float ratio = 0;
     private void JumpSpin()
     {
-        Vector3 dir = target.transform.position - transform.position;
-        dir.Normalize();
-        //lerp로 현재위치에서 위로 5만큼 속도로 점프한다.
-        transform.position = Vector3.Lerp(transform.position, jumpPos, 6 * Time.deltaTime);
-        //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
-        //타겟방향으로 몸 회전시킬때 x축 회전되는 것 막기
-        //고정되어야할 회전값
-        rotX = transform.rotation;
-        rotX.x = 0;
-        transform.rotation = rotX;
-        //위치를 비교했을때 현재위치와 위로 5로 떨어진 지점이 0.1보다 가까워졌다면
-        if (transform.position.y >= jumpPos.y - 0.1f && transform.position.y >= 5)//jumpPos.y보다 내 y가 올라갔다면
+        //slerp를 써서 이동할껀데 slerp의 s는 sphere다.
+        //곡선으로 움직여라
+        isJump = true;
+        //시작지점 설정
+        startPos = transform.position;
+        //도착지점 설정
+        endPos = target.transform.position + (target.transform.position - transform.position); //나의 경우는 반지름이 플레이어의 거리만큼 더 커져야 하므로 target-me를 더 더함
+        //가운데 지점
+        center = Vector3.Lerp(startPos, endPos, 0.5f);
+        //가운데 지점의 y축을 내려줘야 반지름의 거리가 짧은 쪽으로 돌기 때문에 세로로 이동한다
+        center += new Vector3(0, -1, 0);
+        //현재 시간을 0으로 한다.
+        ratio = 0;
+
+        if (isJump == true) // 점프를 한다.
+        {
+            ratio += Time.deltaTime / 2; //2초안에 가라
+            if (ratio > 0.5f)
+            {
+                ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.   
+            }
+            transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
+            transform.position += center;//다시 값을 더해준다
+        }
+        if (target.transform.position.x == transform.position.x)
         {
             m_state = BossState.JumpStop;
         }
@@ -267,13 +288,9 @@ public class SSB_Boss1 : MonoBehaviour
     {
         Vector3 dir = target.transform.position - transform.position;
         dir.Normalize();
-    
 
-        //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
-        //고정되어야할 회전값
-        rotX = transform.rotation;
-        rotX.x = 0;
+
+
         //타겟방향으로 몸 회전시킬때 x축 회전되는 것 막기
         transform.rotation = rotX;
 
@@ -309,9 +326,9 @@ public class SSB_Boss1 : MonoBehaviour
     //초기 힘의 크기
     float originForce;
 
-    private void Attack2()
+    private void Attack2()//바닥에 내려찍기
     {
-        
+
         curTime += Time.deltaTime;//시간이 흐르고
         //현재시간이 타겟저장시간을 초과하고 현재시간이 지나간 시간보다 적거나 같을 때
         if (curTime > targetTime && curTime <= creTime)
@@ -321,12 +338,12 @@ public class SSB_Boss1 : MonoBehaviour
         }
         if (curTime > creTime)
         {
-            
+
             //바닥으로 내려찍는다
             Vector3 dir = targetPosition - transform.position;
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
-            if(curPos.y <2)
+            if (curPos.y < 2)
             {
                 curPos = transform.position; //위치
                 curPos.y = 0;
@@ -334,82 +351,58 @@ public class SSB_Boss1 : MonoBehaviour
 
 
             }
-            noJumpBackPos = back.transform.position; //back의 전 위치를 저장한다
-            m_state = BossState.Back;
-        }
-    }
-    //현재 뒤로 갈 위치를 저장한다.
-    Vector3 noJumpBackPos;
-    Vector3 backJumpPos;
-    public Transform back;
-    Vector3 curPos;
-    private void Back()//뒤로 점프하기
-    {
-        Vector3 dir = targetPosition - transform.position;
-        dir.Normalize();
-
-
-        //2초동안 올라가고 
-        currentTime += Time.deltaTime;
-        if (currentTime > 2)
-        {
-            // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
-            backJumpPos = transform.position + (Vector3.up * 5) + (transform.forward * -2);
-
             //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
             //고정되어야할 회전값
             rotX = transform.rotation;
             rotX.x = 0;
             rotX.z = 0;
-
-            //lerp로 현재위치에서 점프한다.
-            transform.position = Vector3.Lerp(transform.position, backJumpPos, 10 * Time.deltaTime);
-            //앞방향을 타겟쪽으로 하기
-            transform.forward = target.transform.position;
-            if (transform.position.y > 4f)
-            {
-                //y값이 4가 넘으면 y값이 5로 고정되게끔하기
-                curPos = transform.position;
-                curPos.y = 5;
-                m_state = BossState.Back2;
-
-            }
-
+            noJumpBackPos = back.transform.position; //back의 전 위치를 저장한다
+            m_state = BossState.Move3;
         }
-
     }
-    private void Back2() //백점프
+    private void Move3()
     {
-        Vector3 curPos;
-        Vector3 dir = Vector3.down;
-        int speed = 3;
-
         currentTime += Time.deltaTime;
+        if(currentTime >3) //3초 뒤에 움직이도록
+        {
+            float speed = 10;
+            float moveRange = 2;
 
-        if (currentTime > 2.2f && currentTime < 2.4f)//lerp로 현재위치에서 뒤로 점프한다.
-        {
-            transform.position = Vector3.Lerp(transform.position, noJumpBackPos, speed * Time.deltaTime);
-        }
-        if (currentTime > 2.4f && currentTime < 2.8f)//아래방향으로 내려간다
-        {
-            transform.position += dir * 2 * Time.deltaTime;
-        }
-        if (currentTime > 2.8f)//현재위치의 y값이 2보다 작다면 y값을 0으로 만들고 스피드도 0으로
-        {
-            speed = 2;
-
+            //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
+            //필요속성 : 타겟쪽으로 방향 , 처음 플레이어와의 거리 , 일정거리
+            Vector3 dir = target.transform.position - transform.position;
+            float distance = dir.magnitude;
+            dir.Normalize();
+            //바닥에 붙어있도록 한다
+            dir.y = 0;
+            //방향쪽으로 이동한다
             transform.position += dir * speed * Time.deltaTime;
-            curPos = transform.position;
-            if (curPos.y < 2)
+            //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+
+
+            //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
+            //일정거리 이상 좁혀지면
+            if (distance < moveRange)
             {
-                curPos.y = 0;
-                transform.position = curPos; //현재 위치 y값을 0으로 움직이게 만든다.
-                speed = 0;
-                dir.y = 0;
+                //상태를 어택으로 전환한다
+                m_state = BossState.Charge;
             }
-        }
+        }       
     }
+
+    private void Charge()
+    {
+        
+    }
+
+    //현재 뒤로 갈 위치를 저장한다.
+    Vector3 noJumpBackPos;
+    Vector3 backJumpPos;
+    public Transform back;
+    Vector3 curPos;
+   
 
     public void DamageProcess()
     {
@@ -441,7 +434,7 @@ public class SSB_Boss1 : MonoBehaviour
 
     }
 
-    
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
@@ -452,7 +445,7 @@ public class SSB_Boss1 : MonoBehaviour
             transform.position = curPos;
         }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
         }

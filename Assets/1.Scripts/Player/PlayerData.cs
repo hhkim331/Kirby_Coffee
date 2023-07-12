@@ -23,6 +23,8 @@ public class PlayerData : ScriptableObject
     public float maxFallSpeed;
     [Header("비행 힘")]
     public float flyPower;
+    [Header("비행 최대 높이")]
+    public float flyMaxHeight;
     [Header("비행가능 시간")]
     public float flyTime;
     [Header("날개짓 딜레이(키다운)")]

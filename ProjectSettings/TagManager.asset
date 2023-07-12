@@ -13,6 +13,7 @@ TagManager:
   - SafeGround
   - FallPlane
   - Boss
+  - Ladder
   layers:
   - Default
   - TransparentFX

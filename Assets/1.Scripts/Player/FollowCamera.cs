@@ -22,7 +22,7 @@ public class FollowCamera : MonoBehaviour
                     break;
                 case CameraDistanceState.Zoomin:
                     curDistance = zoomInDistance;
-                    curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance;
+                    curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * 0.5f;
                     break;
             }
             //curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * targetYOffset;
@@ -60,13 +60,13 @@ public class FollowCamera : MonoBehaviour
     readonly float targetYOffset = 1.5f;
 
     //카메라 거리
-    readonly float basicDistance = 10f;
-    readonly float zoomInDistance = 7f;
+    public readonly float basicDistance = 20f;
+    readonly float zoomInDistance = 16f;
 
     //카메라 각도
-    readonly Vector3 basicAngle = new Vector3(30, 0, 0);  //바라보는 각도
-    readonly Vector3 leftAngle = new Vector3(30, 45, 0);  //왼쪽으로 바라보는 각도
-    readonly Vector3 rightAngle = new Vector3(30, -45, 0);  //왼쪽으로 바라보는 각도
+    readonly Vector3 basicAngle = new Vector3(20, 0, 0);  //바라보는 각도
+    readonly Vector3 leftAngle = new Vector3(20, 45, 0);  //왼쪽으로 바라보는 각도
+    readonly Vector3 rightAngle = new Vector3(20, -45, 0);  //왼쪽으로 바라보는 각도
 
     float curDistance;
     Vector3 curAngle;

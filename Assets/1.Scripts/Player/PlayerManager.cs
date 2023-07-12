@@ -193,41 +193,4 @@ public class PlayerManager : MonoBehaviour
         isUnChange = false;
     }
     #endregion
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            Item item = collision.gameObject.GetComponent<Item>();
-            if (item != null)
-            {
-                item.GetItem();
-            }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Basic;
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Basic;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Right;
-        }
-    }
-
 }

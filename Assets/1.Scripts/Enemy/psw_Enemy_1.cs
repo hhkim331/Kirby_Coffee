@@ -19,4 +19,11 @@ public class psw_Enemy_1 : MonoBehaviour
         v.y = 0;
         transform.forward = v;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player")) return;
+
+        Destroy(this.gameObject);
+    }
 }

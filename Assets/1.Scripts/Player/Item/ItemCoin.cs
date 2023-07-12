@@ -35,7 +35,9 @@ public class ItemCoin : Item
     {
         Animation animation = this.gameObject.GetComponent<Animation>();
         animation.Play();
+       
         //yield return new WaitForSeconds(delay);
         yield return new WaitForSeconds(delay);
     }
+
 }

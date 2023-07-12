@@ -12,11 +12,12 @@ public class psw_bulletFactory : MonoBehaviour
     // 적공장
     public GameObject enemyFactory;
     public float bulletSpeed = 5.0f; // 원하는 총알 속도를 설정합니다.
+    public float attackRange = 3;
     // public float maxDistance = 10f;
     // Start is called before the first frame update
     void Start()
     {
-
+        target = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -24,6 +25,7 @@ public class psw_bulletFactory : MonoBehaviour
     {
         // 1. 시간이 흐르다가
         currentTime += Time.deltaTime;
+        float distance = Vector3.Distance(this.transform.position, target.transform.position);
         // 2. 만약 현재시간이 생성시간이 되면
         if (currentTime > makeTime)
         {
@@ -32,13 +34,12 @@ public class psw_bulletFactory : MonoBehaviour
             // 4. 내 위치에 배치하고 싶다.
             bullet.transform.position = transform.position;
             Vector3 direction = target.transform.position - transform.position;
-            direction.y = 0; 
+            direction.y = 0;
             direction.Normalize();
             bullet.transform.forward = direction;
             // 5. 현재 시간을 0으로 초기화 하고 싶다.
             currentTime = 0;
         }
-    
     }
 }
 

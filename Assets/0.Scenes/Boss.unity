@@ -2854,6 +2854,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 2106003403}
   changeCamera: {fileID: 1449735212}
+  startCameraState: 0
+  boss: {fileID: 0}
   postProcessProfile: {fileID: 11400000, guid: 8356d1f1365ad7e479d1a93152211b24, type: 2}
 --- !u!4 &2142489119
 Transform:

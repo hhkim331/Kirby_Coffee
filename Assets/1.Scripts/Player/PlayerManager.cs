@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -14,6 +16,12 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] Animator anim;
     public Animator Anim { get { return anim; } }
+
+    //시작모션
+    bool isStartMotion = false;
+    public bool IsStartMotion { get { return isStartMotion; } }
+    [SerializeField] GameObject starObj;
+    public Vector3 startCameraPoint;
 
     //피격상태
     bool isHit = false;
@@ -74,6 +82,30 @@ public class PlayerManager : MonoBehaviour
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
 
         anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+        isStartMotion = GameManager.Instance.isStartMotion;
+        if (isStartMotion)
+        {
+            transform.position = GameManager.Instance.startPos + new Vector3(0, 10, -5);
+            startCameraPoint = GameManager.Instance.startPos;
+            starObj.SetActive(true);
+            anim.SetTrigger("StartMotion");
+            transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                starObj.SetActive(false);
+                transform.DOMoveZ(GameManager.Instance.startPos.z + 3, 0.5f).SetEase(Ease.Linear);
+                transform.DOMoveY(GameManager.Instance.startPos.y + 1.5f, 0.25f).SetEase(Ease.OutQuad).OnUpdate(() =>
+                {
+                    startCameraPoint = new Vector3(transform.position.x, startCameraPoint.y, transform.position.z);
+                }).OnComplete(() =>
+                {
+                    transform.DOMoveY(GameManager.Instance.startPos.y, 0.25f).SetEase(Ease.InQuad).OnComplete(() =>
+                    {
+                        isStartMotion = false;
+                    });
+                });
+            });
+        }
     }
 
     private void Update()
@@ -88,11 +120,15 @@ public class PlayerManager : MonoBehaviour
 
     void KeyAction()
     {
-        if (isChange || isUnChange) return;
-        if (changeType == CHANGETYPE.Normal) return;
+        if (isChange || isUnChange || isStartMotion || changeType == CHANGETYPE.Normal) return;
         if (Input.GetKeyDown(KeyCode.S))
         {
             UnChange(-transform.forward, false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            FCamera.State = FollowCamera.CameraState.BossTopView;
         }
     }
 
@@ -130,6 +166,9 @@ public class PlayerManager : MonoBehaviour
         anim.SetTrigger("ChangeStart");
         yield return new WaitForSecondsRealtime(0.75f);
         //파티클
+        Vector3 newScale = Vector3.one * GetViewportSize() * 10;
+        foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())
+            rect.localScale = newScale;
         changeEffect.Play();
         yield return new WaitForSecondsRealtime(0.75f);
         ChangeEndEffect();
@@ -142,16 +181,13 @@ public class PlayerManager : MonoBehaviour
     public void ChangeStart()
     {
         isChange = true;
-        //카메라 줌인
-        followCamera.DistanceState = FollowCamera.CameraDistanceState.Zoomin;
-        //카메라의 방향으로 부드럽게 회전한다.
-
+        followCamera.State = FollowCamera.CameraState.Change;
         GameManager.Instance.PlayerChangeStart();
     }
 
     public void ChangeEndEffect()
     {
-        followCamera.DistanceState = FollowCamera.CameraDistanceState.Basic;
+        followCamera.State = followCamera.prevState;
         GameManager.Instance.PlayerChangeEnd();
     }
 
@@ -188,9 +224,21 @@ public class PlayerManager : MonoBehaviour
         bubble.Set(changeType, bubbleDir);
         //기존 액션 해제
         Change(CHANGETYPE.Normal);
+        Vector3 newScale = Vector3.one * GetViewportSize() * 10;
+        foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())
+            rect.localScale = newScale;
         changeEffect.Play();
         yield return new WaitForSeconds(0.1f);
         isUnChange = false;
+    }
+
+    float GetViewportSize()
+    {
+        Bounds bounds = GetComponent<Collider>().bounds;
+        Vector3 min = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.min);
+        Vector3 max = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.max);
+        Vector3 diff = max - min;
+        return Mathf.Max(diff.x, diff.y);
     }
     #endregion
 }

@@ -12,19 +12,22 @@ public class GameManager : MonoBehaviour
     public static InputManager Input { get { return Instance.input; } }
 
     //카메라
-    [SerializeField] Camera mainCamera;
+    public Camera mainCamera;
     [SerializeField] Camera changeCamera;
+    [SerializeField] FollowCamera.CameraState startCameraState;
+    [SerializeField] Transform boss;
 
     //포스트 프로세싱
     [SerializeField] PostProcessProfile postProcessProfile;
     ColorGrading colorGrading;
 
+    //시작위치
+    public bool isStartMotion;
+    public Vector3 startPos;
+
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     // Start is called before the first frame update
@@ -33,6 +36,10 @@ public class GameManager : MonoBehaviour
         //Color Grading
         postProcessProfile.TryGetSettings(out colorGrading);
         colorGrading.colorFilter.value = Color.white;
+        if (startCameraState == FollowCamera.CameraState.BossBasic)
+            PlayerManager.Instance.FCamera.SetBossFight(boss);
+        else
+            PlayerManager.Instance.FCamera.State = startCameraState;
     }
 
     // Update is called once per frame

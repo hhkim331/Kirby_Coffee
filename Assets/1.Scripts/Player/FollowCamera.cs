@@ -4,79 +4,101 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
-    public enum CameraDistanceState
+    public enum CameraState
     {
-        Basic,
-        Zoomin,
+        Change,
+        BasicForward,
+        BasicLeft,
+        BasicRight,
+        BossBasic,
+        BossTopView,
     }
 
-    public CameraDistanceState DistanceState
+    CameraState state;
+    [System.NonSerialized] public CameraState prevState;
+    public CameraState State
     {
         set
         {
+            if (state == value)
+                return;
+            prevState = state;
+            state = value;
             switch (value)
             {
-                case CameraDistanceState.Basic:
+                case CameraState.Change:
+                    curDistance -= changeZOffset;
+                    curYOffset = changeYOffset;
+                    break;
+                case CameraState.BasicForward:
                     curDistance = basicDistance;
-                    curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * targetYOffset;
-                    break;
-                case CameraDistanceState.Zoomin:
-                    curDistance = zoomInDistance;
-                    curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * 0.5f;
-                    break;
-            }
-            //curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * targetYOffset;
-        }
-    }
-
-    public enum CameraAngleState
-    {
-        Basic,
-        Left,
-        Right,
-    }
-
-    public CameraAngleState AngleState
-    {
-        set
-        {
-            switch (value)
-            {
-                case CameraAngleState.Basic:
+                    curYOffset = defaultYOffset;
                     curAngle = basicAngle;
                     break;
-                case CameraAngleState.Left:
+                case CameraState.BasicLeft:
+                    curDistance = basicDistance;
+                    curYOffset = defaultYOffset;
                     curAngle = leftAngle;
                     break;
-                case CameraAngleState.Right:
+                case CameraState.BasicRight:
+                    curDistance = basicDistance;
+                    curYOffset = defaultYOffset;
                     curAngle = rightAngle;
                     break;
+                case CameraState.BossBasic:
+                    curDistance = bossBasicDistance;
+                    curYOffset = defaultYOffset;
+                    //보스 방향을 바라보는 벡터
+                    Vector3 bossDir = (boss.position - PlayerManager.Instance.transform.position).normalized;
+                    //벡터를 5도 왼쪽으로 회전
+                    bossDir = Quaternion.Euler(0, -5, 0) * bossDir;
+                    //회전한 벡터를 바라보는 각도로 변환
+                    curAngle = Quaternion.LookRotation(bossDir).eulerAngles;
+                    //보스전 각도로 바라보기
+                    curAngle.x = bossBasicAngleOffset;
+                    break;
+                case CameraState.BossTopView:
+                    curDistance = bossTopViewDistance;
+                    curYOffset = defaultYOffset;
+                    curAngle = transform.rotation.eulerAngles;
+                    curAngle.x = bossTopViewAngleOffset;
+                    break;
             }
-            curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * targetYOffset;
+            curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * curYOffset;
         }
     }
 
-    //카메라가 타겟을 바라보는 위치 보정
-    readonly float targetYOffset = 1.5f;
-
     //카메라 거리
-    public readonly float basicDistance = 20f;
-    readonly float zoomInDistance = 16f;
+    public readonly float basicDistance = 24f;
+    readonly float changeZOffset = 6f;
+    readonly float bossBasicDistance = 18f;
+    readonly float bossTopViewDistance = 30f;
 
     //카메라 각도
     readonly Vector3 basicAngle = new Vector3(20, 0, 0);  //바라보는 각도
     readonly Vector3 leftAngle = new Vector3(20, 45, 0);  //왼쪽으로 바라보는 각도
     readonly Vector3 rightAngle = new Vector3(20, -45, 0);  //왼쪽으로 바라보는 각도
+    readonly float bossBasicAngleOffset = 10f;  //보스전시 바라보는 각도
+    readonly float bossTopViewAngleOffset = 50f;  //보스전시 바라보는 각도
+
+    //카메라가 타겟을 바라보는 위치 높이보정
+    readonly float defaultYOffset = 1.5f;
+    readonly float changeYOffset = 0.5f;
 
     float curDistance;
     Vector3 curAngle;
     Vector3 curOffset;
+    float curYOffset;
+
+    //변신
+
+    //보스
+    Transform boss;
 
     // Start is called before the first frame update
     void Start()
     {
-        DistanceState = CameraDistanceState.Basic;
-        AngleState = CameraAngleState.Right;
+        State = CameraState.BasicForward;
 
         //transform.rotation = Quaternion.Euler(curAngle);
         //transform.position = targetPlayer.position + curOffset;
@@ -94,10 +116,37 @@ public class FollowCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (PlayerManager.Instance.IsStartMotion)
+        {
+            transform.position = Vector3.Lerp(transform.position, PlayerManager.Instance.startCameraPoint + curOffset, Time.fixedDeltaTime * 5);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.fixedDeltaTime * 5);
+            return;
+        }
+
+        if (state == CameraState.BossBasic)
+        {
+            //보스 방향을 바라보는 벡터
+            Vector3 bossDir = (boss.position - PlayerManager.Instance.transform.position).normalized;
+            //벡터를 5도 왼쪽으로 회전
+            bossDir = Quaternion.Euler(0, -5, 0) * bossDir;
+            //회전한 벡터를 바라보는 각도로 변환
+            curAngle = Quaternion.LookRotation(bossDir).eulerAngles;
+            //보스전 각도로 바라보기
+            curAngle.x = bossBasicAngleOffset;
+            curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * curYOffset;
+        }
+
         transform.position = Vector3.Lerp(transform.position, PlayerManager.Instance.PMovement.CameraViewPoint + curOffset, Time.fixedDeltaTime * 5);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.fixedDeltaTime * 5);
     }
 
+    public void SetBossFight(Transform boss)
+    {
+        this.boss = boss;
+        State = CameraState.BossBasic;
+    }
+
+    #region CameraShake
     /// <summary>
     /// 카메라 쉐이크
     /// </summary>
@@ -137,4 +186,5 @@ public class FollowCamera : MonoBehaviour
         yield return null;
         transform.position = originPos;
     }
+    #endregion
 }

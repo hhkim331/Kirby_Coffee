@@ -158,6 +158,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (PlayerManager.Instance.IsStartMotion)
+            return;
+
         if (isBreathAttack)
         {
             rb.velocity = Vector3.zero;
@@ -269,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if (flyFlag)
             {
-                if(isCanFly)
+                if (isCanFly)
                 {
                     if (!isFly)
                     {
@@ -292,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
                 //비행중 위로 힘을 더 못주는 상태
-                else if(isFly)
+                else if (isFly)
                 {
                     flyActionDelay -= Time.deltaTime;
                     if (flyActionDelay <= 0)
@@ -315,7 +318,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void keyMove()
     {
-        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit || PlayerManager.Instance.IsStartMotion) return;
 
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
         float v = Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) ? 0 : Input.GetKey(KeyCode.UpArrow) ? 1 : Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
@@ -460,7 +463,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("CameraBasic"))
         {
-            PlayerManager.Instance.FCamera.AngleState = FollowCamera.CameraAngleState.Basic;
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicForward;
         }
 
         //사다리
@@ -475,7 +478,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("CameraBasic"))
         {
-            PlayerManager.Instance.FCamera.AngleState = FollowCamera.CameraAngleState.Basic;
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicForward;
         }
     }
 
@@ -483,7 +486,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("CameraBasic"))
         {
-            PlayerManager.Instance.FCamera.AngleState = FollowCamera.CameraAngleState.Right;
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicRight;
         }
 
         //사다리

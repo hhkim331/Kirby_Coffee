@@ -177,7 +177,7 @@ public class PlayerActionPistol : PlayerAction
     public override void KeyAction()
     {
         if (isFire) return;
-        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit || PlayerManager.Instance.IsStartMotion) return;
         if (PlayerManager.Instance.PMovement.IsFly) return;
 
         if (Input.GetKeyDown(KeyCode.Z))

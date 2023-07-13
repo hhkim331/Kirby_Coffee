@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class psw_EnemyDestroy : MonoBehaviour
 {
-
-
+    
+    public Animator anim;
+    
     // Start is called before the first frame update
     void Start()
     {
-
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -20,8 +21,7 @@ public class psw_EnemyDestroy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) return;
-
-        Destroy(this.gameObject);
+        anim.SetTrigger("Damaged");
+        Destroy(this.gameObject, 2);
     }
 }

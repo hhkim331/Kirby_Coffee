@@ -5,10 +5,12 @@ using UnityEngine;
 public class psw_Enemy_1 : MonoBehaviour
 {
     public Transform Player;
+    public Animator anim;
+   
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponentInChildren<Animator>(); // 애니메이터 컴포넌트 취득
     }
 
     // Update is called once per frame
@@ -22,8 +24,9 @@ public class psw_Enemy_1 : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) return;
-
-        Destroy(this.gameObject);
+        
+            anim.SetTrigger("damage");
+            Destroy(this.gameObject,1);
+        
     }
 }

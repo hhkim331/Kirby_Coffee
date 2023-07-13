@@ -34,6 +34,9 @@ public class SSB_Boss2 : MonoBehaviour
         Charge,//2
         Charge2,//2
         RotAttack,//2
+        LerpJump1,//3단점프1
+        LerpJump2,//3단점프2
+        LerpJump3,//3단점프3
         Damage,//3.
         Drop,//4.
     };
@@ -103,6 +106,15 @@ public class SSB_Boss2 : MonoBehaviour
                 break;
             case BossState.RotAttack:
                 RotAttack();
+                break;
+            case BossState.LerpJump1:
+                LerpJump1();
+                break;
+            case BossState.LerpJump2:
+                LerpJump2();
+                break;
+            case BossState.LerpJump3:
+                LerpJump3();
                 break;
             case BossState.Damage:
                 Damage();
@@ -370,7 +382,7 @@ public class SSB_Boss2 : MonoBehaviour
     private void Move3()
     {
         currentTime += Time.deltaTime;
-        if(currentTime >3) //3초 뒤에 움직이도록
+        if (currentTime > 3) //3초 뒤에 움직이도록
         {
             float speed = 10;
             float moveRange = 2;
@@ -397,7 +409,7 @@ public class SSB_Boss2 : MonoBehaviour
                 //현재위치를 저장한다 ->  Charge에서 쓸 위치
                 pastPos = transform.position;
             }
-        }       
+        }
     }
     Vector3 pastPos; // 이전 위치;
     Vector3 upPos; // 현재 위치;
@@ -441,24 +453,24 @@ public class SSB_Boss2 : MonoBehaviour
             transform.position = Vector3.Lerp(upPos, pastPos, 0.5f);
             //보스를 기존 포지션으로 가져온다.
         }
-        
+
         if (rotateRight == true) // 회전하는게 true라면
         {
             transform.Rotate(0, 1, 0);
             rotValue += 1;
 
-             if(rotValue > 80)
-        {
-            rotateRight = false;
-            transform.Rotate(0,  -(rotValue -80), 0);
-            curPos = transform.position;
-            curPos.y = 0;
-            transform.position = curPos;
-            m_state = BossState.Charge2;
+            if (rotValue > 80)
+            {
+                rotateRight = false;
+                transform.Rotate(0, -(rotValue - 80), 0);
+                curPos = transform.position;
+                curPos.y = 0;
+                transform.position = curPos;
+                m_state = BossState.Charge2;
             }
         }
 
-       
+
 
     }
     bool rotateRight = true;
@@ -473,9 +485,9 @@ public class SSB_Boss2 : MonoBehaviour
     bool rotateLeft = true;
     private void Charge2()
     {
-        
+
         curTime += Time.deltaTime;
-        if(curTime > 1)
+        if (curTime > 1)
         {
             if (rotateLeft)
             {
@@ -485,15 +497,68 @@ public class SSB_Boss2 : MonoBehaviour
             if (rotValue < 0)
             {
                 rotateLeft = false;
-
+                m_state = BossState.RotAttack;
             }
-        }       
+        }
     }
     private void RotAttack()//360도 회전하게 한다
     {
-        
+        currentTime += Time.deltaTime;
+        if(currentTime >2)
+        {
+        m_state = BossState.LerpJump1;
+        }
+
+        //1단점프 전 target위치를 저장한다
     }
 
+    private void LerpJump1()//1단점프
+    {
+        isJump = true;
+        startPos = transform.position;
+        endPos = target.transform.position + (target.transform.position - transform.position);
+        center = Vector3.Lerp(startPos, endPos, 0.5f);
+        center += new Vector3(0, -1, 0);
+        ratio = 0;
+        //플레이어의 위치를 기억한다
+        targetPosition = target.transform.position;
+
+        if (isJump == true)
+        {
+            ratio += Time.deltaTime / 1; //1초만에 가라
+            if (ratio > 0.5f)
+            {
+                ratio = 0.5f; // 0.5를 넘어가면 멈춰야함 - 반지름까지만 올라가서 멈춰야 하므로
+            }
+            transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);
+            transform.position += center;
+        }
+        if (target.transform.position.x == transform.position.x)
+        {
+
+            //바닥으로 내려찍는다
+            Vector3 dir = targetPosition - transform.position;
+            dir.Normalize();
+            rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
+            if (curPos.y < 2)
+            {
+                curPos = transform.position; //위치
+                curPos.y = 0;
+                transform.position = curPos;
+                m_state = BossState.LerpJump2;
+            }
+        }
+    }
+
+    private void LerpJump2()
+    {
+
+    }
+
+    private void LerpJump3()
+    {
+
+    }
     public void DamageProcess()
     {
         //적 체력을 1 감소하고 싶다

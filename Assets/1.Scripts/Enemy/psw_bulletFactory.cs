@@ -23,11 +23,12 @@ public class psw_bulletFactory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 거리 계산
+        float distance = Vector3.Distance(this.transform.position, target.transform.position);
         // 1. 시간이 흐르다가
         currentTime += Time.deltaTime;
-        float distance = Vector3.Distance(this.transform.position, target.transform.position);
         // 2. 만약 현재시간이 생성시간이 되면
-        if (currentTime > makeTime)
+        if (currentTime > makeTime && distance <= attackRange)
         {
             // 3. 적공장에서 적을 만들어서
             GameObject bullet = Instantiate(enemyFactory);

@@ -32,6 +32,8 @@ public class SSB_Boss2 : MonoBehaviour
         HammerMove,//2
         Move3,//2
         Charge,//2
+        Charge2,//2
+        RotAttack,//2
         Damage,//3.
         Drop,//4.
     };
@@ -96,6 +98,12 @@ public class SSB_Boss2 : MonoBehaviour
             case BossState.Charge:
                 Charge();
                 break;
+            case BossState.Charge2:
+                Charge2();
+                break;
+            case BossState.RotAttack:
+                RotAttack();
+                break;
             case BossState.Damage:
                 Damage();
                 break;
@@ -111,8 +119,6 @@ public class SSB_Boss2 : MonoBehaviour
 
         }
     }
-
-
 
     //플레이어와 일정거리 이상 가까워지면 상태를 Move로 변경한다
     //필요속성 : 타겟, 일정시간 , 현재시간
@@ -388,21 +394,105 @@ public class SSB_Boss2 : MonoBehaviour
             {
                 //상태를 어택으로 전환한다
                 m_state = BossState.Charge;
+                //현재위치를 저장한다 ->  Charge에서 쓸 위치
+                pastPos = transform.position;
             }
         }       
     }
-
-    private void Charge()
+    Vector3 pastPos; // 이전 위치;
+    Vector3 upPos; // 현재 위치;
+    float currentRotTime; // 현재 돌아가는 시간;
+    float creatRotTime; // 특정 돌아가는 시간;
+    private void Charge() //차징할때 위아래로 진동하면서 
     {
+        float speed = 50;
+        float creatTime = 0.05f; //특정시간
+        bool isUp = false; //올라갔는지
+
+
+        //현재시간이 흐르고
+        currentTime += Time.deltaTime;
+        //일정시간을 초과하면
+        if (currentTime > creatTime)
+        {
+            if (isUp == true)//isUp이 true면
+            {
+                isUp = false; //false로 바꾼다
+            }
+            else
+            {
+                isUp = true; //isUp을 true로 바꾼다
+            }
+            currentTime = 0; //계속 반복할 수 있도록 현재시간을 0으로 바꾼다.
+        }
+
+        if (isUp == true)
+        {
+            //보스를 위로 올린다
+            transform.position += Vector3.up * speed * Time.deltaTime;
+            //현재 위치를 저장한다 -> 밑에서 lerp로 연결하기 위해
+            upPos = transform.position;
+            pastPos = transform.position;
+            pastPos.y = 0;
+        }
+        else
+        {
+            //transform.position = pastPos;
+            transform.position = Vector3.Lerp(upPos, pastPos, 0.5f);
+            //보스를 기존 포지션으로 가져온다.
+        }
         
+        if (rotateRight == true) // 회전하는게 true라면
+        {
+            transform.Rotate(0, 1, 0);
+            rotValue += 1;
+
+             if(rotValue > 80)
+        {
+            rotateRight = false;
+            transform.Rotate(0,  -(rotValue -80), 0);
+            curPos = transform.position;
+            curPos.y = 0;
+            transform.position = curPos;
+            m_state = BossState.Charge2;
+            }
+        }
+
+       
+
     }
+    bool rotateRight = true;
+    float rotValue = 0;
 
     //현재 뒤로 갈 위치를 저장한다.
     Vector3 noJumpBackPos;
     Vector3 backJumpPos;
     public Transform back;
     Vector3 curPos;
-   
+
+    bool rotateLeft = true;
+    private void Charge2()
+    {
+        
+        curTime += Time.deltaTime;
+        if(curTime > 1)
+        {
+            if (rotateLeft)
+            {
+                transform.Rotate(0, -0.5f, 0);
+                rotValue -= 0.5f;
+            }
+            if (rotValue < 0)
+            {
+                rotateLeft = false;
+
+            }
+        }       
+    }
+    private void RotAttack()//360도 회전하게 한다
+    {
+        
+    }
 
     public void DamageProcess()
     {

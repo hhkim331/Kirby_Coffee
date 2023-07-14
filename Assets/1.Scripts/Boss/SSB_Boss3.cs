@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SSB_Boss2 : MonoBehaviour
+public class SSB_Boss3 : MonoBehaviour
 {
     // state 구성
     //1.플레이어에게 다가가서 망치로 내려찍기 내려찍으면 별이 나온다
@@ -26,8 +26,6 @@ public class SSB_Boss2 : MonoBehaviour
         Attack, //1.
         TimeLimit,
         JumpSpin,//2.
-        JumpStop,//2
-        Move2,//2.
         Attack2,//2.
         HammerMove,//2
         Move3,//2
@@ -85,12 +83,6 @@ public class SSB_Boss2 : MonoBehaviour
                 break;
             case BossState.JumpSpin:
                 JumpSpin();
-                break;
-            case BossState.JumpStop:
-                JumpStop();
-                break;
-            case BossState.Move2:
-                Move2();
                 break;
             case BossState.Attack2:
                 Attack2();
@@ -245,21 +237,6 @@ public class SSB_Boss2 : MonoBehaviour
         // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
         jumpPos = transform.position + Vector3.up * jumpPower;
 
-    }
-
-    Vector3 jumpPos;
-    float jumpPower = 5.5f;
-
-    bool isJump = false; //점프를 한다
-    Vector3 startPos; //시작
-    Vector3 endPos; //끝
-    Vector3 center; //가운데
-    float ratio = 0;
-    private void JumpSpin()
-    {
-        //slerp를 써서 이동할껀데 slerp의 s는 sphere다.
-        //곡선으로 움직여라
-        isJump = true;
         //시작지점 설정
         startPos = transform.position;
         //도착지점 설정
@@ -271,61 +248,31 @@ public class SSB_Boss2 : MonoBehaviour
         //현재 시간을 0으로 한다.
         ratio = 0;
 
-        float yTime = 0; //y축으로 내려찍을 시간
-        yTime += Time.deltaTime;
-
-        if (isJump == true) // 점프를 한다.
-        {
-            ratio += Time.deltaTime / 2; //2초안에 가라
-            if (ratio > 0.5f)
-            {
-                ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.   
-            }
-            transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
-            transform.position += center;//다시 값을 더해준다
-        }
-        if (target.transform.position.x == transform.position.x)
-        {
-            m_state = BossState.JumpStop;
-        }
     }
 
-    private void JumpStop()
-    {
-        m_state = BossState.Move2;
-    }
+    Vector3 jumpPos;
+    float jumpPower = 5.5f;
 
-    private void Move2()
-    {
-        Vector3 dir = target.transform.position - transform.position;
-        dir.Normalize();
-
-
-
-        //타겟방향으로 몸 회전시킬때 x축 회전되는 것 막기
-        transform.rotation = rotX;
-
-        //만약 플레이어와의 거리가 일정거리 이상 가까워지면  
-        float distance = Vector3.Distance(this.transform.position, target.transform.position);
-        currentTime += Time.deltaTime;
-        // 플레이어의 현재위치를 저장한다
-        Vector3 targetPos = target.transform.position;
-        if (currentTime > 1)
+    bool isJump = false; //점프를 한다
+    Vector3 startPos; //시작
+    Vector3 endPos; //끝
+    Vector3 center; //가운데
+    float ratio;
+    private void JumpSpin()
+    {      
+        ratio += Time.deltaTime / 2; //2초안에 가라
+        if (ratio > 0.5f)
         {
-
-            transform.position = Vector3.Lerp(transform.position, targetPos, 10 * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, targetPos) < 1f)
-            {
-                //상태를 attack2로 바꾸자
-                currentTime = 0;
-                m_state = BossState.Attack2;
-            }
+            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.
+            m_state = BossState.Attack2;              
         }
+        transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
+        transform.position += center;//다시 값을 더해준다
+        
     }
 
     //바닥에 내려찍는 속도
-    float attackSpeed = 50;
+    float attackSpeed = 20;
     //현재시간
     float curTime = 0;
     //타겟저장시간
@@ -501,12 +448,9 @@ public class SSB_Boss2 : MonoBehaviour
         {
             m_state = BossState.LerpJump1;
         }
+        //animation 재생
 
         //1단점프 전 target위치를 저장한다
-    }
-
-    private void LerpJump1()//1단점프
-    {
         isJump = true;
         startPos = transform.position;
         endPos = target.transform.position + (target.transform.position - transform.position);
@@ -515,9 +459,11 @@ public class SSB_Boss2 : MonoBehaviour
         ratio = 0;
         //플레이어의 위치를 기억한다
         targetPosition = target.transform.position;
+    }
 
-        if (isJump == true)
-        {
+    private void LerpJump1()//1단점프
+    {
+      
             ratio += Time.deltaTime / 1; //1초만에 가라
             if (ratio > 0.5f)
             {
@@ -525,7 +471,7 @@ public class SSB_Boss2 : MonoBehaviour
             }
             transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);
             transform.position += center;
-        }
+        
         if (target.transform.position.x == transform.position.x)
         {
 

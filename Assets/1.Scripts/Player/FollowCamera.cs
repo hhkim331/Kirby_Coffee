@@ -202,5 +202,22 @@ public class FollowCamera : MonoBehaviour
         yield return null;
         transform.position = originPos;
     }
+
+    /// <summary>
+    /// 카메라 쉐이크 위방향으로
+    /// </summary>
+    /// <param name="shakePower"></param>
+    public void CameraShakeUpOnce(float shakePower)
+    {
+        StartCoroutine(CameraShakeUpOnceCoroutine(shakePower));
+    }
+
+    IEnumerator CameraShakeUpOnceCoroutine(float shakePower)
+    {
+        Vector3 originPos = transform.position;
+        transform.position = originPos + transform.up * shakePower;
+        yield return null;
+        transform.position = originPos;
+    }
     #endregion
 }

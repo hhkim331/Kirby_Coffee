@@ -10,6 +10,9 @@ public class PistolBullet : MonoBehaviour
     Vector3 moveDir;
     Collider targetCollider;
 
+    //이펙트
+    [SerializeField] GameObject hitEffect;
+
     public void Set(Vector3 dir)
     {
         isGuide = false;
@@ -47,7 +50,13 @@ public class PistolBullet : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Boss") || other.gameObject.layer == LayerMask.NameToLayer("Hammer"))
         {
             other.transform.root.GetComponent<SSB_Boss1>().DamageProcess();
+            Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity), 3);
         }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity), 3);
+        }
+
 
         if (!other.CompareTag("CameraBasic"))
             Destroy(gameObject);

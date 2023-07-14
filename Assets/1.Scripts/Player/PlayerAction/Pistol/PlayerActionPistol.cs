@@ -449,7 +449,7 @@ public class PlayerActionPistol : PlayerAction
                 else
                     pistolBullet.Set(leftAimDir);
             }
-            PlayerManager.Instance.FCamera.CameraShakeOnce(0.1f);
+            PlayerManager.Instance.FCamera.CameraShakeUpOnce(0.1f);
         }
         isFire = false;
         IsHardAction = false;

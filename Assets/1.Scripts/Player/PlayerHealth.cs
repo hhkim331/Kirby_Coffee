@@ -24,7 +24,7 @@ public class PlayerHealth : MonoBehaviour
 
     Color curColor = Color.black;
     [SerializeField] Renderer[] renderers;
-    [SerializeField] Material myMaterial;
+    [SerializeField] Material[] materials;
 
     //피격
     float hitDelay;
@@ -58,7 +58,8 @@ public class PlayerHealth : MonoBehaviour
                 //emission으로 발광효과주기
                 //foreach (var renderer in renderers)
                 curColor = Color.black;
-                myMaterial.SetColor("_EmissionColor", Color.black);
+                foreach(var material in materials)
+                    material.SetColor("_EmissionColor", Color.black);
             }
             else
             {
@@ -70,13 +71,15 @@ public class PlayerHealth : MonoBehaviour
                     if (curColor == Color.black)
                     {
                         curColor = blinkColor;
-                        myMaterial.SetColor("_EmissionColor", blinkColor);
+                        foreach (var material in materials)
+                            material.SetColor("_EmissionColor", blinkColor);
 
                     }
                     else
                     {
                         curColor = Color.black;
-                        myMaterial.SetColor("_EmissionColor", Color.black);
+                        foreach (var material in materials)
+                            material.SetColor("_EmissionColor", Color.black);
                     }
                 }
 
@@ -115,12 +118,14 @@ public class PlayerHealth : MonoBehaviour
             if (curColor == Color.black)
             {
                 Color newColor = new Color(warningBlinkTime/ playerData.healthWarningBlinkDelay, 0, 0);
-                myMaterial.SetColor("_EmissionColor", newColor);
+                foreach (var material in materials)
+                    material.SetColor("_EmissionColor", newColor);
             }
             else
             {
                 Color newColor = new Color(1-warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
-                myMaterial.SetColor("_EmissionColor", newColor);
+                foreach (var material in materials)
+                    material.SetColor("_EmissionColor", newColor);
             }
 
             if (warningBlinkTime > playerData.healthWarningBlinkDelay)

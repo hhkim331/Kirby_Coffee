@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -10,6 +12,21 @@ public class PlayerManager : MonoBehaviour
     public PlayerData Data { get { return playerData; } }
 
     [SerializeField] FollowCamera followCamera;
+    public FollowCamera FCamera { get { return followCamera; } }
+
+    [SerializeField] Animator anim;
+    public Animator Anim { get { return anim; } }
+
+    //시작모션
+    bool isStartMotion = false;
+    public bool IsStartMotion { get { return isStartMotion; } }
+    [SerializeField] GameObject starObj;
+    public Vector3 startCameraPoint;
+
+    //피격상태
+    bool isHit = false;
+    public bool IsHit { get { return isHit; } }
+    float hitTime; //조작불가능시간,밀려나는 시간
 
     //변신
     public enum CHANGETYPE
@@ -26,6 +43,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject[] changeBubbles;
     [SerializeField] ParticleSystem changeEffect;
 
+    //캐릭터 컴포넌트
     PlayerMovement playerMovement;
     public PlayerMovement PMovement { get { return playerMovement; } }
     PlayerHealth playerHealth;
@@ -47,7 +65,6 @@ public class PlayerManager : MonoBehaviour
         playerActionManager = GetComponent<PlayerActionManager>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         GameManager.Input.keyaction += KeyAction;
@@ -63,16 +80,58 @@ public class PlayerManager : MonoBehaviour
         playerActionManager.Set(changeType);
         if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
+
+        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+        isStartMotion = GameManager.Instance.isStartMotion;
+        if (isStartMotion)
+        {
+            transform.position = GameManager.Instance.startPos + new Vector3(0, 10, -5);
+            startCameraPoint = GameManager.Instance.startPos;
+            starObj.SetActive(true);
+            anim.SetTrigger("StartMotion");
+            transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                starObj.SetActive(false);
+                anim.SetTrigger("StartMotionEnd");
+                transform.DOMoveZ(GameManager.Instance.startPos.z + 3, 0.5f).SetEase(Ease.Linear);
+                transform.DOMoveY(GameManager.Instance.startPos.y + 1.5f, 0.25f).SetEase(Ease.OutQuad).OnUpdate(() =>
+                {
+                    startCameraPoint = new Vector3(transform.position.x, startCameraPoint.y, transform.position.z);
+                }).OnComplete(() =>
+                {
+                    transform.DOMoveY(GameManager.Instance.startPos.y, 0.25f).SetEase(Ease.InQuad).OnComplete(() =>
+                    {
+                        isStartMotion = false;
+                    });
+                });
+            });
+        }
+    }
+
+    private void Update()
+    {
+        if (isHit)
+        {
+            hitTime -= Time.deltaTime;
+            if (hitTime <= 0)
+                isHit = false;
+        }
     }
 
     void KeyAction()
     {
-        if (isChange || isUnChange) return;
-        if (changeType == CHANGETYPE.Normal) return;
+        if (isChange || isUnChange || isStartMotion || changeType == CHANGETYPE.Normal) return;
         if (Input.GetKeyDown(KeyCode.S))
         {
             UnChange(-transform.forward, false);
         }
+    }
+
+    public void Hit()
+    {
+        isHit = true;
+        hitTime = playerData.hitTime;
     }
 
     #region 변신
@@ -99,12 +158,18 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
+        float s = GetViewportSize();
         Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(0.5f);
+        anim.SetTrigger("ChangeStart");
+        yield return new WaitForSecondsRealtime(0.75f);
         //파티클
+        Vector3 newScale = Vector3.one * GetViewportSize() * 10;
+        foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())
+            rect.localScale = newScale;
         changeEffect.Play();
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.75f);
         ChangeEndEffect();
+        anim.SetTrigger("ChangeEnd");
         yield return new WaitForSecondsRealtime(0.5f);
         ChangeEnd();
         Time.timeScale = 1;
@@ -113,16 +178,13 @@ public class PlayerManager : MonoBehaviour
     public void ChangeStart()
     {
         isChange = true;
-        //카메라 줌인
-        followCamera.DistanceState = FollowCamera.CameraDistanceState.Zoomin;
-        //카메라의 방향으로 부드럽게 회전한다.
-
+        followCamera.State = FollowCamera.CameraState.Change;
         GameManager.Instance.PlayerChangeStart();
     }
 
     public void ChangeEndEffect()
     {
-        followCamera.DistanceState = FollowCamera.CameraDistanceState.Basic;
+        followCamera.State = followCamera.prevState;
         GameManager.Instance.PlayerChangeEnd();
     }
 
@@ -159,46 +221,22 @@ public class PlayerManager : MonoBehaviour
         bubble.Set(changeType, bubbleDir);
         //기존 액션 해제
         Change(CHANGETYPE.Normal);
+        Vector3 newScale = Vector3.one * GetViewportSize() * 10;
+        foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())
+            rect.localScale = newScale;
         changeEffect.Play();
         yield return new WaitForSeconds(0.1f);
         isUnChange = false;
     }
+
+    float GetViewportSize()
+    {
+        Bounds bounds = GetComponent<Collider>().bounds;
+        Vector3 min = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.min);
+        Vector3 max = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.max);
+        Vector3 diff = max - min;
+        diff.z = 0;
+        return diff.magnitude;
+    }
     #endregion
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            Item item = collision.gameObject.GetComponent<Item>();
-            if (item != null)
-            {
-                item.GetItem();
-            }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Basic;
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Basic;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("CameraBasic"))
-        {
-            followCamera.AngleState = FollowCamera.CameraAngleState.Right;
-        }
-    }
-
 }

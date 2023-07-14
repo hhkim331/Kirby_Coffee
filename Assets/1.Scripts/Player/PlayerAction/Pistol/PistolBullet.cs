@@ -48,6 +48,8 @@ public class PistolBullet : MonoBehaviour
         {
             other.transform.root.GetComponent<SSB_Boss1>().DamageProcess();
         }
-        Destroy(gameObject);
+
+        if (!other.CompareTag("CameraBasic"))
+            Destroy(gameObject);
     }
 }

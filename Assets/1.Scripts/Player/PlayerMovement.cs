@@ -1,11 +1,17 @@
 ﻿using System.Collections;
 using System.Globalization;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     PlayerData playerData;
+
+    Vector3 cameraViewPoint;
+    public Vector3 CameraViewPoint { get { return cameraViewPoint; } }
+    Vector3 screenBounds;
+    float objectHeight = 2f;
 
     //이동
     Rigidbody rb;
@@ -38,21 +44,25 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject breathFactory;
 
     //피격
-    bool isHit = false;
-    float hitTime; //밀려나는 시간
     Vector3 hitDir; //밀려나는 방향
+
+    //사다리
+    bool isLadder = false;  //사다리를 타고 있는지
+    public bool IsLadder { get { return isLadder; } }
+    bool isCloseLadder = false; //사다리 근처에 있는지
+    bool isCanLadder = true;    //사다리를 탈 수 있는지
+    float ladderDelay;
+    Vector3 ladderUpAxis;   //사다리를 올라가는 축
 
     public void Set(PlayerData data)
     {
         playerData = data;
-        //cc = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         gc = GetComponent<GroundChecker>();
 
         velocity = new Vector3(0, 0, 0);
-        //lastFixedPosition = transform.position;
+        cameraViewPoint = transform.position;
         lastFixedRotation = transform.rotation;
-        //nextFixedPosition = transform.position;
         nextFixedRotation = transform.rotation;
 
         jumpFlag = false;
@@ -86,8 +96,50 @@ public class PlayerMovement : MonoBehaviour
                 isCanFly = false;
         }
 
+        //사다리
+        if (isLadder)
+        {
+            //사다리 중간으로 이동
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(ladderUpAxis.x, transform.position.y, ladderUpAxis.z), Time.deltaTime * 5);
+
+            if (planeVelocity.z > 0.1f)
+            {
+                //올라가기
+                rb.velocity = new Vector3(0, 4, 0);
+                PlayerManager.Instance.Anim.speed = 1;
+                PlayerManager.Instance.Anim.SetBool("ClimbDown", false);
+            }
+            else if (planeVelocity.z < -0.1f)
+            {
+                //내려가기
+                rb.velocity = new Vector3(0, -4, 0);
+                PlayerManager.Instance.Anim.speed = 1;
+                PlayerManager.Instance.Anim.SetBool("ClimbDown", true);
+            }
+            else
+            {
+                //애니메이션 일시정지
+                rb.velocity = Vector3.zero;
+                PlayerManager.Instance.Anim.speed = 0;
+                PlayerManager.Instance.Anim.SetBool("ClimbDown", false);
+            }
+        }
+        else if (!isCanLadder)
+        {
+            ladderDelay -= Time.deltaTime;
+            if (ladderDelay <= 0)
+                isCanLadder = true;
+        }
+
         if (PlayerManager.Instance.IsChange)
         {
+            //상태 해제
+            isJump = false;
+            isFly = false;
+            isBreathAttack = false;
+            PlayerManager.Instance.Anim.SetBool("Run", false);
+            PlayerManager.Instance.Anim.SetBool("Jump", false);
+
             velocity = Vector3.zero;
             //카메라를 바라보는 방향
             Vector3 lookCameraVec = -Camera.main.transform.forward;
@@ -106,52 +158,87 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (PlayerManager.Instance.IsStartMotion)
+            return;
+
         if (isBreathAttack)
         {
             rb.velocity = Vector3.zero;
             return;
         }
 
-        if (isHit)
+        if (PlayerManager.Instance.IsHit)
         {
-            hitTime -= Time.fixedDeltaTime;
-            if (hitTime <= 0)
-            {
-                isHit = false;
-                planeVelocity = Vector3.zero;
-            }
-            else
-            {
-                planeVelocity = hitDir * playerData.hitPower;
-            }
+            planeVelocity = hitDir * playerData.hitPower;
         }
 
         //lastFixedPosition = nextFixedPosition;
         lastFixedRotation = nextFixedRotation;
 
-        if(PlayerManager.Instance.IsUnChange && !isHit)
+        if (isLadder)
         {
-            velocity = Vector3.zero;
+            //카메라 앞방향 보기
+            nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), playerData.rotateSpeed * Time.fixedDeltaTime);
         }
         else
         {
-            float yVelocity = GetYVelocity();
-            velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
-            if (planeVelocity != Vector3.zero && !isHit)
-                nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
-            //nextFixedPosition += velocity * Time.fixedDeltaTime;
-        }
+            if (PlayerManager.Instance.IsUnChange && !PlayerManager.Instance.IsHit)
+            {
+                velocity = Vector3.zero;
+            }
+            else
+            {
+                float yVelocity = GetYVelocity();
+                velocity = new Vector3(planeVelocity.x, planeVelocity.y + yVelocity, planeVelocity.z);
+                if (planeVelocity != Vector3.zero && !PlayerManager.Instance.IsHit)
+                    nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(planeVelocity.x, 0, planeVelocity.z)), playerData.rotateSpeed * Time.fixedDeltaTime);
+                //nextFixedPosition += velocity * Time.fixedDeltaTime;
+            }
 
-        rb.velocity = velocity;
+            if (planeVelocity == Vector3.zero)
+                PlayerManager.Instance.Anim.SetBool("Run", false);
+            else
+                PlayerManager.Instance.Anim.SetBool("Run", true);
+
+            rb.velocity = velocity;
+        }
     }
 
-    /// <remarks>
-    /// This function must be called only in FixedUpdate()
-    /// </remarks>
+    void LateUpdate()
+    {
+        //카메라가 봐야할 위치
+        if (isJump || isFly)
+        {
+            cameraViewPoint.x = transform.position.x;
+            cameraViewPoint.z = transform.position.z;
+        }
+        else
+        {
+            cameraViewPoint.x = transform.position.x;
+            cameraViewPoint.y = transform.position.y;
+            cameraViewPoint.z = transform.position.z;
+        }
+
+        if (isFly)
+        {
+            screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height, PlayerManager.Instance.FCamera.basicDistance));
+            Vector3 viewPos = transform.position;
+            if (viewPos.y > screenBounds.y - objectHeight)
+                viewPos.y = screenBounds.y - objectHeight;
+
+            if (viewPos.y > cameraViewPoint.y + playerData.flyMaxHeight)
+                viewPos.y = cameraViewPoint.y + playerData.flyMaxHeight;
+
+            transform.position = viewPos;
+        }
+    }
+
     private float GetYVelocity()
     {
         if (gc.IsGrounded())     //땅인 경우
         {
+            PlayerManager.Instance.Anim.SetBool("Ground", true);
+
             if (gc.IsSafeGround)
                 lastSafeAreaPosition = transform.position;
 
@@ -162,11 +249,13 @@ public class PlayerMovement : MonoBehaviour
             }
 
             isJump = false;
+            PlayerManager.Instance.Anim.SetBool("Jump", false);
             isCanFly = true;
             if (jumpFlag)
             {
                 //시작 y높이 
                 isJump = true;
+                PlayerManager.Instance.Anim.SetBool("Jump", true);
                 jumpFlagTime = playerData.jumpFlagTime;
                 return playerData.jumpPower;
             }
@@ -175,25 +264,45 @@ public class PlayerMovement : MonoBehaviour
         }
         else                    //땅이 아닌 경우
         {
+            PlayerManager.Instance.Anim.SetBool("Ground", false);
+
             if (jumpFlag)
             {
                 return playerData.jumpPower;
             }
-            if (flyFlag && isCanFly)
+            if (flyFlag)
             {
-                if (!isFly)
+                if (isCanFly)
                 {
-                    isFly = true;
-                    flyActiveTime = playerData.flyTime;
-                    return playerData.flyPower;
+                    if (!isFly)
+                    {
+                        isFly = true;
+                        flyActionDelay = playerData.flyActionDelay;
+                        PlayerManager.Instance.Anim.SetTrigger("Fly");
+                        PlayerManager.Instance.Anim.SetBool("Jump", false);
+                        flyActiveTime = playerData.flyTime;
+                        return playerData.flyPower;
+                    }
+                    else
+                    {
+                        flyActionDelay -= Time.deltaTime;
+                        if (flyActionDelay <= 0)
+                        {
+                            flyActionDelay = playerData.flyActionDelay;
+                            PlayerManager.Instance.Anim.SetTrigger("Fly");
+                            return playerData.flyPower;
+                        }
+                    }
                 }
-                else
+                //비행중 위로 힘을 더 못주는 상태
+                else if (isFly)
                 {
                     flyActionDelay -= Time.deltaTime;
                     if (flyActionDelay <= 0)
                     {
                         flyActionDelay = playerData.flyActionDelay;
-                        return playerData.flyPower;
+                        PlayerManager.Instance.Anim.SetTrigger("Fly");
+                        return 0;
                     }
                 }
             }
@@ -209,8 +318,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void keyMove()
     {
-        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange) return;
-        if (isHit) return;
+        if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit || PlayerManager.Instance.IsStartMotion) return;
 
         float h = Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) ? 0 : Input.GetKey(KeyCode.RightArrow) ? 1 : Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
         float v = Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow) ? 0 : Input.GetKey(KeyCode.UpArrow) ? 1 : Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
@@ -223,6 +331,14 @@ public class PlayerMovement : MonoBehaviour
             dir = gc.AdjustDirectionToSlope(dir);
             if (dir.y > 0) dir.y = 0;
             dir.Normalize();
+
+            if (isLadder && dir.z < 0)
+            {
+                isLadder = false;
+                PlayerManager.Instance.Anim.SetBool("Climb", false);
+                PlayerManager.Instance.Anim.SetBool("ClimbDown", false);
+                PlayerManager.Instance.Anim.speed = 1;
+            }
         }
         else
         {
@@ -238,7 +354,22 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X) && !PlayerManager.Instance.PMouth.IsSuction)
         {
             //땅인경우 점프
-            if (gc.IsGrounded()) jumpFlag = true;
+            if (gc.IsGrounded())
+            {
+                jumpFlag = true;
+            }
+            //사다리인경우
+            else if (isLadder)
+            {
+                jumpFlag = true;
+                isLadder = false;
+                PlayerManager.Instance.Anim.SetBool("Climb", false);
+                PlayerManager.Instance.Anim.SetBool("ClimbDown", false);
+                PlayerManager.Instance.Anim.speed = 1;
+                //잠깐 사다리를 못타는 상태
+                isCanLadder = false;
+                ladderDelay = 0.3f;
+            }
             //입에 아무것도 없는 경우 날기가능
             else if (PlayerManager.Instance.PMouth.Stack == PlayerMouth.MOUTHSTACK.None)
             {
@@ -256,7 +387,27 @@ public class PlayerMovement : MonoBehaviour
         if (isFly)
         {
             if (Input.GetKeyDown(KeyCode.Z))
+            {
+                PlayerManager.Instance.Anim.SetTrigger("FlyCancel");
                 StartCoroutine(BreathAttackCoroutine());
+            }
+        }
+
+        //사다리
+        if (isCanLadder && !isLadder && isCloseLadder && planeVelocity.z > 0)
+        {
+            isLadder = true;
+            PlayerManager.Instance.Anim.SetBool("Climb", true);
+            if (isJump)
+            {
+                isJump = false;
+                PlayerManager.Instance.Anim.SetBool("Jump", false);
+            }
+            if (isFly)
+            {
+                isFly = false;
+                PlayerManager.Instance.Anim.SetTrigger("FlyCancel");
+            }
         }
     }
 
@@ -290,11 +441,62 @@ public class PlayerMovement : MonoBehaviour
 
     public void Hit(Vector3 hitDir)
     {
-        isHit = true;
-        hitTime = playerData.hitTime;
         velocity = Vector3.zero;
         this.hitDir = hitDir;
         if (hitDir == Vector3.zero)
             transform.position = lastSafeAreaPosition;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Item"))
+        {
+            Item item = collision.gameObject.GetComponent<Item>();
+            if (item != null)
+            {
+                item.GetItem();
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("CameraBasic"))
+        {
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicForward;
+        }
+
+        //사다리
+        if (other.CompareTag("Ladder"))
+        {
+            isCloseLadder = true;
+            ladderUpAxis = other.transform.position + Vector3.back * 0.5f;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("CameraBasic"))
+        {
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicForward;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("CameraBasic"))
+        {
+            PlayerManager.Instance.FCamera.State = FollowCamera.CameraState.BasicRight;
+        }
+
+        //사다리
+        if (other.CompareTag("Ladder"))
+        {
+            isLadder = false;
+            isCloseLadder = false;
+            PlayerManager.Instance.Anim.SetBool("Climb", false);
+            PlayerManager.Instance.Anim.SetBool("ClimbDown", false);
+            PlayerManager.Instance.Anim.speed = 1;
+        }
     }
 }

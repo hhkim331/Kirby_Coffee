@@ -16,10 +16,11 @@ MonoBehaviour:
   speed: 10
   rotateSpeed: 20
   jumpPower: 10
-  jumpFlagTime: 0.3
-  gravity: -20
-  maxFallSpeed: -20
-  flyPower: 3
+  jumpFlagTime: 0.16
+  gravity: -30
+  maxFallSpeed: -30
+  flyPower: 4
+  flyMaxHeight: 4
   flyTime: 3
   flyActionDelay: 0.2
   maxFlyFallSpeed: -2
@@ -30,3 +31,5 @@ MonoBehaviour:
   hitTime: 0.2
   hitDelay: 1
   hitBlinkDelay: 0.05
+  healthWarningRatio: 0.25
+  healthWarningBlinkDelay: 0.2

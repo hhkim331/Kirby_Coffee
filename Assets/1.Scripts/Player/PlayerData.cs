@@ -23,6 +23,8 @@ public class PlayerData : ScriptableObject
     public float maxFallSpeed;
     [Header("비행 힘")]
     public float flyPower;
+    [Header("비행 최대 높이")]
+    public float flyMaxHeight;
     [Header("비행가능 시간")]
     public float flyTime;
     [Header("날개짓 딜레이(키다운)")]
@@ -47,4 +49,8 @@ public class PlayerData : ScriptableObject
     public float hitDelay;
     [Header("피격무적깜빡임시간")]
     public float hitBlinkDelay;
+    [Header("체력경고비율")]
+    public float healthWarningRatio;
+    [Header("체력경고깜빡임시간")]
+    public float healthWarningBlinkDelay;
 }

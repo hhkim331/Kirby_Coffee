@@ -4,13 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - SafeGround
-  - Enemy
-  - CameraBasic
-  - FallPlane
+  - DeleteMap
+  - Snow
   - Item
   - Bubble
-  - Snow
+  - Enemy
+  - CameraBasic
+  - SafeGround
+  - FallPlane
+  - Boss
+  - Ladder
   layers:
   - Default
   - TransparentFX

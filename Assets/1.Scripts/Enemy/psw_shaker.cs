@@ -9,6 +9,7 @@ public class psw_shaker : MonoBehaviour
     public float delaytime = 1;
     private Vector3 currentPosition;
     bool isUp = false;
+    public GameObject door;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,8 +47,7 @@ public class psw_shaker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) return;
-
         Destroy(this.gameObject);
+        Destroy(door);
     }
 }

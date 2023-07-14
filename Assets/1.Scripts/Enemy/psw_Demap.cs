@@ -5,19 +5,17 @@ using UnityEngine;
 public class psw_Demap : MonoBehaviour
 {
     public GameObject objectPrefab;
-    public Transform spawnPosition;
     private GameObject Player;
     BoxCollider boxCollider;
     float currentTime;
     //사라질때 시간 체크 시작
     bool startDisappear = false;
     bool startBox = true;
-    public Animator animator;
+    public ParticleSystem particle;
     void Start()
     {
         Player = PlayerManager.Instance.gameObject;
         boxCollider = GetComponent<BoxCollider>();
-        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -38,6 +36,15 @@ public class psw_Demap : MonoBehaviour
                 //사라지게 하자.
                 MeshRenderer mr = this.GetComponent<MeshRenderer>();
                 mr.enabled = false;
+                if (mr.enabled == false)
+                {
+                    particle.Play();
+                    print("야 되냐?");
+                }
+                else
+                {
+                    particle.Stop();
+                }
 
                 BoxCollider bx = this.GetComponent<BoxCollider>();
                 bx.enabled = false;

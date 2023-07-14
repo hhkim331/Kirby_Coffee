@@ -6,7 +6,7 @@ public class psw_rtmap : MonoBehaviour
 {
     public float speed = 5;
     public float rotSpeed = 200;
-    float rz;
+    public float rz;
     float currentTime;
     public bool Rotation = true;
     bool rotationDirection = true;

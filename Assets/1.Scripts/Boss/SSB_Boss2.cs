@@ -184,7 +184,7 @@ public class SSB_Boss2 : MonoBehaviour
     //타겟이랑 일정거리 이상 좁혀지면 weapon을 들어서 내려찍는다
     //필요속성 : Hammer
     public GameObject hammer;
-    float attackRange = 2f;
+    float attackRange = 1.5f;
     private void Attack()
     {
         //플레이어쪽으로 이동한다 
@@ -199,12 +199,24 @@ public class SSB_Boss2 : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         //이동하게하기
         transform.position += dir * speed * Time.deltaTime;
-        //rb.MovePosition(rb.position + dir * speed * Time.deltaTime);
+
+        //해머활성화
+        isHammer = true;
+        Quaternion firstRot = Quaternion.Euler(0, 0, 0);
+        Quaternion secondRot = Quaternion.Euler(-90, 0, 0);
+
+        currentTime += Time.deltaTime;
+
+        if (currentTime < 2)
+        {
+            hammer.transform.localRotation = Quaternion.Lerp(firstRot, secondRot, currentTime / 2);
+        }
+
         //attackRange가 1, attackRange보다 현재 거리가 좁으면 
         if (distance < attackRange)
         {
             //가까이 다가갔으면 멈추고 
-            speed = 0;
+            //speed = 0;
             m_state = BossState.HammerMove;
             noJumpPos = transform.position; //점프 전 위치를 저장한다
 
@@ -224,23 +236,26 @@ public class SSB_Boss2 : MonoBehaviour
 
         //해머활성화
         isHammer = true;
-        Quaternion secontRot = Quaternion.Euler(-90, 0, 0);
-        Quaternion thirdRot = Quaternion.Euler(20, 0, 0);
+        Quaternion firstRot = Quaternion.Euler(0, 0, 0);
+        Quaternion secondRot = Quaternion.Euler(-90, 0, 0);
+        Quaternion thirdRot = Quaternion.Euler(50, 0, 0);
         currentTime += Time.deltaTime;
         //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         //고정되어야할 회전값
         rotX = transform.rotation;
         rotX.x = 0;
+        rotX.z = 0;
         //타겟방향으로 몸 회전시킬때 x축 회전되는 것 막기
         transform.rotation = rotX;
 
-        if (currentTime < 2)
+       
+        if (currentTime < 4 && currentTime >3)
         {
-            hammer.transform.localRotation = Quaternion.Lerp(secontRot, thirdRot, (currentTime / 2) * 20);
+            hammer.transform.localRotation = Quaternion.Lerp(secondRot, thirdRot, (currentTime / 2) * 20);
         }
         //3초 뒤에 TimeLimit
-        if (currentTime >= 3)
+        if (currentTime >= 5)
         {
 
             m_state = BossState.TimeLimit;
@@ -361,7 +376,7 @@ public class SSB_Boss2 : MonoBehaviour
             Vector3 dir = targetPosition - transform.position;
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
-            if (curPos.y < 2)
+            if (curPos.y < 0.5f) //바닥에 박히는 것 막기
             {
                 curPos = transform.position; //위치
                 curPos.y = 0;
@@ -417,11 +432,11 @@ public class SSB_Boss2 : MonoBehaviour
     float creatRotTime; // 특정 돌아가는 시간;
     private void Charge() //차징할때 위아래로 진동하면서 
     {
-        float speed = 50;
+        float speed = 10;
         float creatTime = 0.05f; //특정시간
         bool isUp = false; //올라갔는지
 
-
+        //위 아래로 진동하게 하기
         //현재시간이 흐르고
         currentTime += Time.deltaTime;
         //일정시간을 초과하면

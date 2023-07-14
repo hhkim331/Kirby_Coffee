@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Camera changeCamera;
     [SerializeField] FollowCamera.CameraState startCameraState;
     [SerializeField] Transform boss;
+    [SerializeField] Transform bossGround;
 
     //포스트 프로세싱
     [SerializeField] PostProcessProfile postProcessProfile;
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
         postProcessProfile.TryGetSettings(out colorGrading);
         colorGrading.colorFilter.value = Color.white;
         if (startCameraState == FollowCamera.CameraState.BossBasic)
-            PlayerManager.Instance.FCamera.SetBossFight(boss);
+            PlayerManager.Instance.FCamera.SetBossBasic(boss);
         else
             PlayerManager.Instance.FCamera.State = startCameraState;
     }
@@ -46,6 +47,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         input.OnUpdate();
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.J))
+        {
+            if (PlayerManager.Instance.FCamera.State == FollowCamera.CameraState.BossBasic)
+                PlayerManager.Instance.FCamera.SetBossTopView(boss, bossGround);
+            else
+                PlayerManager.Instance.FCamera.SetBossBasic(boss);
+        }
     }
 
     public void PlayerChangeStart()

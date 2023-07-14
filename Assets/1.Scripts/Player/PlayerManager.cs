@@ -93,6 +93,7 @@ public class PlayerManager : MonoBehaviour
             transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 starObj.SetActive(false);
+                anim.SetTrigger("StartMotionEnd");
                 transform.DOMoveZ(GameManager.Instance.startPos.z + 3, 0.5f).SetEase(Ease.Linear);
                 transform.DOMoveY(GameManager.Instance.startPos.y + 1.5f, 0.25f).SetEase(Ease.OutQuad).OnUpdate(() =>
                 {
@@ -124,11 +125,6 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             UnChange(-transform.forward, false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            FCamera.State = FollowCamera.CameraState.BossTopView;
         }
     }
 
@@ -162,6 +158,7 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
+        float s = GetViewportSize();
         Time.timeScale = 0;
         anim.SetTrigger("ChangeStart");
         yield return new WaitForSecondsRealtime(0.75f);
@@ -238,7 +235,8 @@ public class PlayerManager : MonoBehaviour
         Vector3 min = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.min);
         Vector3 max = GameManager.Instance.mainCamera.WorldToViewportPoint(bounds.max);
         Vector3 diff = max - min;
-        return Mathf.Max(diff.x, diff.y);
+        diff.z = 0;
+        return diff.magnitude;
     }
     #endregion
 }

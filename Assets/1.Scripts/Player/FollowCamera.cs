@@ -18,6 +18,7 @@ public class FollowCamera : MonoBehaviour
     [System.NonSerialized] public CameraState prevState;
     public CameraState State
     {
+        get { return state; }
         set
         {
             if (state == value)
@@ -90,10 +91,9 @@ public class FollowCamera : MonoBehaviour
     Vector3 curOffset;
     float curYOffset;
 
-    //변신
-
-    //보스
+    //보스전
     Transform boss;
+    Transform bossGround;
 
     // Start is called before the first frame update
     void Start()
@@ -116,13 +116,16 @@ public class FollowCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Vector3 targetPos;
         if (PlayerManager.Instance.IsStartMotion)
         {
-            transform.position = Vector3.Lerp(transform.position, PlayerManager.Instance.startCameraPoint + curOffset, Time.fixedDeltaTime * 5);
+            targetPos = PlayerManager.Instance.startCameraPoint;
+            transform.position = Vector3.Lerp(transform.position, targetPos + curOffset, Time.fixedDeltaTime * 5);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.fixedDeltaTime * 5);
             return;
         }
 
+        targetPos = PlayerManager.Instance.PMovement.CameraViewPoint;
         if (state == CameraState.BossBasic)
         {
             //보스 방향을 바라보는 벡터
@@ -136,14 +139,27 @@ public class FollowCamera : MonoBehaviour
             curOffset = Quaternion.Euler(curAngle) * Vector3.back * curDistance + Vector3.up * curYOffset;
         }
 
-        transform.position = Vector3.Lerp(transform.position, PlayerManager.Instance.PMovement.CameraViewPoint + curOffset, Time.fixedDeltaTime * 5);
+        if (state == CameraState.BossTopView)
+        {
+            targetPos = (PlayerManager.Instance.PMovement.CameraViewPoint * 2 + boss.position + bossGround.position) / 4;
+            targetPos.y = PlayerManager.Instance.PMovement.CameraViewPoint.y;
+        }
+
+        transform.position = Vector3.Lerp(transform.position, targetPos + curOffset, Time.fixedDeltaTime * 5);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(curAngle), Time.fixedDeltaTime * 5);
     }
 
-    public void SetBossFight(Transform boss)
+    public void SetBossBasic(Transform boss)
     {
         this.boss = boss;
         State = CameraState.BossBasic;
+    }
+
+    public void SetBossTopView(Transform boss, Transform bossGround)
+    {
+        this.boss = boss;
+        this.bossGround = bossGround;
+        State = CameraState.BossTopView;
     }
 
     #region CameraShake

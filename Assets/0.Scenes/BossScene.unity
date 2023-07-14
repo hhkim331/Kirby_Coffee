@@ -2328,7 +2328,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93718
+  m_Name: pb_Mesh28660
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2856,7 +2856,10 @@ MonoBehaviour:
   changeCamera: {fileID: 1449735212}
   startCameraState: 4
   boss: {fileID: 122507276}
+  bossGround: {fileID: 390158913}
   postProcessProfile: {fileID: 11400000, guid: 8356d1f1365ad7e479d1a93152211b24, type: 2}
+  isStartMotion: 0
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!4 &2142489119
 Transform:
   m_ObjectHideFlags: 0

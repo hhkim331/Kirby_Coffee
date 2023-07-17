@@ -115,6 +115,7 @@ MonoBehaviour:
   sizespeed: 3
   maxsize: 3
   slopeForce: 5
+  particle: {fileID: 141433446842962269, guid: 91f19f70f9ef63647a8bf2db9b2b48f0, type: 3}
 --- !u!54 &3932770802200136525
 Rigidbody:
   m_ObjectHideFlags: 0

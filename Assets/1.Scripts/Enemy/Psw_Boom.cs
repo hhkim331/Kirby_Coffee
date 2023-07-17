@@ -8,6 +8,7 @@ public class Psw_Boom : MonoBehaviour
     public float speed = 5.0f; // 원하는 총알 속도를 설정합니다.
     public float distanceTime = 1f;
     Rigidbody rb;
+    public GameObject particle;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,4 +48,10 @@ public class Psw_Boom : MonoBehaviour
         Destroy(gameObject, 3);
     }
 
+    private void OnDestroy()
+    {
+        GameObject pa = Instantiate(particle);
+        pa.transform.position = this.transform.position;
+        Destroy(pa, 1);
+    }
 }

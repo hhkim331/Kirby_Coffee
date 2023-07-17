@@ -11,7 +11,7 @@ public class psw_Snow_90 : MonoBehaviour
     float size = 0;
     public float maxsize = 3;
     public float slopeForce = 5;
-
+    public GameObject particle;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +40,9 @@ public class psw_Snow_90 : MonoBehaviour
         if (rb.velocity.magnitude < 0.1f)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
     }
 
@@ -59,6 +62,9 @@ public class psw_Snow_90 : MonoBehaviour
         if (rb != null)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
 
     }
@@ -71,6 +77,9 @@ public class psw_Snow_90 : MonoBehaviour
         if (rb != null)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
     }
 

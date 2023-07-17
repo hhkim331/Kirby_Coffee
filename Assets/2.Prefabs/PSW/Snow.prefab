@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba2cbfb655d7c042a8ef5b165abeeed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 
   speed: 4
   sizespeed: 5
   maxsize: 4
   slopeForce: 5
+  particle: {fileID: 141433446842962269, guid: 91f19f70f9ef63647a8bf2db9b2b48f0, type: 3}

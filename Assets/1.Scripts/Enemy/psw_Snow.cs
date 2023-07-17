@@ -8,17 +8,21 @@ public class psw_Snow : MonoBehaviour
     Rigidbody rb;
 
    
-    public string Player;
+   // public string Player;
     public float speed = 5;
     public float sizespeed = 3;
     float size = 0;
     public float maxsize = 3; 
     public float slopeForce = 5; // 경사로 올라갈 때 가해지는 힘의 크기
+    public GameObject particle;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.velocity = transform.right * speed;
+        //GameObject pa = Instantiate(particle);
+        //pa.transform.position = this.transform.position;
+        //Destroy(pa, 1);
     }
 
     // Update is called once per frame
@@ -44,6 +48,9 @@ public class psw_Snow : MonoBehaviour
         if (rb.velocity.magnitude < 0.1f)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
     }
 
@@ -63,6 +70,9 @@ public class psw_Snow : MonoBehaviour
         if (rb != null)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
     }
 
@@ -74,6 +84,9 @@ public class psw_Snow : MonoBehaviour
         if (rb != null)
         {
             Destroy(gameObject);
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
         }
     }
 

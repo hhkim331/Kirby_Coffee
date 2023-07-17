@@ -177,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isLadder)
         {
+            velocity = Vector3.zero;
             //카메라 앞방향 보기
             nextFixedRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), playerData.rotateSpeed * Time.fixedDeltaTime);
         }
@@ -388,6 +389,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
+                isFly = false;
+                isCanFly = false;
                 PlayerManager.Instance.Anim.SetTrigger("FlyCancel");
                 StartCoroutine(BreathAttackCoroutine());
             }
@@ -435,7 +438,6 @@ public class PlayerMovement : MonoBehaviour
             breathAttackDelay -= Time.deltaTime;
             yield return null;
         }
-        isFly = false;
         isBreathAttack = false;
     }
 
@@ -471,6 +473,11 @@ public class PlayerMovement : MonoBehaviour
         {
             isCloseLadder = true;
             ladderUpAxis = other.transform.position + Vector3.back * 0.5f;
+        }
+
+        if (other.CompareTag("ChangeScene"))
+        {
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("BossScene"));
         }
     }
 

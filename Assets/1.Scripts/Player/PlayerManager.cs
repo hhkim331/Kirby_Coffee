@@ -90,7 +90,7 @@ public class PlayerManager : MonoBehaviour
             startCameraPoint = GameManager.Instance.startPos;
             starObj.SetActive(true);
             anim.SetTrigger("StartMotion");
-            transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).SetDelay(1f).OnComplete(() =>
             {
                 starObj.SetActive(false);
                 anim.SetTrigger("StartMotionEnd");

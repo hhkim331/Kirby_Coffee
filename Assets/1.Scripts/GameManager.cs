@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
             PlayerManager.Instance.FCamera.SetBossBasic(boss);
         else
             PlayerManager.Instance.FCamera.State = startCameraState;
+
+        StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
     }
 
     // Update is called once per frame

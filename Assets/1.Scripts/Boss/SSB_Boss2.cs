@@ -249,8 +249,8 @@ public class SSB_Boss2 : MonoBehaviour
         //타겟방향으로 몸 회전시킬때 x축 회전되는 것 막기
         transform.rotation = rotX;
 
-       
-        if (currentTime < 4 && currentTime >3)
+
+        if (currentTime < 4 && currentTime > 3)
         {
             hammer.transform.localRotation = Quaternion.Lerp(secondRot, thirdRot, (currentTime / 2) * 20);
         }
@@ -519,9 +519,9 @@ public class SSB_Boss2 : MonoBehaviour
     private void RotAttack()//360도 회전하게 한다
     {
         currentTime += Time.deltaTime;
-        if(currentTime >2)
+        if (currentTime > 2)
         {
-        m_state = BossState.LerpJump1;
+            m_state = BossState.LerpJump1;
         }
 
         //1단점프 전 target위치를 저장한다
@@ -585,6 +585,7 @@ public class SSB_Boss2 : MonoBehaviour
             //state 변경하기
             //m_state = BossState.Die;
             //파괴하고싶다.3초 뒤에
+            StartCoroutine(GameClearManager.Instance.GameClear());
             Destroy(gameObject, 3);
             //anim.SetTrigger("Die");
         }

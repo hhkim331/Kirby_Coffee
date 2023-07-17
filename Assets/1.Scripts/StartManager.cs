@@ -16,6 +16,8 @@ public class StartManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SoundManager.Instance.PlayBGM("BGM2");
+
         startButton.interactable = false;
         videoPlayer.clip = videoClips[0];
         videoPlayer.loopPointReached += VideoEnd;

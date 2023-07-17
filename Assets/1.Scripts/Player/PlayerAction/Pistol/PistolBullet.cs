@@ -6,6 +6,11 @@ public class PistolBullet : MonoBehaviour
 {
     [SerializeField] float bulletSpeed = 10f;
     [SerializeField] float lifeTime = 3f;
+    [SerializeField] Outline outline;
+    [SerializeField] Color[] outlineColors;
+    int curColor = 0;
+    float curColorChangeTime = 0f;
+    float colorChangeDelay = 0.5f;
     bool isGuide = false;   //유도
     Vector3 moveDir;
     Collider targetCollider;
@@ -27,6 +32,9 @@ public class PistolBullet : MonoBehaviour
 
     private void Start()
     {
+        curColor = Random.Range(0, outlineColors.Length);
+        outline.OutlineColor = outlineColors[curColor];
+
         Destroy(gameObject, lifeTime);
     }
 
@@ -43,6 +51,20 @@ public class PistolBullet : MonoBehaviour
             //정해진 방향으로 이동
             transform.position += moveDir * Time.deltaTime * bulletSpeed;
         }
+
+        //Color
+        curColorChangeTime += Time.deltaTime;
+        if (curColorChangeTime > colorChangeDelay)
+        {
+            curColorChangeTime = 0;
+            int color = Random.Range(0, outlineColors.Length);
+            if (color == curColor) color++;
+            if (color >= outlineColors.Length) color = 0;
+            curColor = color;
+            outline.OutlineColor = outlineColors[curColor];
+        }
+
+        transform.LookAt(Camera.main.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)

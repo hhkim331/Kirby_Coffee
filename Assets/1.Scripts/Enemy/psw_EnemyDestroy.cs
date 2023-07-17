@@ -7,6 +7,7 @@ public class psw_EnemyDestroy : MonoBehaviour
     
     public Animator anim;
     public GameObject coin; // 활성화할 게임 오브젝트
+    public GameObject particle;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,9 +28,12 @@ public class psw_EnemyDestroy : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (coin != null)
-        {
-            coin.SetActive(true); // 게임 오브젝트를 활성화
-        }
+        GameObject co = Instantiate(coin);
+        co.transform.position = this.transform.position;
+        ItemCoin itemcoin = co.GetComponent<ItemCoin>();
+        itemcoin.GetItem();
+        GameObject pa = Instantiate(particle);
+        pa.transform.position = this.transform.position;
+        Destroy(pa, 2);
     }
 }

@@ -14,12 +14,12 @@ public class psw_rtmap_2 : MonoBehaviour
     void Start()
     {
         currentTime = 0;
-        rx = -25;
+        rx = -20;
     }
 
     public void CanRotation()
     {
-        rx = Mathf.Clamp(rx, -25, 25);
+        rx = Mathf.Clamp(rx, -20f, 20f);
         
     }
 
@@ -44,7 +44,7 @@ public class psw_rtmap_2 : MonoBehaviour
                 rx -= Time.deltaTime * speed;
             }
 
-            rx = Mathf.Clamp(rx, -25, 25);
+            rx = Mathf.Clamp(rx, -20, 20);
             Vector3 Rotation = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(0, 90, rx);
 

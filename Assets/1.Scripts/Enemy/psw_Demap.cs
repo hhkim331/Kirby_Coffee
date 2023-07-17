@@ -31,7 +31,7 @@ public class psw_Demap : MonoBehaviour
             //시간을 흐르게 한다.
             currentTime += Time.deltaTime;
             //1초가 지나면
-            if (currentTime > 1)
+            if (currentTime > 3f)
             {
                 //사라지게 하자.
                 MeshRenderer mr = this.GetComponent<MeshRenderer>();

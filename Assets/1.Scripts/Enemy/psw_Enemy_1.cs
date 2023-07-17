@@ -9,6 +9,7 @@ public class psw_Enemy_1 : MonoBehaviour
     public Animator anim;
     public float attackRange = 3;
     public GameObject coin; // 활성화할 게임 오브젝트
+    public GameObject particle;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,17 +33,28 @@ public class psw_Enemy_1 : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        
-            anim.SetTrigger("damage");
-            Destroy(this.gameObject,1);
-        
+    {   
+
+        anim.SetTrigger("damage");        
+           
+        Destroy(this.gameObject,1);
+ 
     }
+
     private void OnDestroy()
     {
-        if (coin != null)
-        {
-            coin.SetActive(true); // 게임 오브젝트를 활성화
-        }
+        // coin 공장에서 coin 을 생성하자
+        GameObject co = Instantiate(coin);
+        // 생성된 coin을 나의 위치에 배치하자
+        co.transform.position = this.transform.position;
+        // 생성된 coin 에서 ItemCoin 콤포넌트를 가져오자
+        ItemCoin itemcoin = co.GetComponent<ItemCoin>();
+        // 가져온 컴포넌트에  GetItem 함수를 실행하자.
+        itemcoin.GetItem();
+        GameObject pa = Instantiate(particle);
+        pa.transform.position = this.transform.position;
+        Destroy(pa, 2);
+        //particle.Play();
+        //print("되고 있는거니");
     }
 }

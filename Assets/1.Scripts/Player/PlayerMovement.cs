@@ -477,7 +477,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.CompareTag("ChangeScene"))
         {
-            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("BossScene"));
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("PlayerTestScene2"));
         }
     }
 

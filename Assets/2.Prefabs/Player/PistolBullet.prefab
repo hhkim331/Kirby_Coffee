@@ -46,7 +46,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &429678122925134524
 Rigidbody:
@@ -101,17 +101,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0b1b776ae3467ac41b19f295d7491a40,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b1b776ae3467ac41b19f295d7491a40,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b1b776ae3467ac41b19f295d7491a40,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b1b776ae3467ac41b19f295d7491a40,
         type: 3}
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 5
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []

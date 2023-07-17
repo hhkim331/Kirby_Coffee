@@ -27,7 +27,9 @@ public class psw_DeBox : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player")) return;
 
+
         Destroy(this.gameObject);
+        return;
         GameObject pa = Instantiate(particle);
         pa.transform.position = this.transform.position;
         Destroy(pa, 1);

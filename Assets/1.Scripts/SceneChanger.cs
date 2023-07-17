@@ -14,8 +14,13 @@ public class SceneChanger : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+            DestroyImmediate(gameObject);
     }
 
     //IEnumerator Start()

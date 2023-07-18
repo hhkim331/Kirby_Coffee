@@ -33,6 +33,7 @@ public class SSB_Boss3 : MonoBehaviour
         Charge2,//2
         RotAttack,//2
         LerpJump1,//3단점프1
+        JumpStop1,//점프스탑1
         LerpJump2,//3단점프2
         LerpJump3,//3단점프3
         Damage,//3.
@@ -48,6 +49,8 @@ public class SSB_Boss3 : MonoBehaviour
     bool isHammer = false;
     //첫번째 각도
     Quaternion originRot;
+    //애니메이션 콘트롤러 가져오기
+    public Animator anim;
 
 
     void Start()
@@ -58,6 +61,8 @@ public class SSB_Boss3 : MonoBehaviour
         originRot = hammer.transform.rotation;
         //컴포넌트 가져오기
         bossHP = GetComponent<SSB_BossHP>();
+        //애니메이터 컴포넌트 가져오기
+        anim = GetComponentInChildren<Animator>();
 
     }
     Vector3 jumpUpPos;
@@ -102,6 +107,9 @@ public class SSB_Boss3 : MonoBehaviour
             case BossState.LerpJump1:
                 LerpJump1();
                 break;
+            case BossState.JumpStop1:
+                JumpStop1();
+                break;
             case BossState.LerpJump2:
                 LerpJump2();
                 break;
@@ -143,6 +151,7 @@ public class SSB_Boss3 : MonoBehaviour
             //3. 상태를 Move로 변경한다
             m_state = BossState.Move;
             currentTime = 0;
+
         }
     }
 
@@ -153,9 +162,9 @@ public class SSB_Boss3 : MonoBehaviour
     {
         isHammer = true;
         Quaternion firstRot = Quaternion.Euler(0, 0, 0);
-        Quaternion secondRot = Quaternion.Euler(-90, 0, 0);
+        Quaternion secondRot = Quaternion.Euler(0, 0, 30);
         currentTime += Time.deltaTime;
-
+        anim.SetTrigger("Move");
         //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
         //필요속성 : 타겟쪽으로 방향 , 처음 플레이어와의 거리 , 일정거리
         Vector3 dir = target.transform.position - transform.position;
@@ -170,7 +179,8 @@ public class SSB_Boss3 : MonoBehaviour
 
         if (currentTime < 2)
         {
-            hammer.transform.localRotation = Quaternion.Lerp(firstRot, secondRot, currentTime / 2);
+            
+           // hammer.transform.localRotation = Quaternion.Lerp(firstRot, secondRot, currentTime / 2);
         }
 
         //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
@@ -179,6 +189,7 @@ public class SSB_Boss3 : MonoBehaviour
         {
             //상태를 어택으로 전환한다
             m_state = BossState.Attack;
+            
         }
 
     }
@@ -187,30 +198,29 @@ public class SSB_Boss3 : MonoBehaviour
     public GameObject hammer;
     float attackRange = 1.5f;
     private void Attack()
-    {      
-        Quaternion secondRot = Quaternion.Euler(-90, 0, 0);
-        Quaternion thirdRot = Quaternion.Euler(50, 0, 0);
+    {
+        Quaternion secondRot = Quaternion.Euler(0, 0, 30);
+        Quaternion thirdRot = Quaternion.Euler(0, 0, 80);
         currentTime += Time.deltaTime;
 
         //플레이어쪽으로 이동한다 
         Vector3 dir = target.transform.position - transform.position;
         float distance = dir.magnitude;
+        //바닥에 붙어있도록 한다
+        dir.y = 0;
         dir.Normalize();
         //타겟의 위치를 저장한다
         Vector3 targetRot = target.transform.position;
-        //바닥에 붙어있도록 한다
-        dir.y = 0;
         //타겟방향으로 몸 회전시키기 LookRotation은 해당벡터를 바라보는 함수
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
         //이동하게하기
         transform.position += dir * speed * Time.deltaTime;
 
-        if (distance < attackRange )
+        if (distance < attackRange)
         {
-            hammer.transform.localRotation = Quaternion.Lerp(secondRot, thirdRot, currentTime / 1);
-            transform.position += dir * speed * Time.deltaTime;
-            speed = 0;
+            //hammer.transform.localRotation = Quaternion.Lerp(secondRot, thirdRot, currentTime / 1);
             m_state = BossState.HammerMove;
+            
         }
     }
     //현재 위치를 저장한다
@@ -220,20 +230,25 @@ public class SSB_Boss3 : MonoBehaviour
 
     private void HammerMove()
     {
-        currentTime += Time.deltaTime;
-        
-        if (currentTime > 4)
-        {
+        //플레이어쪽으로 이동한다 
+        Vector3 dir = target.transform.position - transform.position;
+        float distance = dir.magnitude;
+        dir.y = 0;
+        dir.Normalize();
+        transform.position += dir * speed * Time.deltaTime;
+        speed = 0;
+        anim.SetTrigger("HammerAttack");
+        Invoke("TimeLimit", 3f);
+            
+         // m_state = BossState.TimeLimit;
 
-            m_state = BossState.TimeLimit;
-        }
     }
 
 
     void TimeLimit()
     {
         //yVelocity = 20;
-        m_state = BossState.JumpSpin;
+        //m_state = BossState.JumpSpin;
         // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
         jumpPos = transform.position + Vector3.up * jumpPower;
 
@@ -248,6 +263,10 @@ public class SSB_Boss3 : MonoBehaviour
         //현재 시간을 0으로 한다.
         ratio = 0;
 
+        
+        m_state = BossState.JumpSpin;
+            
+  
     }
 
     Vector3 jumpPos;
@@ -259,16 +278,15 @@ public class SSB_Boss3 : MonoBehaviour
     Vector3 center; //가운데
     float ratio;
     private void JumpSpin()
-    {      
+    {
         ratio += Time.deltaTime / 2; //2초안에 가라
         if (ratio > 0.5f)
         {
-            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.
-            m_state = BossState.Attack2;              
+            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.    
         }
         transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
         transform.position += center;//다시 값을 더해준다
-        
+        m_state = BossState.Attack2;
     }
 
     //바닥에 내려찍는 속도
@@ -301,7 +319,7 @@ public class SSB_Boss3 : MonoBehaviour
             Vector3 dir = targetPosition - transform.position;
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
-            if (curPos.y < 0.5f) //바닥에 박히는 것 막기
+            if (curPos.y < 1f) //바닥에 박히는 것 막기
             {
                 curPos = transform.position; //위치
                 curPos.y = 0;
@@ -449,6 +467,7 @@ public class SSB_Boss3 : MonoBehaviour
             m_state = BossState.LerpJump1;
         }
         //animation 재생
+        anim.SetTrigger("360Attack");
 
         //1단점프 전 target위치를 저장한다
         isJump = true;
@@ -463,32 +482,36 @@ public class SSB_Boss3 : MonoBehaviour
 
     private void LerpJump1()//1단점프
     {
-      
-            ratio += Time.deltaTime / 1; //1초만에 가라
-            if (ratio > 0.5f)
-            {
-                ratio = 0.5f; // 0.5를 넘어가면 멈춰야함 - 반지름까지만 올라가서 멈춰야 하므로
-            }
-            transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);
-            transform.position += center;
-        
-        if (target.transform.position.x == transform.position.x)
-        {
 
-            //바닥으로 내려찍는다
-            Vector3 dir = targetPosition - transform.position;
-            dir.Normalize();
-            rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
-            if (curPos.y < 2)
-            {
-                curPos = transform.position; //위치
-                curPos.y = 0;
-                transform.position = curPos;
-                m_state = BossState.LerpJump2;
-            }
+        ratio += Time.deltaTime / 1; //1초만에 가라
+        if (ratio > 0.5f)
+        {
+            ratio = 0.5f; // 0.5를 넘어가면 멈춰야함 - 반지름까지만 올라가서 멈춰야 하므로
+            m_state = BossState.JumpStop1;
         }
+        transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);
+        transform.position += center;
+
+        targetPosition = target.transform.position;
+
     }
 
+
+    private void JumpStop1()
+    {
+        //바닥으로 내려찍는다
+        Vector3 dir = targetPosition - transform.position;
+        dir.Normalize();
+        rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
+        if (curPos.y < 2)
+        {
+            curPos = transform.position; //위치
+            curPos.y = 0;
+            transform.position = curPos;
+            m_state = BossState.JumpStop1;
+        }
+
+    }
     private void LerpJump2()
     {
 
@@ -529,9 +552,9 @@ public class SSB_Boss3 : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision other)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             isGrounded = true;
             curPos = transform.position;
@@ -539,9 +562,12 @@ public class SSB_Boss3 : MonoBehaviour
             transform.position = curPos;
         }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-
+            Vector3 dir = other.transform.position - transform.position;
+            dir.y = 0;
+            dir.Normalize();
+            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
         }
     }
     private void OnCollisionExit(Collision collision)
@@ -551,4 +577,5 @@ public class SSB_Boss3 : MonoBehaviour
             isGrounded = false;
         }
     }
+
 }

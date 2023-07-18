@@ -10,10 +10,12 @@ public class psw_shaker : MonoBehaviour
     private Vector3 currentPosition;
     bool isUp = false;
     public GameObject door;
+    BoxCollider boxCollider;
     // Start is called before the first frame update
     void Start()
     {
         currentPosition = transform.position;
+        boxCollider = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -47,7 +49,9 @@ public class psw_shaker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(this.gameObject);
-        Destroy(door);
+        MeshRenderer mr = this.GetComponent<MeshRenderer>();
+        mr.enabled = false;
+        BoxCollider bx = this.GetComponent<BoxCollider>();
+        bx.enabled = false;
     }
 }

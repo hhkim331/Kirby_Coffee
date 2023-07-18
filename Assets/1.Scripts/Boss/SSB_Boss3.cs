@@ -179,8 +179,8 @@ public class SSB_Boss3 : MonoBehaviour
 
         if (currentTime < 2)
         {
-            
-           // hammer.transform.localRotation = Quaternion.Lerp(firstRot, secondRot, currentTime / 2);
+
+            // hammer.transform.localRotation = Quaternion.Lerp(firstRot, secondRot, currentTime / 2);
         }
 
         //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
@@ -189,7 +189,7 @@ public class SSB_Boss3 : MonoBehaviour
         {
             //상태를 어택으로 전환한다
             m_state = BossState.Attack;
-            
+
         }
 
     }
@@ -220,7 +220,7 @@ public class SSB_Boss3 : MonoBehaviour
         {
             //hammer.transform.localRotation = Quaternion.Lerp(secondRot, thirdRot, currentTime / 1);
             m_state = BossState.HammerMove;
-            
+
         }
     }
     //현재 위치를 저장한다
@@ -239,8 +239,8 @@ public class SSB_Boss3 : MonoBehaviour
         speed = 0;
         anim.SetTrigger("HammerAttack");
         Invoke("TimeLimit", 3f);
-            
-         // m_state = BossState.TimeLimit;
+
+        // m_state = BossState.TimeLimit;
 
     }
 
@@ -263,10 +263,9 @@ public class SSB_Boss3 : MonoBehaviour
         //현재 시간을 0으로 한다.
         ratio = 0;
 
-        
+
         m_state = BossState.JumpSpin;
-            
-  
+        PlayerManager.Instance.FCamera.SetBossTopView(transform, GameManager.Instance.bossGround);
     }
 
     Vector3 jumpPos;
@@ -335,6 +334,7 @@ public class SSB_Boss3 : MonoBehaviour
             rotX.z = 0;
             noJumpBackPos = back.transform.position; //back의 전 위치를 저장한다
             m_state = BossState.Move3;
+            PlayerManager.Instance.FCamera.SetBossBasic(transform);
         }
     }
     private void Move3()

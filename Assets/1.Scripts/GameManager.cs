@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Camera changeCamera;
     [SerializeField] FollowCamera.CameraState startCameraState;
     [SerializeField] Transform boss;
-    [SerializeField] Transform bossGround;
+    public Transform bossGround;
 
     //포스트 프로세싱
     [SerializeField] PostProcessProfile postProcessProfile;

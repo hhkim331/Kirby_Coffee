@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -266,10 +268,13 @@ public class PlayerActionPistol : PlayerAction
             aimRT.position += aimDir;
             Ray ray = Camera.main.ScreenPointToRay(aimRT.position);
             // Raycast를 수행하여 가장 먼저 만나는 Collider를 찾습니다.
-            foreach (RaycastHit hit in Physics.RaycastAll(ray))
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+            Array.Sort(hits, (RaycastHit x, RaycastHit y) => x.distance.CompareTo(y.distance));
+            foreach (RaycastHit hit in hits)
             {
                 if (hit.collider.isTrigger || hit.collider.CompareTag("Player")) continue;
 
+                Debug.Log(hit.collider.name);
                 UpdateAimPlayer(hit.point);
                 if (hit.transform.CompareTag("Enemy") || hit.transform.CompareTag("Boss"))
                 {
@@ -287,6 +292,8 @@ public class PlayerActionPistol : PlayerAction
                     if (distance < lockOnDistance)
                         LockOn(hit.collider);
                 }
+
+                break;
             }
         }
     }

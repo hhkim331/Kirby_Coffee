@@ -84,10 +84,6 @@ public class SoundManager : MonoBehaviour
         if (bgmVolumeChange)
         {
             bgmFadeTime += Time.unscaledDeltaTime;
-            if (audioMixer.GetFloat("BGM", out float v))
-            {
-                Debug.Log("BGM Volume : " + v);
-            }
             if (bgmFadeTime > bgmFadeDelay)
             {
                 bgmVolumeChange = false;

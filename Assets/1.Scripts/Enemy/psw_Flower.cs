@@ -17,7 +17,7 @@ public class psw_Flower : MonoBehaviour
             isOpen = true;
             Item item = Instantiate(ItemFactory, transform.position, Quaternion.identity).GetComponent<Item>();
             item.GetItem();
-            GetComponent<MeshRenderer>().materials[0].color = Color.red;
+            GetComponentInChildren<Renderer>().materials[2].color = new Color32(231, 0, 0, 255);
         }
     }
 }

@@ -20,9 +20,16 @@ public class PlayerMouth : MonoBehaviour
         get { return isSuction; }
         set
         {
+            if (isSuction == value) return;
+
             isSuction = value;
             if (suction.activeSelf != value)
                 suction.SetActive(value);
+
+            if (value)
+                audioSource.Play();
+            else
+                audioSource.Stop();
         }
     }
     bool canSuction = true;
@@ -33,12 +40,29 @@ public class PlayerMouth : MonoBehaviour
     //먹은 물건
     GameObject stackObject;
 
+    //사운드(구간반복을 위해 별도배치)
+    AudioSource audioSource;
+    [SerializeField] float audioStartPoint;
+    [SerializeField] float audioEndPoint;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void Update()
     {
-
         //인풋이 없는 경우
         if (!GameManager.Input.isInput)
             IsSuction = false;
+
+        //빨아들이기 사운드
+        if (isSuction)
+        {
+            Debug.Log(audioSource.time);
+            if (audioSource.time > audioEndPoint)
+                audioSource.time = audioStartPoint;
+        }
 
         //빨아들이기 쿨타임
         if (!canSuction)

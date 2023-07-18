@@ -17,6 +17,7 @@ public class StartManager : MonoBehaviour
     void Start()
     {
         SoundManager.Instance.PlayBGM("BGM2");
+        SoundManager.Instance.BGMVolume = 1;
 
         startButton.interactable = false;
         videoPlayer.clip = videoClips[0];
@@ -43,7 +44,7 @@ public class StartManager : MonoBehaviour
 
     void LastVideoEnd(VideoPlayer vp)
     {
-        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("Stage1"); });
+        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene"); });
     }
 
 #if UNITY_EDITOR

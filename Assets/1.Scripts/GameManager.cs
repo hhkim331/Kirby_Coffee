@@ -38,10 +38,14 @@ public class GameManager : MonoBehaviour
         postProcessProfile.TryGetSettings(out colorGrading);
         colorGrading.colorFilter.value = Color.white;
         if (startCameraState == FollowCamera.CameraState.BossBasic)
+        {
             PlayerManager.Instance.FCamera.SetBossBasic(boss);
+            SoundManager.Instance.PlayBGM("BGM1");
+        }
         else
             PlayerManager.Instance.FCamera.State = startCameraState;
 
+        SoundManager.Instance.BGMVolume = 1;
         StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
     }
 

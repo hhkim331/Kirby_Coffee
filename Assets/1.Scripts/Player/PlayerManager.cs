@@ -74,6 +74,7 @@ public class PlayerManager : MonoBehaviour
 
         playerHealth.Set(playerData);
 
+        changeType = PlayerIngameData.Instance.ChangeType;
         playerMouth.Set(changeType);
         GameManager.Input.keyaction += playerMouth.KeyAction;
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5855839934742109564}
   - component: {fileID: 429678122925134524}
   - component: {fileID: 3040744001034456313}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PistolBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,9 @@ MonoBehaviour:
   - {r: 0.5019608, g: 1, b: 0.5019608, a: 1}
   - {r: 1, g: 0.627451, b: 0.3137255, a: 1}
   - {r: 1, g: 1, b: 0, a: 1}
-  hitEffect: {fileID: 1247311384876784, guid: c996e56bf48430d4698bb0ca0d99e37f, type: 3}
+  hitEffect: {fileID: 1247311384876784, guid: 09af0f2d34a724847a2f4c9d503b8d73, type: 3}
+  nonHitEffect: {fileID: 1247311384876784, guid: c996e56bf48430d4698bb0ca0d99e37f,
+    type: 3}
 --- !u!1001 &8345909093213718661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -172,6 +174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: star
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0b1b776ae3467ac41b19f295d7491a40,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b1b776ae3467ac41b19f295d7491a40, type: 3}

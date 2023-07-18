@@ -178,7 +178,7 @@ public class PlayerActionPistol : PlayerAction
     {
         if (isFire) return;
         if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit || PlayerManager.Instance.IsStartMotion) return;
-        if (PlayerManager.Instance.PMovement.IsFly) return;
+        if (PlayerManager.Instance.PMovement.IsFly || PlayerManager.Instance.PMovement.IsBreathAttack) return;
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -266,9 +266,10 @@ public class PlayerActionPistol : PlayerAction
             aimRT.position += aimDir;
             Ray ray = Camera.main.ScreenPointToRay(aimRT.position);
             // Raycast를 수행하여 가장 먼저 만나는 Collider를 찾습니다.
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            foreach (RaycastHit hit in Physics.RaycastAll(ray))
             {
+                if (hit.collider.isTrigger || hit.collider.CompareTag("Player")) continue;
+
                 UpdateAimPlayer(hit.point);
                 if (hit.transform.CompareTag("Enemy") || hit.transform.CompareTag("Boss"))
                 {
@@ -420,8 +421,10 @@ public class PlayerActionPistol : PlayerAction
         IsHardAction = false;
         yield return new WaitForSeconds(0.1f);
         Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(transform.forward);
+        SoundManager.Instance.PlaySFX("Shot");
         yield return new WaitForSeconds(0.1f);
         Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(transform.forward);
+        SoundManager.Instance.PlaySFX("Shot");
         isFire = false;
         IsAction = false;
         IsHardAction = false;
@@ -433,6 +436,7 @@ public class PlayerActionPistol : PlayerAction
         {
             yield return new WaitForSeconds(0.1f);
             PistolBullet pistolBullet = Instantiate(bulletFactory).GetComponent<PistolBullet>();
+            SoundManager.Instance.PlaySFX("Shot");
             if (i % 2 == 0)
             {
                 pistolBullet.transform.position = rightFirePos.position;

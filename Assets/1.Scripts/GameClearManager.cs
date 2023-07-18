@@ -12,11 +12,18 @@ public class GameClearManager : MonoBehaviour
     [SerializeField] Image playerBossKillImage;
 
     [SerializeField] Image myBossKillImage;
+    [SerializeField] RawImage myBossKillVideo;
     [SerializeField] VideoPlayer videoPlayer;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        myBossKillVideo.enabled = false;
+        videoPlayer.Stop();
     }
 
     public IEnumerator GameClear()
@@ -32,6 +39,7 @@ public class GameClearManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.1f);
         PlayerManager.Instance.FCamera.CameraShake(0.1f, 0.15f);
         yield return new WaitForSecondsRealtime(0.55f);
+        myBossKillVideo.enabled = true;
         videoPlayer.Play();
     }
 }

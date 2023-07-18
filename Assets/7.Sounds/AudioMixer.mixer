@@ -215,7 +215,11 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 816da4a2ed9e41b41992bbb24f30d00f
+    name: BGM
+  - guid: 3803acc2abd059246b019fb9b88a6c1c
+    name: SFX
   m_AudioMixerGroupViews:
   - guids:
     - c5962379964b20046a204e1dc378218c

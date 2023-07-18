@@ -2991,6 +2991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBossKillImage: {fileID: 1462523189}
   myBossKillImage: {fileID: 403564307}
+  myBossKillVideo: {fileID: 1035209321}
   videoPlayer: {fileID: 237563975}
 --- !u!4 &1629003604
 Transform:

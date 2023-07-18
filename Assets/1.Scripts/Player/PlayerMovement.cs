@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
     //내뱉기
     bool isBreathAttack = false;
+    public bool IsBreathAttack { get { return isBreathAttack; } }
     float breathAttackDelay;    //내뱉기 공격 딜레이
     [SerializeField] GameObject breathFactory;
 
@@ -53,6 +54,10 @@ public class PlayerMovement : MonoBehaviour
     bool isCanLadder = true;    //사다리를 탈 수 있는지
     float ladderDelay;
     Vector3 ladderUpAxis;   //사다리를 올라가는 축
+
+    //걷기 사운드 딜레이
+    float footSoundTime = 0;
+    float footSoundDelay = 0.5f;
 
     public void Set(PlayerData data)
     {
@@ -75,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
         if (!GameManager.Input.isInput)
         {
             planeVelocity = Vector3.zero;
+            footSoundTime = 0;
             jumpFlag = false;
             flyFlag = false;
         }
@@ -197,9 +203,20 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if (planeVelocity == Vector3.zero)
+            {
+                footSoundTime = 0;
                 PlayerManager.Instance.Anim.SetBool("Run", false);
+            }
             else
+            {
+                footSoundTime += Time.fixedDeltaTime;
+                if (footSoundTime >= footSoundDelay)
+                {
+                    footSoundTime = 0;
+                    SoundManager.Instance.PlaySFX("Foot");
+                }
                 PlayerManager.Instance.Anim.SetBool("Run", true);
+            }
 
             rb.velocity = velocity;
         }
@@ -256,6 +273,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //시작 y높이 
                 isJump = true;
+                SoundManager.Instance.PlaySFXOnce("Jump");
                 PlayerManager.Instance.Anim.SetBool("Jump", true);
                 jumpFlagTime = playerData.jumpFlagTime;
                 return playerData.jumpPower;
@@ -279,6 +297,7 @@ public class PlayerMovement : MonoBehaviour
                     {
                         isFly = true;
                         flyActionDelay = playerData.flyActionDelay;
+                        SoundManager.Instance.PlaySFX("Fly");
                         PlayerManager.Instance.Anim.SetTrigger("Fly");
                         PlayerManager.Instance.Anim.SetBool("Jump", false);
                         flyActiveTime = playerData.flyTime;
@@ -290,6 +309,7 @@ public class PlayerMovement : MonoBehaviour
                         if (flyActionDelay <= 0)
                         {
                             flyActionDelay = playerData.flyActionDelay;
+                            SoundManager.Instance.PlaySFX("Fly");
                             PlayerManager.Instance.Anim.SetTrigger("Fly");
                             return playerData.flyPower;
                         }
@@ -302,6 +322,7 @@ public class PlayerMovement : MonoBehaviour
                     if (flyActionDelay <= 0)
                     {
                         flyActionDelay = playerData.flyActionDelay;
+                        SoundManager.Instance.PlaySFX("Fly");
                         PlayerManager.Instance.Anim.SetTrigger("Fly");
                         return 0;
                     }
@@ -432,7 +453,7 @@ public class PlayerMovement : MonoBehaviour
         breathAttackDelay = 0.2f;
         //탄환 생성
         Instantiate(breathFactory, transform.position, Quaternion.identity).GetComponent<PlayerBreath>().Set(transform.forward);
-
+        SoundManager.Instance.PlaySFXOnce("Sigh");
         while (breathAttackDelay > 0f)
         {
             breathAttackDelay -= Time.deltaTime;
@@ -477,6 +498,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.CompareTag("ChangeScene"))
         {
+            PlayerIngameData.Instance.HP = PlayerManager.Instance.PHealth.HP;
+            PlayerIngameData.Instance.ChangeType = PlayerManager.Instance.ChangeType;
+            SoundManager.Instance.BGMVolume = 0;
             StartCoroutine(SceneChanger.Instance.ChangeSceneStart("PlayerTestScene2"));
         }
     }

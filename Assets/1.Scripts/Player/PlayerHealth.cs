@@ -58,7 +58,7 @@ public class PlayerHealth : MonoBehaviour
                 //emission으로 발광효과주기
                 //foreach (var renderer in renderers)
                 curColor = Color.black;
-                foreach(var material in materials)
+                foreach (var material in materials)
                     material.SetColor("_EmissionColor", Color.black);
             }
             else
@@ -117,13 +117,13 @@ public class PlayerHealth : MonoBehaviour
             warningBlinkTime += Time.deltaTime;
             if (curColor == Color.black)
             {
-                Color newColor = new Color(warningBlinkTime/ playerData.healthWarningBlinkDelay, 0, 0);
+                Color newColor = new Color(warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
                 foreach (var material in materials)
                     material.SetColor("_EmissionColor", newColor);
             }
             else
             {
-                Color newColor = new Color(1-warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
+                Color newColor = new Color(1 - warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
                 foreach (var material in materials)
                     material.SetColor("_EmissionColor", newColor);
             }
@@ -143,7 +143,13 @@ public class PlayerHealth : MonoBehaviour
     {
         this.playerData = playerData;
         maxHP = playerData.health;
-        hp = maxHP;
+        if (PlayerIngameData.Instance.HP == 0) hp = maxHP;
+        else
+        {
+            hp = PlayerIngameData.Instance.HP;
+            mainHPSlider.value = hp / maxHP;
+            subHPSlider.value = hp / maxHP;
+        }
     }
 
     public void Hit(Vector3 hitDir, float damage, bool drop)
@@ -159,11 +165,11 @@ public class PlayerHealth : MonoBehaviour
             Die();
         else
         {
+            SoundManager.Instance.PlaySFXOnce("Damaged");
+
             PlayerManager.Instance.Hit();
             //피격 애니메이션 실행
             PlayerManager.Instance.PMovement.Hit(hitDir);
-
-            //피격UI?
 
             //아이템 드롭
             if (drop)

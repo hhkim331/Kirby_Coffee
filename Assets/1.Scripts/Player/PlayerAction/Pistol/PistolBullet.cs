@@ -17,6 +17,7 @@ public class PistolBullet : MonoBehaviour
 
     //이펙트
     [SerializeField] GameObject hitEffect;
+    [SerializeField] GameObject nonHitEffect;
 
     public void Set(Vector3 dir)
     {
@@ -79,8 +80,10 @@ public class PistolBullet : MonoBehaviour
             Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity), 3);
         }
 
-
         if (!other.CompareTag("CameraBasic"))
+        {
+            Destroy(Instantiate(nonHitEffect, transform.position, Quaternion.identity), 3);
             Destroy(gameObject);
+        }
     }
 }

@@ -16,6 +16,7 @@ public class ItemCoin : Item
     {
         base.GetItem();
         StartCoroutine(PlayAnimationDelayed(0f));
+        SoundManager.Instance.PlaySFX("Coin");
         Destroy(gameObject, 0.6f);
         switch (coinType)
         {

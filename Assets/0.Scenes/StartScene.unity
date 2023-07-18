@@ -397,7 +397,6 @@ GameObject:
   m_Component:
   - component: {fileID: 829594977}
   - component: {fileID: 829594976}
-  - component: {fileID: 829594978}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -421,38 +420,45 @@ MonoBehaviour:
   loadingBGMSoundInfos:
   - key: BGM1
     audioClip: {fileID: 8300000, guid: 8e1547b10db0d9744a47b9fa1d7be30b, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: -7911947102148796118, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: BGM2
     audioClip: {fileID: 8300000, guid: 5ae07b605d4f65f40adcf04c0975b1f1, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: 3256470207545801557, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   loadingSFXSoundInfos:
   - key: Foot
     audioClip: {fileID: 8300000, guid: e5dabfe2672a9014b8fa158cae8d87b1, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: -2264287576019524579, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Jump
     audioClip: {fileID: 8300000, guid: 6f9cd7b52bae014429704d3d9e304d60, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: -3632204565194469339, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Fly
     audioClip: {fileID: 8300000, guid: d3eae06181791ed4b8ace771bd2a8358, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
-  - key: Suction
-    audioClip: {fileID: 8300000, guid: 75e5c861aabf28649b1372027567552c, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: 7388941172755611051, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Sigh
     audioClip: {fileID: 8300000, guid: 1e93d2b847001ee4c8fc86c70040d89c, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: -237583560640382933, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Damaged
     audioClip: {fileID: 8300000, guid: ee60a3499cf75824c8602617d9556e12, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: 6217595935500911837, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Shot
     audioClip: {fileID: 8300000, guid: 1db184fc802667a48a2e2ed7540b8d73, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: 3041405511499744667, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Box
     audioClip: {fileID: 8300000, guid: 64141ff1fce6a754baf58c6853c63413, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: -1524853237325851200, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
   - key: Coin
     audioClip: {fileID: 8300000, guid: 0ac7017d4a236f54a9a81a9ed13ab528, type: 3}
-    audioMixerGroup: {fileID: 24300002, guid: aca2c2bb313214d498a53a5c5d377ed8, type: 2}
+    audioMixerGroup: {fileID: 9144201334225004735, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
 --- !u!4 &829594977
 Transform:
   m_ObjectHideFlags: 0
@@ -468,102 +474,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &829594978
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829594975}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1187677493
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
-    float bgmVolume = 1;
+    float bgmVolume = 0;
     public float BGMVolume
     {
         set

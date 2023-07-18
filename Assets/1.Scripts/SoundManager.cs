@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -15,31 +16,39 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
+    bool bgmVolumeChange = false;
+    float bgmFadeTime = 0;
+    float bgmFadeDelay = 0.5f;
+    float lastBgmVolume = 0;
     float bgmVolume = 0;
     public float BGMVolume
     {
         set
         {
-            if (bgmCoroutine != null)
-                StopCoroutine(bgmCoroutine);
-            bgmCoroutine = StartCoroutine(BGMFade(bgmVolume, value, 1f));
+            if (bgmVolume == value) return;
+            bgmVolumeChange = true;
+            bgmFadeTime = 0;
+            lastSfxVolume = bgmVolume;
             bgmVolume = value;
         }
     }
-    Coroutine bgmCoroutine = null;
 
+    bool sfxVolumeChange = false;
+    float sfxFadeTime = 0;
+    float sfxFadeDelay = 0.5f;
+    float lastSfxVolume = 0;
     float sfxVolume = 1;
     public float SFXVolume
     {
         set
         {
-            if (sfxCoroutine != null)
-                StopCoroutine(sfxCoroutine);
-            sfxCoroutine = StartCoroutine(SFXFade(sfxVolume, value, 1f));
+            if (sfxVolume == value) return;
+            sfxVolumeChange = true;
+            sfxFadeTime = 0;
+            lastSfxVolume = sfxVolume;
             sfxVolume = value;
         }
     }
-    Coroutine sfxCoroutine = null;
 
     [SerializeField] AudioMixer audioMixer = null;
 
@@ -68,6 +77,37 @@ public class SoundManager : MonoBehaviour
 
         LoadSound();
         LoadChildGameObj();
+    }
+
+    private void Update()
+    {
+        if (bgmVolumeChange)
+        {
+            bgmFadeTime += Time.unscaledDeltaTime;
+            if (audioMixer.GetFloat("BGM", out float v))
+            {
+                Debug.Log("BGM Volume : " + v);
+            }
+            if (bgmFadeTime > bgmFadeDelay)
+            {
+                bgmVolumeChange = false;
+                audioMixer.SetFloat("BGM", bgmVolume);
+            }
+            else
+                audioMixer.SetFloat("BGM", Mathf.Lerp(lastBgmVolume, bgmVolume, bgmFadeTime / bgmFadeDelay));
+        }
+
+        if (sfxVolumeChange)
+        {
+            sfxFadeTime += Time.unscaledDeltaTime;
+            if (sfxFadeTime > sfxFadeDelay)
+            {
+                sfxVolumeChange = false;
+                audioMixer.SetFloat("SFX", sfxVolume);
+            }
+            else
+                audioMixer.SetFloat("SFX", Mathf.Lerp(lastSfxVolume, sfxVolume, sfxFadeTime / sfxFadeDelay));
+        }
     }
 
     void LoadSound()
@@ -147,17 +187,6 @@ public class SoundManager : MonoBehaviour
             bgmSrc.loop = true;
             bgmSrc.spatialBlend = 0f;
             bgmSrc.Play(0);
-        }
-    }
-
-    IEnumerator BGMFade(float startValue, float endValue, float fadeTime)
-    {
-        float time = 0;
-        while (time < fadeTime)
-        {
-            yield return null;
-            audioMixer.SetFloat("BGM", Mathf.Lerp(startValue, endValue, time / fadeTime));
-            time += Time.deltaTime;
         }
     }
     #endregion
@@ -286,17 +315,6 @@ public class SoundManager : MonoBehaviour
             sfxCurCount++;
             if (sfxMaxCount <= sfxCurCount)
                 sfxCurCount = 0;
-        }
-    }
-
-    IEnumerator SFXFade(float startValue, float endValue, float fadeTime)
-    {
-        float time = 0;
-        while (time < fadeTime)
-        {
-            yield return null;
-            audioMixer.SetFloat("SFX", Mathf.Lerp(startValue, endValue, time / fadeTime));
-            time += Time.deltaTime;
         }
     }
 

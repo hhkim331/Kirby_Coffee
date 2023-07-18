@@ -28,6 +28,7 @@ public class GameClearManager : MonoBehaviour
 
     public IEnumerator GameClear()
     {
+        SoundManager.Instance.BGMVolume = 0;
         Time.timeScale = 0;
 
         playerBossKillImage.gameObject.SetActive(true);

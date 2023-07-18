@@ -7,7 +7,7 @@ public class PlayerSuction : MonoBehaviour
     [SerializeField] Transform mouth;   //도착지점
 
     //콜라이더에 닿은 물건들
-    Dictionary<Transform,float> colliderDic = new Dictionary<Transform, float>();
+    Dictionary<Transform, float> colliderDic = new Dictionary<Transform, float>();
 
     private void OnEnable()
     {
@@ -17,7 +17,7 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             return;
         //닿은 대상을 목록에 추가시킨다
         colliderDic.Add(other.transform, 0f);
@@ -25,11 +25,11 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.layer != LayerMask.NameToLayer("MoveableObj"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             return;
 
         //이미 목록에 있는 대상이라면
-        if(colliderDic.ContainsKey(other.transform))
+        if (colliderDic.ContainsKey(other.transform))
         {
             //당기는 상대를 일시적으로 버티는 상태로 만든이후
             colliderDic[other.transform] += Time.fixedDeltaTime;
@@ -50,7 +50,7 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             return;
         //나간대상을 목록에서 제거한다
         colliderDic.Remove(other.transform);

@@ -3330,6 +3330,9 @@ MonoBehaviour:
   coin: {fileID: 4264240769498535094, guid: a7993a046186c9a4a9f8c07e69298584, type: 3}
   particle: {fileID: 6925533621942992133, guid: 005d3efedd11bba46878c04f7ac138ff,
     type: 3}
+  psw_bullet: {fileID: 1891569693}
+  isChange: 1
+  isStack: 0
 --- !u!54 &661789922
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4114,6 +4117,8 @@ MonoBehaviour:
   coin: {fileID: 4264240769498535094, guid: a7993a046186c9a4a9f8c07e69298584, type: 3}
   particle: {fileID: 6925533621942992133, guid: 005d3efedd11bba46878c04f7ac138ff,
     type: 3}
+  psw_snow: {fileID: 874823932}
+  isStack: 0
 --- !u!4 &792897611 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2759306471448224285, guid: a75d524808882a34f8d4c1c6051d9e50,
@@ -4896,6 +4901,9 @@ MonoBehaviour:
   coin: {fileID: 4264240769498535094, guid: a7993a046186c9a4a9f8c07e69298584, type: 3}
   particle: {fileID: 6925533621942992133, guid: 005d3efedd11bba46878c04f7ac138ff,
     type: 3}
+  psw_bullet: {fileID: 31253336}
+  isChange: 1
+  isStack: 0
 --- !u!54 &962616479
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9011,6 +9019,8 @@ MonoBehaviour:
   coin: {fileID: 4264240769498535094, guid: a7993a046186c9a4a9f8c07e69298584, type: 3}
   particle: {fileID: 6925533621942992133, guid: 005d3efedd11bba46878c04f7ac138ff,
     type: 3}
+  psw_snow: {fileID: 1417164349}
+  isStack: 0
 --- !u!1001 &1720075864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9563,6 +9573,9 @@ MonoBehaviour:
   coin: {fileID: 4264240769498535094, guid: a7993a046186c9a4a9f8c07e69298584, type: 3}
   particle: {fileID: 6925533621942992133, guid: 005d3efedd11bba46878c04f7ac138ff,
     type: 3}
+  psw_bullet: {fileID: 772606966}
+  isChange: 0
+  isStack: 0
 --- !u!1001 &1813622109
 PrefabInstance:
   m_ObjectHideFlags: 0

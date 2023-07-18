@@ -27,5 +27,32 @@ public class PlayerMouthCollider : MonoBehaviour
                 actionNormal.SetStack(collision.gameObject);
             }
         }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            psw_Enemy_1 enemy1 = collision.gameObject.GetComponent<psw_Enemy_1>();
+            psw_EnemyDestroy enemy2 = collision.gameObject.GetComponent<psw_EnemyDestroy>();
+
+            if (enemy1 != null)
+            {
+                enemy1.isStack = true;
+                if (enemy1.isChange)
+                {
+                    PlayerManager.Instance.ChangeStart();
+                    PlayerManager.Instance.Change(PlayerManager.CHANGETYPE.Pistol);
+                    Destroy(collision.gameObject);
+                }
+                else
+                {
+                    //오브젝트를 액션에 넘긴다.
+                    actionNormal.SetStack(collision.gameObject);
+                }
+            }
+            else if (enemy2 != null)
+            {
+                enemy2.isStack = true;
+                //오브젝트를 액션에 넘긴다.
+                actionNormal.SetStack(collision.gameObject);
+            }
+        }
     }
 }

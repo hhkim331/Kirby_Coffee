@@ -2605,7 +2605,7 @@ GameObject:
   - component: {fileID: 5050361923841243310}
   m_Layer: 6
   m_Name: Suction
-  m_TagString: Player
+  m_TagString: Suction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3082,7 +3082,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5032
+  m_VersionIndex: 5035
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

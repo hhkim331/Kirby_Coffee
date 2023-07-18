@@ -10,11 +10,18 @@ public class psw_Enemy_1 : MonoBehaviour
     public float attackRange = 3;
     public GameObject coin; // 활성화할 게임 오브젝트
     public GameObject particle;
+    public psw_bulletFactory psw_bullet;
     // Start is called before the first frame update
 
     bool needDestroy = false;
     float destroyTime = 0f;
     float destroyDelay = 1f;
+
+    //suction
+    public bool isChange = false;
+    bool suction = false;
+    public bool isStack = false;
+    GameObject suctionObj = null;
 
     void Start()
     {
@@ -25,6 +32,15 @@ public class psw_Enemy_1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isStack) return;
+
+        if (suction && !suctionObj.activeSelf)
+        {
+            suction = false;
+            anim.speed = 1;
+            psw_bullet.enabled = true;
+        }
+
         this.transform.LookAt(Player);
         Vector3 v = transform.forward;
         v.y = 0;
@@ -56,26 +72,29 @@ public class psw_Enemy_1 : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {   
-        anim.SetTrigger("damage");
-        destroyTime = 0;
-        needDestroy = true; 
+    {
+        if (other.CompareTag("Suction"))
+        {
+            suctionObj = other.gameObject;
+            suction = true;
+            anim.speed = 0;
+            psw_bullet.enabled = false;
+        }
+        else
+        {
+            anim.SetTrigger("damage");
+            destroyTime = 0;
+            needDestroy = true;
+        }
     }
 
-    //private void OnDestroy()
-    //{
-    //    // coin 공장에서 coin 을 생성하자
-    //    GameObject co = Instantiate(coin);
-    //    // 생성된 coin을 나의 위치에 배치하자
-    //    co.transform.position = this.transform.position;
-    //    // 생성된 coin 에서 ItemCoin 콤포넌트를 가져오자
-    //    ItemCoin itemcoin = co.GetComponent<ItemCoin>();
-    //    // 가져온 컴포넌트에  GetItem 함수를 실행하자.
-    //    itemcoin.GetItem();
-    //    GameObject pa = Instantiate(particle);
-    //    pa.transform.position = this.transform.position;
-    //    Destroy(pa, 2);
-    //    //particle.Play();
-    //    //print("되고 있는거니");
-    //}
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Suction"))
+        {
+            suction = false;
+            anim.speed = 1;
+            psw_bullet.enabled = true;
+        }
+    }
 }

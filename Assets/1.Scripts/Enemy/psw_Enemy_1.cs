@@ -71,6 +71,14 @@ public class psw_Enemy_1 : MonoBehaviour
         }
     }
 
+    public void SuctionDie()
+    { 
+        GameObject co = Instantiate(coin);
+        co.transform.position = this.transform.position;
+        ItemCoin itemcoin = co.GetComponent<ItemCoin>();
+        itemcoin.GetItem();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Suction"))

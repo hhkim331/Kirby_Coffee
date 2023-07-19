@@ -570,7 +570,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-201940
+  m_Name: pb_Mesh-28262
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11228,6 +11228,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050361922744994018, guid: 646e50bfdb400c145b559b07010a3a46,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5050361922744994029, guid: 646e50bfdb400c145b559b07010a3a46,
         type: 3}

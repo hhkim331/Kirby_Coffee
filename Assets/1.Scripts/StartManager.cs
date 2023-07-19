@@ -13,6 +13,8 @@ public class StartManager : MonoBehaviour
     [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] VideoClip[] videoClips;
 
+    bool isStart = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,10 @@ public class StartManager : MonoBehaviour
 
     void StartButtonEvent()
     {
+        if (isStart == true) return;
+        isStart = true;
+        SoundManager.Instance.PlaySFX("Start");
+
         videoPlayer.clip = videoClips[2];
         videoPlayer.loopPointReached += LastVideoEnd;
         videoPlayer.isLooping = false;

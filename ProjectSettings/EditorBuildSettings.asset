@@ -10,8 +10,8 @@ EditorBuildSettings:
     guid: 9bacf2379f5620a48bba598b5c1969d4
   - enabled: 1
     path: Assets/0.Scenes/PlayerTestScene.unity
-    guid: c853785c8eafda1499be11bdbf1eb8b7
+    guid: 0c5bc71afebdab34fb8c70464d9d67a5
   - enabled: 1
     path: Assets/0.Scenes/PlayerTestScene2.unity
-    guid: d3a3e5aeacf08cd4a83e556904cf186f
+    guid: e843024acfa2d454989aa67024cd4325
   m_configObjects: {}

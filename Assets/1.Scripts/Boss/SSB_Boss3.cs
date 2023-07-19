@@ -543,6 +543,7 @@ public class SSB_Boss3 : MonoBehaviour
             //state 변경하기
             //m_state = BossState.Die;
             //파괴하고싶다.3초 뒤에
+            StartCoroutine(GameClearManager.Instance.GameClear());
             Destroy(gameObject, 3);
             //anim.SetTrigger("Die");
         }

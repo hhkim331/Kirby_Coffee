@@ -153,11 +153,11 @@ public class PlayerManager : MonoBehaviour
 
         if (isSwallow)
         {
-            playerModel.transform.DOScaleY(defaultModelScale * 1.3f, 0.7f).SetEase(Ease.OutCubic).OnComplete(() =>
+            playerModel.transform.DOScaleY(defaultModelScale * 1.3f, 0.07f).SetEase(Ease.OutCubic).OnComplete(() =>
             {
                 playerModel.transform.DOScale(new Vector3(2f, 0.3f, 2f) * defaultModelScale, 0.2f).SetEase(Ease.OutCubic).OnComplete(() =>
                 {
-                    playerModel.transform.DOScale(Vector3.one * defaultModelScale, 0.8f).SetEase(Ease.OutCubic).OnComplete(() =>
+                    playerModel.transform.DOScale(Vector3.one * defaultModelScale, 0.08f).SetEase(Ease.OutCubic).OnComplete(() =>
                     {
                         ChangeSet(type);
                     });

@@ -12,7 +12,7 @@ public class psw_Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
- 
+
     }
 
     Vector3 dir = Vector3.up;
@@ -21,12 +21,13 @@ public class psw_Door : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+
         // 태어날 때 Mark를 찾고 싶다.
         target = GameObject.Find("Mark");
         if (target.GetComponent<MeshRenderer>().enabled == false && CanDoor)
         {
             Time.timeScale = 0;
+            PlayerManager.Instance.Anim.updateMode = AnimatorUpdateMode.Normal;
             dir = Vector3.up;
             transform.position += dir * speed * Time.unscaledDeltaTime;
             currentTime += Time.unscaledDeltaTime;
@@ -35,6 +36,7 @@ public class psw_Door : MonoBehaviour
             {
                 pswcamera.SetActive(false);
                 Time.timeScale = 1;
+                PlayerManager.Instance.Anim.updateMode = AnimatorUpdateMode.UnscaledTime;
                 CanDoor = false;
                 currentTime = 0;
             }
@@ -42,7 +44,7 @@ public class psw_Door : MonoBehaviour
         if (CanDoor == false)
         {
             currentTime += Time.deltaTime;
-            if(currentTime > 1f)
+            if (currentTime > 1f)
             {
                 coins[0].SetActive(true);
             }

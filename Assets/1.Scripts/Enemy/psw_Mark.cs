@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class psw_shaker : MonoBehaviour
+public class psw_Mark : MonoBehaviour
 {
     public float speed = 5;
     public float currentTime = 0;
@@ -10,6 +10,7 @@ public class psw_shaker : MonoBehaviour
     private Vector3 currentPosition;
     bool isUp = false;
     public GameObject door;
+    public GameObject psw_camera;
     BoxCollider boxCollider;
     // Start is called before the first frame update
     void Start()

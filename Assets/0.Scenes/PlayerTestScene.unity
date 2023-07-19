@@ -12475,8 +12475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2129459429}
   - component: {fileID: 2129459431}
-  - component: {fileID: 2129459430}
-  - component: {fileID: 2129459432}
   m_Layer: 0
   m_Name: Mark Camera
   m_TagString: Untagged
@@ -12499,14 +12497,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 36
   m_LocalEulerAnglesHint: {x: 18.524, y: -47.067, z: 0}
---- !u!81 &2129459430
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129459428}
-  m_Enabled: 1
 --- !u!20 &2129459431
 Camera:
   m_ObjectHideFlags: 0
@@ -12550,18 +12540,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &2129459432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129459428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae999cbb3187e64889a8815f5b05911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &824021526094598172
 PrefabInstance:
   m_ObjectHideFlags: 0

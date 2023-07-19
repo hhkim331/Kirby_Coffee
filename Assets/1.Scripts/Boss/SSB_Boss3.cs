@@ -98,9 +98,9 @@ public class SSB_Boss3 : MonoBehaviour
             case BossState.Charge:
                 Charge();
                 break;
-            case BossState.Charge2:
-                Charge2();
-                break;
+            //case BossState.Charge2:
+            //    Charge2();
+                //break;
             case BossState.RotAttack:
                 RotAttack();
                 break;
@@ -117,7 +117,7 @@ public class SSB_Boss3 : MonoBehaviour
                 LerpJump3();
                 break;
             case BossState.Damage:
-                Damage();
+                Attack3();
                 break;
             case BossState.Drop:
                 Drop();
@@ -231,7 +231,7 @@ public class SSB_Boss3 : MonoBehaviour
     private void HammerMove()
     {
         currentTime += Time.deltaTime;
-        
+
 
         //플레이어쪽으로 이동한다 
         Vector3 dir = target.transform.position - transform.position;
@@ -251,6 +251,7 @@ public class SSB_Boss3 : MonoBehaviour
 
     void TimeLimit()
     {
+        //anim.SetTrigger("Move");
         //yVelocity = 20;
         //m_state = BossState.JumpSpin;
         // 내 위치에서 위로 5만큼 떨어진 위치를 구하고싶다.
@@ -282,16 +283,16 @@ public class SSB_Boss3 : MonoBehaviour
     float ratio;
     private void JumpSpin()
     {
-        ratio += Time.deltaTime /2;  //2초안에 가라
+        ratio += Time.deltaTime / 2;  //2초안에 가라
 
         if (ratio > 0.5f)
         {
             ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.        
         }
+        anim.SetTrigger("Jump");
         transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
         transform.position += center;//다시 값을 더해준다
 
-        print(ratio);
         if (ratio == 0.5f)   // || target.transform.position.x == transform.position.x
         {
             print("ratio == 0.5f");
@@ -324,11 +325,12 @@ public class SSB_Boss3 : MonoBehaviour
         }
         if (curTime > creTime)
         {
-
+            anim.SetTrigger("Idle");
             //바닥으로 내려찍는다
             Vector3 dir = Vector3.down;
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
+           
             if (curPos.y < 1f) //바닥에 박히는 것 막기
             {
                 curPos = transform.position; //위치
@@ -358,6 +360,7 @@ public class SSB_Boss3 : MonoBehaviour
 
             //플레이어와 일정거리 이상 가까워지면 상태를 어택으로 전환한다
             //필요속성 : 타겟쪽으로 방향 , 처음 플레이어와의 거리 , 일정거리
+            anim.SetTrigger("Move");
             Vector3 dir = target.transform.position - transform.position;
             float distance = dir.magnitude;
             dir.Normalize();
@@ -435,7 +438,7 @@ public class SSB_Boss3 : MonoBehaviour
                 curPos = transform.position;
                 curPos.y = 0;
                 transform.position = curPos;
-                m_state = BossState.Charge2;
+                m_state = BossState.RotAttack;
             }
         }
 
@@ -452,24 +455,25 @@ public class SSB_Boss3 : MonoBehaviour
     Vector3 curPos;
 
     bool rotateLeft = true;
-    private void Charge2()
-    {
-
-        curTime += Time.deltaTime;
-        if (curTime > 1)
-        {
-            if (rotateLeft)
-            {
-                transform.Rotate(0, -0.5f, 0);
-                rotValue -= 0.5f;
-            }
-            if (rotValue < 0)
-            {
-                rotateLeft = false;
-                m_state = BossState.RotAttack;
-            }
-        }
-    }
+    //private void Charge2() // 호달달달
+    //{
+        
+    //    curTime += Time.deltaTime;
+    //    if (curTime > 1)
+    //    {
+    //        if (rotateLeft)
+    //        {
+    //            transform.Rotate(0, -0.5f, 0);
+    //            rotValue -= 0.5f;
+    //        }
+    //        if (rotValue < 0)
+    //        {
+    //            print("호더ㅏㄹ달");
+    //            rotateLeft = false;
+    //            m_state = BossState.RotAttack;
+    //        }
+    //    }
+    //}
     private void RotAttack()//360도 회전하게 한다
     {
         currentTime += Time.deltaTime;
@@ -495,8 +499,9 @@ public class SSB_Boss3 : MonoBehaviour
     {
 
         ratio += Time.deltaTime / 1; //1초만에 가라
-        if (ratio > 0.5f)
+        if (ratio > 1f)
         {
+            anim.SetTrigger("Jump");
             ratio = 0.5f; // 0.5를 넘어가면 멈춰야함 - 반지름까지만 올라가서 멈춰야 하므로
             m_state = BossState.JumpStop1;
         }
@@ -510,6 +515,7 @@ public class SSB_Boss3 : MonoBehaviour
 
     private void JumpStop1()
     {
+        anim.SetTrigger("Idle");
         //바닥으로 내려찍는다
         Vector3 dir = targetPosition - transform.position;
         dir.Normalize();
@@ -519,13 +525,27 @@ public class SSB_Boss3 : MonoBehaviour
             curPos = transform.position; //위치
             curPos.y = 0;
             transform.position = curPos;
-            m_state = BossState.JumpStop1;
+            m_state = BossState.LerpJump2;
         }
 
     }
     private void LerpJump2()
     {
+        ratio += Time.deltaTime / 2;  //2초안에 가라
 
+        if (ratio > 0.5f)
+        {
+            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.        
+        }
+        anim.SetTrigger("Jump");
+        transform.position = Vector3.up;// center값을 맨첨에 빼줘서 0의 위치로 이동
+        transform.position += center;//다시 값을 더해준다
+
+        if (ratio == 0.5f)   // || target.transform.position.x == transform.position.x
+        {
+            print("ratio == 0.5f");
+            m_state = BossState.RotAttack;
+        }
     }
 
     private void LerpJump3()
@@ -553,9 +573,20 @@ public class SSB_Boss3 : MonoBehaviour
         }
     }
 
-    private void Damage()
+    private void Attack3()
     {
-
+        anim.SetTrigger("Idle");
+        //바닥으로 내려찍는다
+        Vector3 dir = targetPosition - transform.position;
+        dir.Normalize();
+        rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
+        if (curPos.y < 2)
+        {
+            curPos = transform.position; //위치
+            curPos.y = 0;
+            transform.position = curPos;
+            m_state = BossState.LerpJump2;
+        }
     }
 
     private void Drop()

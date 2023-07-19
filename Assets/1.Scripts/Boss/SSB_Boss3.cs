@@ -230,6 +230,9 @@ public class SSB_Boss3 : MonoBehaviour
 
     private void HammerMove()
     {
+        currentTime += Time.deltaTime;
+        
+
         //플레이어쪽으로 이동한다 
         Vector3 dir = target.transform.position - transform.position;
         float distance = dir.magnitude;
@@ -238,9 +241,10 @@ public class SSB_Boss3 : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
         speed = 0;
         anim.SetTrigger("HammerAttack");
-        Invoke("TimeLimit", 3f);
-
-        // m_state = BossState.TimeLimit;
+        if (currentTime > 3)
+        {
+            m_state = BossState.TimeLimit;
+        }
 
     }
 
@@ -278,14 +282,21 @@ public class SSB_Boss3 : MonoBehaviour
     float ratio;
     private void JumpSpin()
     {
-        ratio += Time.deltaTime / 2; //2초안에 가라
+        ratio += Time.deltaTime /2;  //2초안에 가라
+
         if (ratio > 0.5f)
         {
-            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.    
+            ratio = 0.5f; // 0.5를 넘어가면 멈춰야한다. 그래야 반지름까지만 올라가서 멈출 수 있다.        
         }
         transform.position = Vector3.Slerp(startPos - center, endPos - center, ratio);// center값을 맨첨에 빼줘서 0의 위치로 이동
         transform.position += center;//다시 값을 더해준다
-        m_state = BossState.Attack2;
+
+        print(ratio);
+        if (ratio == 0.5f)   // || target.transform.position.x == transform.position.x
+        {
+            print("ratio == 0.5f");
+            m_state = BossState.Attack2;
+        }
     }
 
     //바닥에 내려찍는 속도
@@ -315,7 +326,7 @@ public class SSB_Boss3 : MonoBehaviour
         {
 
             //바닥으로 내려찍는다
-            Vector3 dir = targetPosition - transform.position;
+            Vector3 dir = Vector3.down;
             dir.Normalize();
             rb.AddForce(dir * attackSpeed, ForceMode.Impulse);
             if (curPos.y < 1f) //바닥에 박히는 것 막기
@@ -462,12 +473,12 @@ public class SSB_Boss3 : MonoBehaviour
     private void RotAttack()//360도 회전하게 한다
     {
         currentTime += Time.deltaTime;
-        if (currentTime > 2)
+        //animation 재생
+        anim.SetTrigger("360Attack");
+        if (currentTime > 2.5)
         {
             m_state = BossState.LerpJump1;
         }
-        //animation 재생
-        anim.SetTrigger("360Attack");
 
         //1단점프 전 target위치를 저장한다
         isJump = true;

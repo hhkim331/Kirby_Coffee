@@ -2220,7 +2220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 4c610a10bf95d7041adcc5db34c1cfdd, type: 2}
   followCamera: {fileID: 0}
-  anim: {fileID: 5988323568486302210}
+  playerModel: {fileID: 1058681223824818882}
   starObj: {fileID: 7506167655059473157}
   startCameraPoint: {x: 0, y: 0, z: 0}
   changeBubbles:
@@ -3082,7 +3082,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5035
+  m_VersionIndex: 5041
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

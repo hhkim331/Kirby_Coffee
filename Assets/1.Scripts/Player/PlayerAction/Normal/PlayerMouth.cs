@@ -11,6 +11,7 @@ public class PlayerMouth : MonoBehaviour
     }
     MOUTHSTACK stack = MOUTHSTACK.None;
     public MOUTHSTACK Stack { get { return stack; } }
+    Stack<GameObject> stackList = new Stack<GameObject>();
 
     [SerializeField] GameObject suction;
     bool canUse = true;
@@ -59,7 +60,6 @@ public class PlayerMouth : MonoBehaviour
         //빨아들이기 사운드
         if (isSuction)
         {
-            Debug.Log(audioSource.time);
             if (audioSource.time > audioEndPoint)
                 audioSource.time = audioStartPoint;
         }
@@ -95,6 +95,7 @@ public class PlayerMouth : MonoBehaviour
                 switch (stack)
                 {
                     case MOUTHSTACK.Object:
+                        PlayerManager.Instance.ChangeScale(1f);
                         Destroy(stackObject);
                         break;
                         //case Stack.Enemy_Pistol:
@@ -110,14 +111,23 @@ public class PlayerMouth : MonoBehaviour
                 {
                     case MOUTHSTACK.Object:
                         //바라보는 방향으로 물건 뱉기
-                        stackObject.SetActive(true);
-                        stackObject.transform.parent = null;
-                        stackObject.transform.position = mouthTransform.position + transform.forward;
-                        PlayerNormalBullet playerBullet = stackObject.AddComponent<PlayerNormalBullet>();
-                        playerBullet.Set(transform.forward);
+                        GameObject playerBullet = new GameObject("PlayerBullet");
+                        while (stackList.Count > 0)
+                        {
+                            GameObject child = stackList.Pop();
+                            child.SetActive(true);
+                            child.transform.parent = playerBullet.transform;
+                            child.transform.localPosition = Vector3.zero;
+                        }
+                        playerBullet.transform.position = mouthTransform.position + transform.forward;
+                        playerBullet.AddComponent<PlayerNormalBullet>().Set(transform.forward);
+
                         //물건을 뱉은 후 쿨타임
                         canSuction = false;
                         suctionDelay = PlayerManager.Instance.Data.suctionDelay;
+
+                        //크기 원상복구
+                        PlayerManager.Instance.ChangeScale(1f);
                         break;
                 }
                 stack = MOUTHSTACK.None;
@@ -135,11 +145,61 @@ public class PlayerMouth : MonoBehaviour
 
     public void SetStack(GameObject suctionObejct)
     {
+        //해당 오브젝트가 물건인 경우
+        if (suctionObejct.layer == LayerMask.NameToLayer("MoveableObj"))
+        {
+            //태그가 버블인 경우
+            if (suctionObejct.CompareTag("Bubble"))
+            {
+                if (PlayerManager.Instance.ChangeType == PlayerManager.CHANGETYPE.Normal)
+                {
+                    PlayerManager.Instance.PMouth.IsSuction = false;
+                    suctionObejct.GetComponent<ChangeBubble>().GetItem();
+                }
+                Destroy(suctionObejct);
+            }
+            else
+            {
+                AddStack(suctionObejct);
+            }
+        }
+        else if (suctionObejct.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            psw_Enemy_1 enemy1 = suctionObejct.GetComponent<psw_Enemy_1>();
+            psw_EnemyDestroy enemy2 = suctionObejct.GetComponent<psw_EnemyDestroy>();
+
+            if (enemy1 != null)
+            {
+                enemy1.isStack = true;
+                if (enemy1.isChange)
+                {
+                    PlayerManager.Instance.ChangeStart();
+                    PlayerManager.Instance.Change(PlayerManager.CHANGETYPE.Pistol, true);
+                    Destroy(suctionObejct);
+                }
+                else
+                {
+                    AddStack(suctionObejct);
+                }
+            }
+            else if (enemy2 != null)
+            {
+                enemy2.isStack = true;
+                AddStack(suctionObejct);
+            }
+        }
+    }
+
+    void AddStack(GameObject suctionObejct)
+    {
         stack = MOUTHSTACK.Object;
         stackObject = suctionObejct;
         //물건을 비활성화 상태로 가지고 있는다.
         suctionObejct.transform.parent = transform;
         suctionObejct.transform.localPosition = Vector3.zero;
         suctionObejct.SetActive(false);
+        PlayerManager.Instance.ChangeScale(1.2f);
+
+        stackList.Push(suctionObejct);
     }
 }

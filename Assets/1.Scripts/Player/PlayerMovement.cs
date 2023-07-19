@@ -498,6 +498,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.CompareTag("ChangeScene"))
         {
+            SoundManager.Instance.PlaySFX("SceneChange");
             PlayerIngameData.Instance.HP = PlayerManager.Instance.PHealth.HP;
             PlayerIngameData.Instance.ChangeType = PlayerManager.Instance.ChangeType;
             SoundManager.Instance.BGMVolume = 0;

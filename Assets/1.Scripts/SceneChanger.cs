@@ -35,6 +35,7 @@ public class SceneChanger : MonoBehaviour
     //씬 전환
     public IEnumerator ChangeSceneStart(string sceneName)
     {
+        yield return new WaitForSeconds(0.15f);
         starHoleImage.gameObject.SetActive(true);
         starHoleImage.rectTransform.DOSizeDelta(new Vector2(150, 150), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine);
         rotStarImage.rectTransform.DOSizeDelta(new Vector2(150, 150), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear);

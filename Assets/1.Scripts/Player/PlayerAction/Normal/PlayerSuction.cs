@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,8 +37,14 @@ public class PlayerSuction : MonoBehaviour
             //일정시간이 지나면
             if (colliderDic[other.transform] >= 0.3f)
             {
-                //상대를 목표지점으로 이동시킨다
-                other.transform.position = Vector3.MoveTowards(other.transform.position, mouth.position, Time.fixedDeltaTime * PlayerManager.Instance.Data.suctionPower);
+                if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    if (other.GetComponent<psw_Enemy_1>() != null)
+                        other.GetComponent<psw_Enemy_1>().SuctionDie();
+                    if (other.GetComponent<psw_EnemyDestroy>() != null)
+                        other.GetComponent<psw_EnemyDestroy>().SuctionDie();
+                }
+                DoStack(other);
             }
             //당기는 상대의 위치를 목표지점으로 이동시킨다.
         }
@@ -54,5 +61,21 @@ public class PlayerSuction : MonoBehaviour
             return;
         //나간대상을 목록에서 제거한다
         colliderDic.Remove(other.transform);
+    }
+
+    void DoStack(Collider other)
+    {
+        colliderDic.Remove(other.transform);
+
+        foreach (Collider col in other.GetComponentsInChildren<Collider>())
+            col.enabled = false;
+        Rigidbody rigid = other.GetComponent<Rigidbody>();
+        Destroy(rigid);
+        //상대를 목표지점으로 이동시킨다
+        other.transform.DOMove(mouth.position, 0.05f * Vector3.Distance(other.transform.position, mouth.position)).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            PlayerManager.Instance.PMouth.SetStack(other.gameObject);
+        });
+        //other.transform.position = Vector3.MoveTowards(other.transform.position, mouth.position, Time.fixedDeltaTime * PlayerManager.Instance.Data.suctionPower);
     }
 }

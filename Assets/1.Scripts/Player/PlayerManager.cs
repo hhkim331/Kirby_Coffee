@@ -14,7 +14,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] FollowCamera followCamera;
     public FollowCamera FCamera { get { return followCamera; } }
 
-    [SerializeField] Animator anim;
+    [SerializeField] GameObject playerModel;
+    float defaultModelScale = 0.25f;
+
+    Animator anim;
     public Animator Anim { get { return anim; } }
 
     //시작모션
@@ -63,6 +66,8 @@ public class PlayerManager : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
         playerCoin = GetComponent<PlayerCoin>();
         playerActionManager = GetComponent<PlayerActionManager>();
+
+        anim = playerModel.GetComponent<Animator>();
     }
 
     void Start()
@@ -135,12 +140,38 @@ public class PlayerManager : MonoBehaviour
         hitTime = playerData.hitTime;
     }
 
+    public void ChangeScale(float scale)
+    {
+        playerModel.transform.DOScale(defaultModelScale * scale, 0.2f).SetEase(Ease.OutQuart);
+    }
+
     #region 변신
     //변신하면 호출되는 함수(나중에 사용)
-    public void Change(CHANGETYPE type)
+    public void Change(CHANGETYPE type, bool isSwallow = false)
     {
         if (type == changeType) return;
 
+        if (isSwallow)
+        {
+            playerModel.transform.DOScaleY(defaultModelScale * 1.3f, 0.7f).SetEase(Ease.OutCubic).OnComplete(() =>
+            {
+                playerModel.transform.DOScale(new Vector3(2f, 0.3f, 2f) * defaultModelScale, 0.2f).SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    playerModel.transform.DOScale(Vector3.one * defaultModelScale, 0.8f).SetEase(Ease.OutCubic).OnComplete(() =>
+                    {
+                        ChangeSet(type);
+                    });
+                });
+            });
+        }
+        else
+        {
+            ChangeSet(type);
+        }
+    }
+
+    void ChangeSet(CHANGETYPE type)
+    {
         //기존 액션 해제
         if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
@@ -162,7 +193,9 @@ public class PlayerManager : MonoBehaviour
         float s = GetViewportSize();
         Time.timeScale = 0;
         anim.SetTrigger("ChangeStart");
-        yield return new WaitForSecondsRealtime(0.75f);
+        yield return new WaitForSecondsRealtime(0.2f);
+        SoundManager.Instance.PlaySFX("KirbyChange");
+        yield return new WaitForSecondsRealtime(0.55f);
         //파티클
         Vector3 newScale = Vector3.one * GetViewportSize() * 10;
         foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())

@@ -459,6 +459,18 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 0ac7017d4a236f54a9a81a9ed13ab528, type: 3}
     audioMixerGroup: {fileID: 9144201334225004735, guid: aca2c2bb313214d498a53a5c5d377ed8,
       type: 2}
+  - key: KirbyChange
+    audioClip: {fileID: 8300000, guid: 7f528b293657667478df976d3e4630c7, type: 3}
+    audioMixerGroup: {fileID: -7113107944331315422, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: Start
+    audioClip: {fileID: 8300000, guid: 2a707f163c3d725478dcbd049b3fa92a, type: 3}
+    audioMixerGroup: {fileID: -1790615018741673920, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: SceneChange
+    audioClip: {fileID: 8300000, guid: 0118d22ed2652c943a8d9aa62e6c3be1, type: 3}
+    audioMixerGroup: {fileID: 7605826375707514946, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
 --- !u!4 &829594977
 Transform:
   m_ObjectHideFlags: 0

@@ -20,11 +20,22 @@ public class StartManager : MonoBehaviour
     {
         SoundManager.Instance.PlayBGM("BGM2");
         SoundManager.Instance.BGMVolume = 1;
-
-        startButton.interactable = false;
-        videoPlayer.clip = videoClips[0];
-        videoPlayer.loopPointReached += VideoEnd;
-        videoPlayer.Play();
+        if (SceneChanger.Instance.prevSceneName == "")
+        {
+            SceneChanger.Instance.gameObject.SetActive(false);
+            startButton.interactable = false;
+            videoPlayer.clip = videoClips[0];
+            videoPlayer.loopPointReached += VideoEnd;
+            videoPlayer.Play();
+        }
+        else
+        {
+            StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
+            startButton.interactable = true;
+            videoPlayer.clip = videoClips[1];
+            videoPlayer.isLooping = true;
+            videoPlayer.Play();
+        }
     }
 
     void VideoEnd(VideoPlayer vp)
@@ -50,6 +61,7 @@ public class StartManager : MonoBehaviour
 
     void LastVideoEnd(VideoPlayer vp)
     {
+        SceneChanger.Instance.gameObject.SetActive(false);
         videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene"); });
     }
 

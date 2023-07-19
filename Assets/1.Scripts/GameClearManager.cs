@@ -15,6 +15,8 @@ public class GameClearManager : MonoBehaviour
     [SerializeField] RawImage myBossKillVideo;
     [SerializeField] VideoPlayer videoPlayer;
 
+    public bool gameClear = false;
+
     private void Awake()
     {
         Instance = this;
@@ -28,6 +30,8 @@ public class GameClearManager : MonoBehaviour
 
     public IEnumerator GameClear()
     {
+        if (gameClear == true) yield break;
+        gameClear = true;
         SoundManager.Instance.BGMVolume = 0;
         Time.timeScale = 0;
 
@@ -40,7 +44,15 @@ public class GameClearManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.1f);
         PlayerManager.Instance.FCamera.CameraShake(0.1f, 0.15f);
         yield return new WaitForSecondsRealtime(0.55f);
-        myBossKillVideo.enabled = true;
+        videoPlayer.loopPointReached += VideoEnd;
+        videoPlayer.targetTexture.Release();
         videoPlayer.Play();
+        myBossKillVideo.enabled = true;
+    }
+
+    void VideoEnd(VideoPlayer vp)
+    {
+        Time.timeScale = 1;
+        StartCoroutine(SceneChanger.Instance.ChangeSceneStart("StartScene"));
     }
 }

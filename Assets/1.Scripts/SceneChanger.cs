@@ -12,6 +12,8 @@ public class SceneChanger : MonoBehaviour
     [SerializeField] Image rotStarImage;
     [SerializeField] Image backImage;
 
+    public string prevSceneName = "";
+
     void Awake()
     {
         if (Instance == null)
@@ -23,22 +25,14 @@ public class SceneChanger : MonoBehaviour
             DestroyImmediate(gameObject);
     }
 
-    //IEnumerator Start()
-    //{
-    //    yield return new WaitForSeconds(1f);
-    //    yield return StartCoroutine(ChangeSceneStart(""));
-
-    //    yield return new WaitForSeconds(5f);
-    //    ChangeSceneEnd();
-    //}
-
     //씬 전환
     public IEnumerator ChangeSceneStart(string sceneName)
     {
+        prevSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         yield return new WaitForSeconds(0.15f);
         starHoleImage.gameObject.SetActive(true);
-        starHoleImage.rectTransform.DOSizeDelta(new Vector2(150, 150), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine);
-        rotStarImage.rectTransform.DOSizeDelta(new Vector2(150, 150), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear);
+        starHoleImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine);
+        rotStarImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear);
         rotStarImage.transform.DORotate(Vector2.zero, 1f).From(new Vector3(0, 0, 144)).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(1.2f);
@@ -47,7 +41,6 @@ public class SceneChanger : MonoBehaviour
         backImage.gameObject.SetActive(true);
         starHoleImage.gameObject.SetActive(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-
     }
 
     //씬 전환

@@ -46,23 +46,28 @@ public class psw_Door : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > 1f)
             {
-                coins[0].SetActive(true);
+                if (coins[0] != null)
+                    coins[0].SetActive(true);
             }
             if (currentTime > 1.2f)
             {
-                coins[1].SetActive(true);
+                if (coins[1] != null)
+                    coins[1].SetActive(true);
             }
             if (currentTime > 1.4f)
             {
-                coins[2].SetActive(true);
+                if (coins[2] != null)
+                    coins[2].SetActive(true);
             }
             if (currentTime > 1.6f)
             {
-                coins[3].SetActive(true);
+                if (coins[3] != null)
+                    coins[3].SetActive(true);
             }
             if (currentTime > 1.8f)
             {
-                coins[4].SetActive(true);
+                if (coins[4] != null)
+                    coins[4].SetActive(true);
             }
         }
     }

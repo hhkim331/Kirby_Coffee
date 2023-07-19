@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
             PlayerManager.Instance.FCamera.State = startCameraState;
 
         SoundManager.Instance.BGMVolume = 1;
+        SceneChanger.Instance.gameObject.SetActive(true);
         StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
     }
 

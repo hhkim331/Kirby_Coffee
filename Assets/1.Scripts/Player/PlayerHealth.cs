@@ -34,12 +34,16 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] Slider mainHPSlider;
     [SerializeField] Slider subHPSlider;
     [SerializeField] Image subHPFillImage;
-    //HP슬라이더 이전값
     float prevSliderValue;
+    Color subUICurColor = Color.white;
+    //Hit
     float subUIBlinkDelay;
     float subUIBlinkTime;
-    Color subUICurColor = Color.white;
-    Color subUIBlinkColor = new Color(1, 1, 0.4f, 1);
+    Color subUIHitColor = new Color(1, 1, 0.4f, 1);
+    //Heal
+    float mainUIHealDelay;
+    float mainUIHealTime;
+    Color subUIHealColor = new Color(1, 0.9f, 0.9f, 1);
 
     //체력경고
     float warningBlinkTime = 0f;
@@ -86,7 +90,7 @@ public class PlayerHealth : MonoBehaviour
                 //UI
                 if (hitDelay < subUIBlinkDelay)
                 {
-                    subHPFillImage.color = subUIBlinkColor;
+                    subHPFillImage.color = subUIHitColor;
                     //게이지 감소
                     subHPSlider.value = Mathf.Lerp(prevSliderValue, hp / maxHP, 1 - (hitDelay / subUIBlinkDelay));
                 }
@@ -98,7 +102,7 @@ public class PlayerHealth : MonoBehaviour
                         subUIBlinkTime = 0f;
                         if (subUICurColor == Color.white)
                         {
-                            subUICurColor = subUIBlinkColor;
+                            subUICurColor = subUIHitColor;
                             subHPFillImage.color = subUICurColor;
                         }
                         else
@@ -137,6 +141,14 @@ public class PlayerHealth : MonoBehaviour
                     curColor = Color.black;
             }
         }
+
+        if (mainUIHealTime < mainUIHealDelay)
+        {
+            mainUIHealTime += Time.deltaTime;
+            float mainUIWaitDelay = mainUIHealDelay * 0.5f;
+            if (mainUIHealTime > mainUIWaitDelay)
+                mainHPSlider.value = Mathf.Lerp(prevSliderValue, hp / maxHP, (mainUIHealTime - mainUIWaitDelay) / mainUIWaitDelay);
+        }
     }
 
     public void Set(PlayerData playerData)
@@ -150,6 +162,17 @@ public class PlayerHealth : MonoBehaviour
             mainHPSlider.value = hp / maxHP;
             subHPSlider.value = hp / maxHP;
         }
+    }
+
+    public void Heal(float heal)
+    {
+        mainUIHealDelay = playerData.hitDelay;
+        mainUIHealTime = 0;
+        prevSliderValue = mainHPSlider.value;
+        if (heal == -1) HP += maxHP;
+        else HP += heal;
+        subHPFillImage.color = subUIHealColor;
+        subHPSlider.value = hp / maxHP;
     }
 
     public void Hit(Vector3 hitDir, float damage, bool drop)
@@ -167,9 +190,7 @@ public class PlayerHealth : MonoBehaviour
         {
             SoundManager.Instance.PlaySFXOnce("Damaged");
 
-            PlayerManager.Instance.Hit();
-            //피격 애니메이션 실행
-            PlayerManager.Instance.PMovement.Hit(hitDir);
+            PlayerManager.Instance.Hit(hitDir);
 
             //아이템 드롭
             if (drop)

@@ -58,10 +58,17 @@ public class Psw_Boom : MonoBehaviour
             Vector3 dir = other.transform.position - transform.position;
             dir.y = 0;
             dir.Normalize();
-            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
-        }
+            PlayerManager.Instance.PHealth.Hit(dir, 1, false);
 
-        destroyTime = 0;
-        needDestroy = true;
+            GameObject pa = Instantiate(particle);
+            pa.transform.position = this.transform.position;
+            Destroy(pa, 1);
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            destroyTime = 0;
+            needDestroy = true;
+        }
     }
 }

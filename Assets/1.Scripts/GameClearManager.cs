@@ -16,6 +16,7 @@ public class GameClearManager : MonoBehaviour
     [SerializeField] VideoPlayer videoPlayer;
 
     public bool gameClear = false;
+    bool videioFinish = false;
 
     private void Awake()
     {
@@ -25,7 +26,24 @@ public class GameClearManager : MonoBehaviour
     private void Start()
     {
         myBossKillVideo.enabled = false;
+        videioFinish = false;
         videoPlayer.Stop();
+    }
+
+    private void Update()
+    {
+        if (!gameClear) return;
+
+        if (Input.GetKeyDown(KeyCode.F1))
+            videoPlayer.playbackSpeed = 10;
+        else if (Input.GetKeyUp(KeyCode.F1))
+            videoPlayer.playbackSpeed = 1;
+
+        if (videioFinish && Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("StartScene"));
+        }
     }
 
     public IEnumerator GameClear()
@@ -52,7 +70,6 @@ public class GameClearManager : MonoBehaviour
 
     void VideoEnd(VideoPlayer vp)
     {
-        Time.timeScale = 1;
-        StartCoroutine(SceneChanger.Instance.ChangeSceneStart("StartScene"));
+        videioFinish = true;
     }
 }

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerActionPistol : PlayerAction
 {
+    [SerializeField] Transform rightPistol;
+    [SerializeField] Transform leftPistol;
     [SerializeField] Transform rightFirePos;
     [SerializeField] Transform leftFirePos;
     [SerializeField] LineRenderer rightLine;
@@ -17,6 +19,10 @@ public class PlayerActionPistol : PlayerAction
     [SerializeField] RectTransform aimRT;
     [SerializeField] Image imageAim;
     [SerializeField] Image imageLockOn;
+
+    //변신 총 위치
+    [SerializeField] Transform kirbyBoneArmRight;
+    [SerializeField] Transform kirbyBoneArmLeft;
 
     enum CHARGELEVEL
     {
@@ -466,4 +472,30 @@ public class PlayerActionPistol : PlayerAction
         IsHardAction = false;
     }
     #endregion
+
+    public override void ChangeAnimationStart()
+    {
+        rightPistol.parent = kirbyBoneArmRight;
+        rightPistol.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        rightPistol.localPosition = new Vector3(0, 0.01f, 0);
+        rightPistol.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
+
+        leftPistol.parent = kirbyBoneArmLeft;
+        leftPistol.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        leftPistol.localPosition = new Vector3(0, 0.01f, 0);
+        leftPistol.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
+    }
+
+    public override void ChangeAnimationEnd()
+    {
+        rightPistol.parent = transform;
+        rightPistol.localScale = Vector3.one;
+        rightPistol.localPosition = new Vector3(0.4f, 0.5f, 0.55f);
+        rightPistol.localRotation = Quaternion.Euler(new Vector3(0, -90, 0));
+
+        leftPistol.parent = transform;
+        leftPistol.localScale = Vector3.one;
+        leftPistol.localPosition = new Vector3(-0.4f, 0.5f, 0.55f);
+        leftPistol.localRotation = Quaternion.Euler(new Vector3(0, -90, 0));
+    }
 }

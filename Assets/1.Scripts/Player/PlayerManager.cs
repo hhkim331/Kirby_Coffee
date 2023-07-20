@@ -193,9 +193,10 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
-        float s = GetViewportSize();
+        //float s = GetViewportSize();
         Time.timeScale = 0;
         anim.SetTrigger("ChangeStart");
+        playerActionManager.ChangeAnimationStart();
         yield return new WaitForSecondsRealtime(0.2f);
         SoundManager.Instance.PlaySFX("KirbyChange");
         yield return new WaitForSecondsRealtime(0.55f);
@@ -209,6 +210,7 @@ public class PlayerManager : MonoBehaviour
         anim.SetTrigger("ChangeEnd");
         yield return new WaitForSecondsRealtime(0.5f);
         ChangeEnd();
+        playerActionManager.ChangeAnimationEnd();
         Time.timeScale = 1;
     }
 

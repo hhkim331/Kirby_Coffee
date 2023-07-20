@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +47,7 @@ public class PlayerHealth : MonoBehaviour
     Color subUIHealColor = new Color(1, 0.9f, 0.9f, 1);
 
     //체력경고
+    bool warning = false;
     float warningBlinkTime = 0f;
     Color warningColor = new Color(1, 0, 0, 1);
 
@@ -114,31 +116,45 @@ public class PlayerHealth : MonoBehaviour
                 }
             }
         }
-        //체력 경고
-        else if ((float)hp / maxHP <= playerData.healthWarningRatio)
+        else
         {
-            //발광효과주기
-            warningBlinkTime += Time.deltaTime;
-            if (curColor == Color.black)
+            //체력 경고
+            if ((float)hp / maxHP <= playerData.healthWarningRatio)
             {
-                Color newColor = new Color(warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
-                foreach (var material in materials)
-                    material.SetColor("_EmissionColor", newColor);
+                warning = true;
+                //발광효과주기
+                warningBlinkTime += Time.deltaTime;
+                if (curColor == Color.black)
+                {
+                    Color newColor = new Color(warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
+                    foreach (var material in materials)
+                        material.SetColor("_EmissionColor", newColor);
+                }
+                else
+                {
+                    Color newColor = new Color(1 - warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
+                    foreach (var material in materials)
+                        material.SetColor("_EmissionColor", newColor);
+                }
+
+                if (warningBlinkTime > playerData.healthWarningBlinkDelay)
+                {
+                    warningBlinkTime = 0f;
+                    if (curColor == Color.black)
+                        curColor = warningColor;
+                    else
+                        curColor = Color.black;
+                }
             }
             else
             {
-                Color newColor = new Color(1 - warningBlinkTime / playerData.healthWarningBlinkDelay, 0, 0);
-                foreach (var material in materials)
-                    material.SetColor("_EmissionColor", newColor);
-            }
-
-            if (warningBlinkTime > playerData.healthWarningBlinkDelay)
-            {
-                warningBlinkTime = 0f;
-                if (curColor == Color.black)
-                    curColor = warningColor;
-                else
+                if(warning)
+                {
+                    warning = false;
                     curColor = Color.black;
+                    foreach (var material in materials)
+                        material.SetColor("_EmissionColor", Color.black);
+                }
             }
         }
 

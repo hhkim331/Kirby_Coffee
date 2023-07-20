@@ -134,10 +134,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void Hit()
+    public void Hit(Vector3 hitDir)
     {
         isHit = true;
         hitTime = playerData.hitTime;
+
+        followCamera.CameraShake(0.1f, 0.1f);
+        playerMovement.Hit(hitDir);
     }
 
     public void ChangeScale(float scale)

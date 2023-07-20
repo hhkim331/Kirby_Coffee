@@ -42,7 +42,7 @@ public class psw_bullet : MonoBehaviour
             Vector3 dir = other.transform.position - transform.position;
             dir.y = 0;
             dir.Normalize();
-            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
+            PlayerManager.Instance.PHealth.Hit(dir, 1, false);
         }
 
         Destroy(gameObject);

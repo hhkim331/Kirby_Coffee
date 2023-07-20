@@ -2066,7 +2066,6 @@ GameObject:
   - component: {fileID: 5050361922567872722}
   - component: {fileID: 5050361922567872723}
   - component: {fileID: 592122960}
-  - component: {fileID: 5050361922567872720}
   m_Layer: 6
   m_Name: MouthCollider
   m_TagString: Untagged
@@ -2118,19 +2117,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5050361922567872720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5050361922567872733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07bce36b9422b764db66a3ed8838651b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionNormal: {fileID: 6936404096049388833}
 --- !u!1 &5050361922744994029
 GameObject:
   m_ObjectHideFlags: 0
@@ -2352,7 +2338,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5050361923597819771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 351dbc762991413408dc4a0cb7118237, type: 3}
+  m_Script: {fileID: 11500000, guid: 2381ee5eac05df04c92c9a4d75a356a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   suction: {fileID: 5050361923841243319}
@@ -3082,7 +3068,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5041
+  m_VersionIndex: 5044
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

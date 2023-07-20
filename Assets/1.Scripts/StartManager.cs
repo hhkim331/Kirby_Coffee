@@ -62,7 +62,7 @@ public class StartManager : MonoBehaviour
     void LastVideoEnd(VideoPlayer vp)
     {
         SceneChanger.Instance.gameObject.SetActive(false);
-        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene"); });
+        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene1"); });
     }
 
 #if UNITY_EDITOR

@@ -52,6 +52,7 @@ public class GameClearManager : MonoBehaviour
         gameClear = true;
         SoundManager.Instance.BGMVolume = 0;
         Time.timeScale = 0;
+        PlayerManager.Instance.Anim.updateMode = AnimatorUpdateMode.Normal;
 
         playerBossKillImage.gameObject.SetActive(true);
         playerBossKillImage.color = new Color(1, 1, 1, 0.8f);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
     float maxHP;
 
     Color curColor = Color.black;
+    [SerializeField] CanvasGroup playerInfoCG;
     [SerializeField] Renderer[] renderers;
     [SerializeField] Material[] materials;
 
@@ -53,6 +55,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
+        if (PlayerManager.Instance.IsDie) return;
+
         //무적시간
         if (hitDelay > 0f)
         {
@@ -148,7 +152,7 @@ public class PlayerHealth : MonoBehaviour
             }
             else
             {
-                if(warning)
+                if (warning)
                 {
                     warning = false;
                     curColor = Color.black;
@@ -200,26 +204,30 @@ public class PlayerHealth : MonoBehaviour
         prevSliderValue = mainHPSlider.value;
         HP -= damage;
         mainHPSlider.value = hp / maxHP;
+        SoundManager.Instance.PlaySFXOnce("Damaged");
         if (hp <= 0f)
             Die();
         else
         {
-            SoundManager.Instance.PlaySFXOnce("Damaged");
-
             PlayerManager.Instance.Hit(hitDir);
-
             //아이템 드롭
             if (drop)
-            {
                 PlayerManager.Instance.UnChange(hitDir, true);
-            }
         }
     }
 
     void Die()
     {
         Time.timeScale = 0f;
-        //게임오버 연출
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        //몸 기본색으로 되돌리기
+        foreach (var material in materials)
+            material.SetColor("_EmissionColor", Color.black);
+
+        //플레이어 게임오버
+        PlayerManager.Instance.PlayerDie();
+
+        //체력 UI 왼쪽으로 움직이면서 감추기
+        playerInfoCG.DOFade(0f, 0.5f).SetDelay(0.5f).SetEase(Ease.Linear).SetUpdate(true);
+        playerInfoCG.transform.DOLocalMoveX(playerInfoCG.transform.localPosition.x - 60, 0.5f).SetDelay(0.5f).SetEase(Ease.Linear).SetUpdate(true);
     }
 }

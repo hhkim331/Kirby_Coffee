@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour
     public FollowCamera FCamera { get { return followCamera; } }
 
     [SerializeField] GameObject playerModel;
+    public GameObject PlayerModel { get { return playerModel; } }
     float defaultModelScale = 0.25f;
 
     Animator anim;
@@ -30,6 +31,11 @@ public class PlayerManager : MonoBehaviour
     bool isHit = false;
     public bool IsHit { get { return isHit; } }
     float hitTime; //조작불가능시간,밀려나는 시간
+
+    //사망
+    bool isDie = false;
+    public bool IsDie { get { return isDie; } }
+    [SerializeField] Canvas playerUICanvas;
 
     //변신
     public enum CHANGETYPE
@@ -278,4 +284,34 @@ public class PlayerManager : MonoBehaviour
         return diff.magnitude;
     }
     #endregion
+
+    public void PlayerDie()
+    {
+        isDie = true;
+        //애니메이션 멈춤
+        anim.speed = 0;
+        playerMovement.Die();
+        StartCoroutine(PlayerDieCoroutine());
+    }
+
+    IEnumerator PlayerDieCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        followCamera.State = FollowCamera.CameraState.Die;  //카메라 설정
+        GameManager.Instance.PlayerDie();
+        playerMovement.DieMovement();
+
+        yield return new WaitForSecondsRealtime(2f);
+        //플레이어UI캔버스의 UI우선순위를 제일 후순위로 한다.
+        playerUICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        playerUICanvas.sortingOrder = 10;
+
+        //씬 재시작
+        yield return StartCoroutine(SceneChanger.Instance.DieRestartSceneStart());
+
+        //코인 감소 모션
+        yield return playerCoin.Die();
+        //씬 재시작
+        SceneChanger.Instance.RestartScene();
+    }
 }

@@ -13041,8 +13041,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae999cbb3187e64889a8815f5b05911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 274935116}
-  pswcamera: {fileID: 2129459428}
 --- !u!1001 &824021526094598172
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -58,7 +58,7 @@ public class SSB_Boss3 : MonoBehaviour
         //리지드 바디
         rb = GetComponent<Rigidbody>();
         //Move때 저장할 해머 초기 회전값
-        //originRot = hammer.transform.rotation;
+        originRot = hammer.transform.rotation;
         //컴포넌트 가져오기
         bossHP = GetComponent<SSB_BossHP>();
         //애니메이터 컴포넌트 가져오기

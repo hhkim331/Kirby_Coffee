@@ -17,7 +17,6 @@ TagManager:
   - ChangeScene
   - FxTemporaire
   - Suction
-  - starEffect
   layers:
   - Default
   - TransparentFX

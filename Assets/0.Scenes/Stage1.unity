@@ -10452,26 +10452,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1844694122}
-  - component: {fileID: 1844694121}
   m_Layer: 0
   m_Name: DummySceneChanger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1844694121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844694120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8afdc9fefa2c8e44f98314356453f260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_IsActive: 0
 --- !u!4 &1844694122
 Transform:
   m_ObjectHideFlags: 0
@@ -13209,9 +13196,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2129459428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae999cbb3187e64889a8815f5b05911, type: 3}
+  m_Script: {fileID: 11500000, guid: 9afc2392908ac694a98c5b016505b112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 5
+  currentTime: 0
+  delaytime: 1
+  door: {fileID: 664004077}
+  psw_camera: {fileID: 2129459428}
 --- !u!1001 &824021526094598172
 PrefabInstance:
   m_ObjectHideFlags: 0

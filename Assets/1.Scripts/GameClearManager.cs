@@ -15,6 +15,9 @@ public class GameClearManager : MonoBehaviour
     [SerializeField] RawImage myBossKillVideo;
     [SerializeField] VideoPlayer videoPlayer;
 
+    public bool gameClear = false;
+    bool videioFinish = false;
+
     private void Awake()
     {
         Instance = this;
@@ -23,13 +26,33 @@ public class GameClearManager : MonoBehaviour
     private void Start()
     {
         myBossKillVideo.enabled = false;
+        videioFinish = false;
         videoPlayer.Stop();
+    }
+
+    private void Update()
+    {
+        if (!gameClear) return;
+
+        if (Input.GetKeyDown(KeyCode.F1))
+            videoPlayer.playbackSpeed = 10;
+        else if (Input.GetKeyUp(KeyCode.F1))
+            videoPlayer.playbackSpeed = 1;
+
+        if (videioFinish && Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("StartScene"));
+        }
     }
 
     public IEnumerator GameClear()
     {
+        if (gameClear == true) yield break;
+        gameClear = true;
         SoundManager.Instance.BGMVolume = 0;
         Time.timeScale = 0;
+        PlayerManager.Instance.Anim.updateMode = AnimatorUpdateMode.Normal;
 
         playerBossKillImage.gameObject.SetActive(true);
         playerBossKillImage.color = new Color(1, 1, 1, 0.8f);
@@ -40,7 +63,14 @@ public class GameClearManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.1f);
         PlayerManager.Instance.FCamera.CameraShake(0.1f, 0.15f);
         yield return new WaitForSecondsRealtime(0.55f);
-        myBossKillVideo.enabled = true;
+        videoPlayer.loopPointReached += VideoEnd;
+        videoPlayer.targetTexture.Release();
         videoPlayer.Play();
+        myBossKillVideo.enabled = true;
+    }
+
+    void VideoEnd(VideoPlayer vp)
+    {
+        videioFinish = true;
     }
 }

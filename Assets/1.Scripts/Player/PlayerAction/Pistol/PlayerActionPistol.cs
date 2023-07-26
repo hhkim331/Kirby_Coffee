@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -8,6 +9,8 @@ using UnityEngine.UI;
 
 public class PlayerActionPistol : PlayerAction
 {
+    [SerializeField] Transform rightPistol;
+    [SerializeField] Transform leftPistol;
     [SerializeField] Transform rightFirePos;
     [SerializeField] Transform leftFirePos;
     [SerializeField] LineRenderer rightLine;
@@ -17,6 +20,10 @@ public class PlayerActionPistol : PlayerAction
     [SerializeField] RectTransform aimRT;
     [SerializeField] Image imageAim;
     [SerializeField] Image imageLockOn;
+
+    //변신 총 위치
+    [SerializeField] Transform kirbyBoneArmRight;
+    [SerializeField] Transform kirbyBoneArmLeft;
 
     enum CHARGELEVEL
     {
@@ -63,6 +70,18 @@ public class PlayerActionPistol : PlayerAction
     float lockOnReleaseDistance = 60f;
     Coroutine lockOnCoroutine = null;
 
+    //총 장착상태
+    bool isEquip = false;
+    float equipTime = 1f;
+    float equipDelay = 1f;
+    readonly Vector3 rightPistolEquipPos = new Vector3(0.4f, 0.5f, 0.55f);
+    readonly Vector3 rightPistolUnEquipPos = new Vector3(0.18f, 0.5f, -0.5f);
+    readonly Vector3 rightPistolEquipRot = new Vector3(0, -90, 0);
+    readonly Vector3 rightPistolUnEquipRot = new Vector3(0, 0, 45);
+    readonly Vector3 leftPistolEquipPos = new Vector3(-0.4f, 0.5f, 0.55f);
+    readonly Vector3 leftPistolUnEquipPos = new Vector3(-0.18f, 0.5f, -0.5f);
+    readonly Vector3 leftPistolEquipRot = new Vector3(0, -90, 0);
+    readonly Vector3 leftPistolUnEquipRot = new Vector3(0, -180, 45);
 
 
     // Update is called once per frame
@@ -79,6 +98,7 @@ public class PlayerActionPistol : PlayerAction
 
         if (isFireKey)
         {
+            equipTime = 0f;
             chargeTime += Time.deltaTime;
             switch (chargeLevel)
             {
@@ -157,6 +177,14 @@ public class PlayerActionPistol : PlayerAction
             if (isAim)
                 UpdateAim();
         }
+
+        //총 위치 변경
+        if (isEquip && equipTime < equipDelay)
+        {
+            equipTime += Time.deltaTime;
+            if (equipTime > equipDelay)
+                UnEquip();
+        }
     }
 
     public override void Set()
@@ -184,6 +212,7 @@ public class PlayerActionPistol : PlayerAction
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            if (!isEquip) Equip();
             isFireKey = true;
             IsHardAction = true;
             isAim = false;
@@ -428,9 +457,11 @@ public class PlayerActionPistol : PlayerAction
         IsHardAction = false;
         yield return new WaitForSeconds(0.1f);
         Instantiate(bulletFactory, rightFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(transform.forward);
+        RightPistolRecoil();
         SoundManager.Instance.PlaySFX("Shot");
         yield return new WaitForSeconds(0.1f);
         Instantiate(bulletFactory, leftFirePos.position, Quaternion.identity).GetComponent<PistolBullet>().Set(transform.forward);
+        LeftPistolRecoil();
         SoundManager.Instance.PlaySFX("Shot");
         isFire = false;
         IsAction = false;
@@ -451,6 +482,7 @@ public class PlayerActionPistol : PlayerAction
                     pistolBullet.Set(lockOnTarget);
                 else
                     pistolBullet.Set(rightAimDir);
+                RightPistolRecoil();
             }
             else
             {
@@ -459,11 +491,98 @@ public class PlayerActionPistol : PlayerAction
                     pistolBullet.Set(lockOnTarget);
                 else
                     pistolBullet.Set(leftAimDir);
+                LeftPistolRecoil();
             }
             PlayerManager.Instance.FCamera.CameraShakeUpOnce(0.1f);
         }
         isFire = false;
         IsHardAction = false;
+    }
+    #endregion
+
+    #region Gun position (Anim)
+    public override void ChangeAnimationStart()
+    {
+        rightPistol.parent = kirbyBoneArmRight;
+        rightPistol.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        rightPistol.localPosition = new Vector3(0, 0.01f, 0);
+        rightPistol.localRotation = Quaternion.Euler(new Vector3(0, 0, 90));
+
+        leftPistol.parent = kirbyBoneArmLeft;
+        leftPistol.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        leftPistol.localPosition = new Vector3(0, 0.01f, 0);
+        leftPistol.localRotation = Quaternion.Euler(new Vector3(180, 0, -90));
+    }
+
+    public override void ChangeAnimationEnd()
+    {
+        rightPistol.parent = transform;
+        rightPistol.localScale = Vector3.one;
+        leftPistol.parent = transform;
+        leftPistol.localScale = Vector3.one;
+        UnEquipImmediately();
+    }
+
+    //장착
+    void Equip()
+    {
+        isEquip = true;
+        //총을 손 위치로 이동
+        rightPistol.DOKill();
+        rightPistol.localRotation = Quaternion.Euler(rightPistolEquipRot);
+        rightPistol.DOLocalMove(rightPistolEquipPos, 0.1f).From(new Vector3(0.6f, 0.5f, -0.05f)).SetEase(Ease.Linear);
+
+        leftPistol.DOKill();
+        leftPistol.localRotation = Quaternion.Euler(leftPistolEquipRot);
+        leftPistol.DOLocalMove(leftPistolEquipPos, 0.1f).From(new Vector3(-0.6f, 0.5f, -0.05f)).SetEase(Ease.Linear);
+    }
+
+    void UnEquip()
+    {
+        isEquip = false;
+
+        //오른손총 원위치
+        rightPistol.DOLocalRotate(rightPistolUnEquipRot, 0.2f).SetEase(Ease.Linear);
+        rightPistol.DOLocalMove(rightPistolUnEquipPos, 0.2f).SetEase(Ease.Linear);
+
+        //왼손총 원위치
+        leftPistol.DOLocalRotate(leftPistolUnEquipRot, 0.2f).SetDelay(0.2f).SetEase(Ease.Linear);
+        leftPistol.DOLocalMove(leftPistolUnEquipPos, 0.2f).SetDelay(0.2f).SetEase(Ease.Linear);
+    }
+
+    void UnEquipImmediately()
+    {
+        isEquip = false;
+
+        //오른손총 원위치
+        rightPistol.DOKill();
+        rightPistol.localRotation = Quaternion.Euler(rightPistolUnEquipRot);
+        rightPistol.localPosition = rightPistolUnEquipPos;
+
+        //왼손총 원위치
+        leftPistol.DOKill();
+        leftPistol.localRotation = Quaternion.Euler(leftPistolUnEquipRot);
+        leftPistol.localPosition = leftPistolUnEquipPos;
+    }
+
+    void RightPistolRecoil()
+    {
+        //위치 초기화
+        rightPistol.DOKill();
+        //rightPistol.localRotation = Quaternion.Euler(rightPistolEquipRot);
+        //rightPistol.localPosition = rightPistolEquipPos;
+        rightPistol.DOLocalRotate(new Vector3(rightPistolEquipRot.x, rightPistolEquipRot.y, 50), 0.08f).SetEase(Ease.OutBack).OnComplete(() =>
+        { rightPistol.DOLocalRotate(rightPistolEquipRot, 0.05f).SetDelay(0.05f).SetEase(Ease.Linear); });
+    }
+
+    void LeftPistolRecoil()
+    {
+        //위치 초기화
+        leftPistol.DOKill();
+        //leftPistol.localRotation = Quaternion.Euler(leftPistolEquipRot);
+        //leftPistol.localPosition = leftPistolEquipPos;
+        leftPistol.DOLocalRotate(new Vector3(leftPistolEquipRot.x, leftPistolEquipRot.y, 50), 0.08f).SetEase(Ease.OutBack).OnComplete(() =>
+        { leftPistol.DOLocalRotate(leftPistolEquipRot, 0.05f).SetDelay(0.05f).SetEase(Ease.Linear); });
     }
     #endregion
 }

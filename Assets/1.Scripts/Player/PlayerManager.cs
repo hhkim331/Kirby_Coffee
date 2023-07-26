@@ -14,7 +14,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] FollowCamera followCamera;
     public FollowCamera FCamera { get { return followCamera; } }
 
-    [SerializeField] Animator anim;
+    [SerializeField] GameObject playerModel;
+    public GameObject PlayerModel { get { return playerModel; } }
+    float defaultModelScale = 0.25f;
+
+    Animator anim;
     public Animator Anim { get { return anim; } }
 
     //시작모션
@@ -27,6 +31,11 @@ public class PlayerManager : MonoBehaviour
     bool isHit = false;
     public bool IsHit { get { return isHit; } }
     float hitTime; //조작불가능시간,밀려나는 시간
+
+    //사망
+    bool isDie = false;
+    public bool IsDie { get { return isDie; } }
+    [SerializeField] Canvas playerUICanvas;
 
     //변신
     public enum CHANGETYPE
@@ -63,6 +72,8 @@ public class PlayerManager : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
         playerCoin = GetComponent<PlayerCoin>();
         playerActionManager = GetComponent<PlayerActionManager>();
+
+        anim = playerModel.GetComponent<Animator>();
     }
 
     void Start()
@@ -73,6 +84,8 @@ public class PlayerManager : MonoBehaviour
         GameManager.Input.keyaction += playerMovement.keyMove;
 
         playerHealth.Set(playerData);
+
+        playerCoin.Set();
 
         changeType = PlayerIngameData.Instance.ChangeType;
         playerMouth.Set(changeType);
@@ -129,18 +142,47 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void Hit()
+    public void Hit(Vector3 hitDir)
     {
         isHit = true;
         hitTime = playerData.hitTime;
+
+        followCamera.CameraShake(0.1f, 0.1f);
+        playerMovement.Hit(hitDir);
+    }
+
+    public void ChangeScale(float scale)
+    {
+        playerModel.transform.DOScale(defaultModelScale * scale, 0.2f).SetEase(Ease.OutQuart);
     }
 
     #region 변신
     //변신하면 호출되는 함수(나중에 사용)
-    public void Change(CHANGETYPE type)
+    public void Change(CHANGETYPE type, bool isSwallow = false)
     {
         if (type == changeType) return;
 
+        if (isSwallow)
+        {
+            playerModel.transform.DOScaleY(defaultModelScale * 1.3f, 0.07f).SetEase(Ease.OutCubic).OnComplete(() =>
+            {
+                playerModel.transform.DOScale(new Vector3(2f, 0.3f, 2f) * defaultModelScale, 0.2f).SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    playerModel.transform.DOScale(Vector3.one * defaultModelScale, 0.08f).SetEase(Ease.OutCubic).OnComplete(() =>
+                    {
+                        ChangeSet(type);
+                    });
+                });
+            });
+        }
+        else
+        {
+            ChangeSet(type);
+        }
+    }
+
+    void ChangeSet(CHANGETYPE type)
+    {
         //기존 액션 해제
         if (changeType != CHANGETYPE.Normal)
             GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
@@ -159,10 +201,13 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator ChangeCoroutine()
     {
-        float s = GetViewportSize();
+        //float s = GetViewportSize();
         Time.timeScale = 0;
         anim.SetTrigger("ChangeStart");
-        yield return new WaitForSecondsRealtime(0.75f);
+        playerActionManager.ChangeAnimationStart();
+        yield return new WaitForSecondsRealtime(0.2f);
+        SoundManager.Instance.PlaySFX("KirbyChange");
+        yield return new WaitForSecondsRealtime(0.55f);
         //파티클
         Vector3 newScale = Vector3.one * GetViewportSize() * 10;
         foreach (RectTransform rect in changeEffect.GetComponentsInChildren<RectTransform>())
@@ -173,6 +218,7 @@ public class PlayerManager : MonoBehaviour
         anim.SetTrigger("ChangeEnd");
         yield return new WaitForSecondsRealtime(0.5f);
         ChangeEnd();
+        playerActionManager.ChangeAnimationEnd();
         Time.timeScale = 1;
     }
 
@@ -240,4 +286,34 @@ public class PlayerManager : MonoBehaviour
         return diff.magnitude;
     }
     #endregion
+
+    public void PlayerDie()
+    {
+        isDie = true;
+        //애니메이션 멈춤
+        anim.speed = 0;
+        playerMovement.Die();
+        StartCoroutine(PlayerDieCoroutine());
+    }
+
+    IEnumerator PlayerDieCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        followCamera.State = FollowCamera.CameraState.Die;  //카메라 설정
+        GameManager.Instance.PlayerDie();
+        playerMovement.DieMovement();
+
+        yield return new WaitForSecondsRealtime(2f);
+        //플레이어UI캔버스의 UI우선순위를 제일 후순위로 한다.
+        playerUICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        playerUICanvas.sortingOrder = 10;
+
+        //씬 재시작
+        yield return StartCoroutine(SceneChanger.Instance.DieRestartSceneStart());
+
+        //코인 감소 모션
+        yield return playerCoin.Die();
+        //씬 재시작
+        SceneChanger.Instance.RestartScene();
+    }
 }

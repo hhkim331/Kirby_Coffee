@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class psw_DeBox : MonoBehaviour
 {
-
     public GameObject particle;
     // Start is called before the first frame update
     void Start()
@@ -25,13 +24,10 @@ public class psw_DeBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) return;
-
-
-        Destroy(this.gameObject);
-        return;
+        if (other.gameObject.CompareTag("Suction")) return;
         GameObject pa = Instantiate(particle);
         pa.transform.position = this.transform.position;
         Destroy(pa, 1);
+        Destroy(this.gameObject);
     }
 }

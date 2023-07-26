@@ -9,4 +9,6 @@ public abstract class PlayerAction : MonoBehaviour
     public abstract void Set();
     public abstract void Unset();
     public abstract void KeyAction();
+    public abstract void ChangeAnimationStart();
+    public abstract void ChangeAnimationEnd();
 }

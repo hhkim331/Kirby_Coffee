@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Globalization;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -59,6 +60,9 @@ public class PlayerMovement : MonoBehaviour
     float footSoundTime = 0;
     float footSoundDelay = 0.5f;
 
+    //게임오버
+    [SerializeField] Transform gameoverPivot;
+
     public void Set(PlayerData data)
     {
         playerData = data;
@@ -76,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PlayerManager.Instance.IsDie) return;
         //인풋이 없는 경우
         if (!GameManager.Input.isInput)
         {
@@ -164,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (PlayerManager.Instance.IsStartMotion)
+        if (PlayerManager.Instance.IsStartMotion || PlayerManager.Instance.IsDie)
             return;
 
         if (isBreathAttack)
@@ -224,6 +229,8 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
+        if (PlayerManager.Instance.IsDie) return;
+
         //카메라가 봐야할 위치
         if (isJump || isFly)
         {
@@ -470,6 +477,37 @@ public class PlayerMovement : MonoBehaviour
             transform.position = lastSafeAreaPosition;
     }
 
+    public void Die()
+    {
+        Vector3 lookCameraVec = -Camera.main.transform.forward;
+        lookCameraVec.y = 0;
+        transform.rotation = Quaternion.LookRotation(lookCameraVec);
+    }
+
+    public void DieMovement()
+    {
+        cameraViewPoint = transform.position;
+        //위로 크게 한번 작게 한번 튕긴다.
+        transform.DOMoveY(transform.position.y + 5, 0.5f).SetEase(Ease.OutCubic).SetLoops(2, LoopType.Yoyo).SetUpdate(true).OnComplete(() =>
+        {
+            transform.DOMoveY(transform.position.y + 2, 0.25f).SetEase(Ease.OutCubic).SetLoops(2, LoopType.Yoyo).SetUpdate(true).OnComplete(() =>
+            {
+                transform.DOMoveY(transform.position.y + 0.5f, 0.1f).SetEase(Ease.OutCubic).SetLoops(2, LoopType.Yoyo).SetUpdate(true).OnComplete(() =>
+                {
+                    transform.position = cameraViewPoint;
+                });
+            });
+        });
+
+        PlayerManager.Instance.PlayerModel.transform.parent = gameoverPivot;
+        gameoverPivot.DORotate(new Vector3(0, 0, -1080), 1.5f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
+        {
+            PlayerManager.Instance.Anim.speed = 1;
+            PlayerManager.Instance.Anim.SetTrigger("Die");
+            gameoverPivot.DORotate(new Vector3(-70, 0, -45), 0.2f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetUpdate(true);
+        });
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Item"))
@@ -498,6 +536,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.CompareTag("ChangeScene"))
         {
+            SoundManager.Instance.PlaySFX("SceneChange");
             PlayerIngameData.Instance.HP = PlayerManager.Instance.PHealth.HP;
             PlayerIngameData.Instance.ChangeType = PlayerManager.Instance.ChangeType;
             SoundManager.Instance.BGMVolume = 0;

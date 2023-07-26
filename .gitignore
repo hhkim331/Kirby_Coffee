@@ -71,3 +71,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Assets/2.Prefabs/SSB_Prefabs/Background/CastleTower/Caslte_Tower.mesh
+Assets/2.Prefabs/SSB_Prefabs/Background/CastleTower/textures/Caslte_Tower.mesh
+Assets/2.Prefabs/SSB_Prefabs/Background/CastleTower/textures/Caslte_Tower.mesh.meta

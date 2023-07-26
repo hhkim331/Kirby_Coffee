@@ -35,15 +35,8 @@ public class PlayerActionManager : MonoBehaviour
         return curAction;
     }
 
-    public void ChangeAnimationStart()
+    public void ActionChange()
     {
-        if (curAction == null) return;
-        curAction.ChangeAnimationStart();
-    }
 
-    public void ChangeAnimationEnd()
-    {
-        if (curAction == null) return;
-        curAction.ChangeAnimationEnd();
     }
 }

@@ -225,7 +225,6 @@ MonoBehaviour:
   myBossKillImage: {fileID: 295056385}
   myBossKillVideo: {fileID: 1444441974}
   videoPlayer: {fileID: 2130136990}
-  gameClear: 0
 --- !u!4 &153040386
 Transform:
   m_ObjectHideFlags: 0
@@ -1854,7 +1853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &777981597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1870,7 +1869,6 @@ MonoBehaviour:
   starHoleImage: {fileID: 390463598}
   rotStarImage: {fileID: 1177641631}
   backImage: {fileID: 1315148000}
-  prevSceneName: 
 --- !u!114 &777981598
 MonoBehaviour:
   m_ObjectHideFlags: 0

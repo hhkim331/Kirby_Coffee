@@ -9,11 +9,6 @@ public class Psw_Boom : MonoBehaviour
     public float distanceTime = 1f;
     Rigidbody rb;
     public GameObject particle;
-
-    bool needDestroy = false;
-    float destroyTime = 0f;
-    float destroyDelay = 3f;
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -36,39 +31,27 @@ public class Psw_Boom : MonoBehaviour
         //{
         //    currentTime = 0;
         //}
-        if (needDestroy)
-            destroyTime += Time.deltaTime;
-
-        if (destroyTime > destroyDelay)
-        {
-            needDestroy = false;
-
-            GameObject pa = Instantiate(particle);
-            pa.transform.position = this.transform.position;
-            Destroy(pa, 1);
-            Destroy(this.gameObject);
-        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
+
         if (other.gameObject.CompareTag("Player"))
         {
             //적의 반대를 향하는 벡터
             Vector3 dir = other.transform.position - transform.position;
             dir.y = 0;
             dir.Normalize();
-            PlayerManager.Instance.PHealth.Hit(dir, 1, false);
+            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
+        }
 
-            GameObject pa = Instantiate(particle);
-            pa.transform.position = this.transform.position;
-            Destroy(pa, 1);
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            destroyTime = 0;
-            needDestroy = true;
-        }
+        Destroy(gameObject, 3);
+    }
+
+    private void OnDestroy()
+    {
+        GameObject pa = Instantiate(particle);
+        pa.transform.position = this.transform.position;
+        Destroy(pa, 1);
     }
 }

@@ -21,13 +21,13 @@ public class ItemCoin : Item
         switch (coinType)
         {
             case CoinType.Coin1:
-                PlayerManager.Instance.PCoin.GetCoin(1);
+                PlayerManager.Instance.PCoin.Coin += 1;
                 break;
             case CoinType.Coin5:
-                PlayerManager.Instance.PCoin.GetCoin(5);
+                PlayerManager.Instance.PCoin.Coin += 5;
                 break;
             case CoinType.Coin10:
-                PlayerManager.Instance.PCoin.GetCoin(10);
+                PlayerManager.Instance.PCoin.Coin += 10;
                 break;
         }
     }

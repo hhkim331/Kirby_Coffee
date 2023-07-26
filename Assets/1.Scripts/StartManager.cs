@@ -13,29 +13,16 @@ public class StartManager : MonoBehaviour
     [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] VideoClip[] videoClips;
 
-    bool isStart = false;
-
     // Start is called before the first frame update
     void Start()
     {
         SoundManager.Instance.PlayBGM("BGM2");
         SoundManager.Instance.BGMVolume = 1;
-        if (SceneChanger.Instance.prevSceneName == "")
-        {
-            SceneChanger.Instance.gameObject.SetActive(false);
-            startButton.interactable = false;
-            videoPlayer.clip = videoClips[0];
-            videoPlayer.loopPointReached += VideoEnd;
-            videoPlayer.Play();
-        }
-        else
-        {
-            StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
-            startButton.interactable = true;
-            videoPlayer.clip = videoClips[1];
-            videoPlayer.isLooping = true;
-            videoPlayer.Play();
-        }
+
+        startButton.interactable = false;
+        videoPlayer.clip = videoClips[0];
+        videoPlayer.loopPointReached += VideoEnd;
+        videoPlayer.Play();
     }
 
     void VideoEnd(VideoPlayer vp)
@@ -49,10 +36,6 @@ public class StartManager : MonoBehaviour
 
     void StartButtonEvent()
     {
-        if (isStart == true) return;
-        isStart = true;
-        SoundManager.Instance.PlaySFX("Start");
-
         videoPlayer.clip = videoClips[2];
         videoPlayer.loopPointReached += LastVideoEnd;
         videoPlayer.isLooping = false;
@@ -61,8 +44,7 @@ public class StartManager : MonoBehaviour
 
     void LastVideoEnd(VideoPlayer vp)
     {
-        SceneChanger.Instance.gameObject.SetActive(false);
-        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene1"); });
+        videoImage.DOFade(0, 0.3f).OnComplete(() => { UnityEngine.SceneManagement.SceneManager.LoadScene("PlayerTestScene"); });
     }
 
 #if UNITY_EDITOR

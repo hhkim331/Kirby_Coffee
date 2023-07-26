@@ -72,7 +72,7 @@ public class PistolBullet : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Boss") || other.gameObject.layer == LayerMask.NameToLayer("Hammer"))
         {
-            other.transform.root.GetComponent<SSB_Boss3>().DamageProcess();
+            other.transform.root.GetComponent<SSB_Boss2>().DamageProcess();
             Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity), 3);
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))

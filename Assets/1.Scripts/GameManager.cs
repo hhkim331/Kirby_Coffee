@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
             PlayerManager.Instance.FCamera.State = startCameraState;
 
         SoundManager.Instance.BGMVolume = 1;
-        SceneChanger.Instance.gameObject.SetActive(true);
         StartCoroutine(SceneChanger.Instance.ChangeSceneEnd());
     }
 
@@ -101,25 +100,4 @@ public class GameManager : MonoBehaviour
         colorGrading.colorFilter.value = postColor;
         changeCamera.enabled = false;
     }
-
-    #region Die
-    public void PlayerDie()
-    {
-        changeCamera.enabled = true;
-        StartCoroutine(PlayerDieCoroutine());
-    }
-
-    IEnumerator PlayerDieCoroutine()
-    {
-        Color postColor = colorGrading.colorFilter.value;
-        while (postColor.r > 0.0f)
-        {
-            postColor = new Color(postColor.r - Time.unscaledDeltaTime, postColor.g - Time.unscaledDeltaTime, postColor.b - Time.unscaledDeltaTime);
-            colorGrading.colorFilter.value = postColor;
-            yield return null;
-        }
-        postColor = Color.black;
-        colorGrading.colorFilter.value = postColor;
-    }
-    #endregion
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.38491854, g: 0.45968658, b: 0.55483043, a: 1}
+  m_IndirectSpecularColor: {r: 0.3849188, g: 0.45968658, b: 0.55483043, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1984,7 +1984,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &356867771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2323,6 +2323,16 @@ PrefabInstance:
     - target: {fileID: 4264240769498535095, guid: a7993a046186c9a4a9f8c07e69298584,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5382032146801319342, guid: a7993a046186c9a4a9f8c07e69298584,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5382032146801319342, guid: a7993a046186c9a4a9f8c07e69298584,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4110,7 +4120,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 60
+  m_RootOrder: 59
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &696312187
 PrefabInstance:
@@ -4810,7 +4820,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 59
+  m_RootOrder: 58
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &886108996
 GameObject:
@@ -12363,7 +12373,7 @@ Transform:
   - {fileID: 1349524054}
   - {fileID: 241678148}
   m_Father: {fileID: 0}
-  m_RootOrder: 62
+  m_RootOrder: 61
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1937370908
 GameObject:
@@ -12738,7 +12748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1980961590
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12919,7 +12929,7 @@ PrefabInstance:
     - target: {fileID: 4264240769498535095, guid: a7993a046186c9a4a9f8c07e69298584,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.05
+      value: 0.025
       objectReference: {fileID: 0}
     - target: {fileID: 4264240769498535095, guid: a7993a046186c9a4a9f8c07e69298584,
         type: 3}
@@ -14675,7 +14685,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 242938336534e1a40bc91a21a5d8ace8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 61
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 242938336534e1a40bc91a21a5d8ace8,
         type: 3}

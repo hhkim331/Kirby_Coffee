@@ -85,6 +85,8 @@ public class PlayerManager : MonoBehaviour
 
         playerHealth.Set(playerData);
 
+        playerCoin.Set();
+
         changeType = PlayerIngameData.Instance.ChangeType;
         playerMouth.Set(changeType);
         GameManager.Input.keyaction += playerMouth.KeyAction;

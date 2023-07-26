@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 4228581137757569261}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.9831495, y: -0.51, z: -3.1821373}
-  m_LocalScale: {x: 0.88132, y: 0.84963, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -114,7 +114,6 @@ MonoBehaviour:
   speed: 5
   distanceTime: 1
   particle: {fileID: 0}
-  isJump: 0
 --- !u!54 &-5880613038847123721
 Rigidbody:
   m_ObjectHideFlags: 0

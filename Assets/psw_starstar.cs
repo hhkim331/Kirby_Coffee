@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class psw_starrrrr : MonoBehaviour
+public class psw_starstar : MonoBehaviour
 {
 
     float currentTime;
@@ -13,15 +13,15 @@ public class psw_starrrrr : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Vector3 dir = -transform.forward + transform.up;
+        Vector3 dir = transform.forward + transform.up;
         dir.Normalize();
         rb.AddForce(dir * speed, ForceMode.Impulse);
     }
 
-   
+
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter(Collision other)
@@ -41,8 +41,8 @@ public class psw_starrrrr : MonoBehaviour
 
     private void OnDestroy()
     {
-        //GameObject pa = Instantiate(particle);
-        //pa.transform.position = this.transform.position;
-        Destroy(gameObject, 1);
+        GameObject pa = Instantiate(particle);
+        pa.transform.position = this.transform.position;
+        Destroy(pa, 1);
     }
 }

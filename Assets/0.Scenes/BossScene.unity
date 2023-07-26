@@ -236,7 +236,7 @@ GameObject:
   m_Layer: 0
   m_Name: StarPosition
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -248,8 +248,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75565013}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.21, z: 2.13}
-  m_LocalScale: {x: 0.4489136, y: 0.972571, z: 1}
+  m_LocalPosition: {x: 0, y: 0.19408263, z: 0.9381774}
+  m_LocalScale: {x: 0.4489136, y: 0.45893312, z: 0.45417383}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1005837658}
@@ -257,8 +257,8 @@ Transform:
   - {fileID: 951385767}
   - {fileID: 356062775}
   - {fileID: 1601905490}
-  m_Father: {fileID: 8873773171988975218}
-  m_RootOrder: 1
+  m_Father: {fileID: 23083259}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &118811020
 GameObject:
@@ -671,11 +671,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1202333353}
-  makeTime: 1
+  makeTime: 2
   enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
     type: 3}
-  bulletSpeed: 5
-  isJump: 0
+  bulletSpeed: 3
+  attackRange: 8
 --- !u!1 &390158907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2475,11 +2475,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1202333353}
-  makeTime: 1
+  makeTime: 2
   enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
     type: 3}
-  bulletSpeed: 5
-  isJump: 0
+  bulletSpeed: 3
+  attackRange: 8
 --- !u!1 &957986407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2614,11 +2614,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1202333353}
-  makeTime: 1
+  makeTime: 2
   enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
     type: 3}
-  bulletSpeed: 5
-  isJump: 0
+  bulletSpeed: 3
+  attackRange: 8
 --- !u!1 &1030265686
 GameObject:
   m_ObjectHideFlags: 0
@@ -2753,11 +2753,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1202333353}
-  makeTime: 1
+  makeTime: 2
   enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
     type: 3}
-  bulletSpeed: 5
-  isJump: 0
+  bulletSpeed: 3
+  attackRange: 8
 --- !u!1 &1102826799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2852,9 +2852,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa4944aacc806040a88137232fff1ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
-    type: 3}
   isJump: 0
+  anim: {fileID: 1005837661}
+  anim1: {fileID: 1033113621}
+  anim2: {fileID: 951385770}
+  anim3: {fileID: 356062778}
+  anim4: {fileID: 1601905493}
 --- !u!1 &1177641630
 GameObject:
   m_ObjectHideFlags: 0
@@ -3679,7 +3682,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh95858
+  m_Name: pb_Mesh26814
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3934,11 +3937,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1202333353}
-  makeTime: 1
+  makeTime: 2
   enemyFactory: {fileID: 4228581137757569261, guid: c9ae2f38b30eec445be3f914b7c9f6a1,
     type: 3}
-  bulletSpeed: 5
-  isJump: 0
+  bulletSpeed: 3
+  attackRange: 8
 --- !u!1 &1632217338
 GameObject:
   m_ObjectHideFlags: 0
@@ -4462,7 +4465,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 23083259}
-  - {fileID: 75565014}
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

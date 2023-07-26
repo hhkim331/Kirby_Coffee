@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class psw_animEvent : MonoBehaviour
 {
-    public static psw_animEvent instance;
-    public GameObject enemyFactory;
+    //public static psw_animEvent instance;
     public bool isJump = false;
-   
-    private void Awake()
-    {
-        instance = this;
-    }
 
+    public psw_starPosition anim;
+    public psw_starPosition anim1;
+    public psw_starPosition anim2;
+    public psw_starPosition anim3;
+    public psw_starPosition anim4;
+    
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -28,7 +28,10 @@ public class psw_animEvent : MonoBehaviour
     {
         print("콘솔아 나 이벤트 찍혔나 확인 부탁행");
         isJump = true;
-        GameObject st = Instantiate(enemyFactory);
-        GetComponent<psw_starrrrr>().starMove();
+        anim.makeStar();
+        anim1.makeStar();
+        anim2.makeStar();
+        anim3.makeStar();
+        anim4.makeStar();
     } 
 }

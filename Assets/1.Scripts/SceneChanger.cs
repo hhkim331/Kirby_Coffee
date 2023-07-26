@@ -29,13 +29,13 @@ public class SceneChanger : MonoBehaviour
     public IEnumerator ChangeSceneStart(string sceneName)
     {
         prevSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSecondsRealtime(0.15f);
         starHoleImage.gameObject.SetActive(true);
-        starHoleImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine);
-        rotStarImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear);
-        rotStarImage.transform.DORotate(Vector2.zero, 1f).From(new Vector3(0, 0, 144)).SetEase(Ease.Linear);
+        starHoleImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine).SetUpdate(true);
+        rotStarImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear).SetUpdate(true);
+        rotStarImage.transform.DORotate(Vector2.zero, 1f).From(new Vector3(0, 0, 144)).SetEase(Ease.Linear).SetUpdate(true);
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSecondsRealtime(1.2f);
         starHoleImage.rectTransform.sizeDelta = Vector2.zero;
         rotStarImage.rectTransform.sizeDelta = Vector2.zero;
         backImage.gameObject.SetActive(true);
@@ -49,8 +49,28 @@ public class SceneChanger : MonoBehaviour
         backImage.gameObject.SetActive(false);
         starHoleImage.gameObject.SetActive(true);
         yield return null;
-        starHoleImage.rectTransform.DOSizeDelta(new Vector2(3600, 3600), 0.8f).From(Vector2.zero).SetDelay(0.2f).SetEase(Ease.InSine);
-        rotStarImage.rectTransform.DOSizeDelta(new Vector2(4500, 4500), 1f).From(Vector2.zero).SetEase(Ease.Linear);
-        rotStarImage.transform.DORotate(new Vector3(0, 0, -72), 1f).From(Vector3.zero).SetEase(Ease.OutQuint).OnComplete(() => { starHoleImage.gameObject.SetActive(false); });
+        starHoleImage.rectTransform.DOSizeDelta(new Vector2(3600, 3600), 0.8f).From(Vector2.zero).SetDelay(0.2f).SetEase(Ease.InSine).SetUpdate(true);
+        rotStarImage.rectTransform.DOSizeDelta(new Vector2(4500, 4500), 1f).From(Vector2.zero).SetEase(Ease.Linear).SetUpdate(true);
+        rotStarImage.transform.DORotate(new Vector3(0, 0, -72), 1f).From(Vector3.zero).SetEase(Ease.OutQuint).SetUpdate(true).OnComplete(() => { starHoleImage.gameObject.SetActive(false); });
+    }
+
+    public IEnumerator DieRestartSceneStart()
+    {
+        starHoleImage.gameObject.SetActive(true);
+        starHoleImage.rectTransform.DOSizeDelta(new Vector2(0, 0), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine).SetUpdate(true);
+        rotStarImage.rectTransform.DOSizeDelta(new Vector2(0, 0), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear).SetUpdate(true);
+        rotStarImage.transform.DORotate(Vector2.zero, 1f).From(new Vector3(0, 0, 144)).SetEase(Ease.Linear).SetUpdate(true);
+
+        yield return new WaitForSecondsRealtime(1.2f);
+        starHoleImage.rectTransform.sizeDelta = Vector2.zero;
+        rotStarImage.rectTransform.sizeDelta = Vector2.zero;
+        backImage.gameObject.SetActive(true);
+        starHoleImage.gameObject.SetActive(false);
+    }
+
+    public void RestartScene()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

@@ -37,13 +37,13 @@ public class PlayerActionManager : MonoBehaviour
 
     public void ChangeAnimationStart()
     {
-        //if (curAction == null) return;
-        //curAction.ChangeAnimationStart();
+        if (curAction == null) return;
+        curAction.ChangeAnimationStart();
     }
 
     public void ChangeAnimationEnd()
     {
-        //if (curAction == null) return;
-        //curAction.ChangeAnimationEnd();
+        if (curAction == null) return;
+        curAction.ChangeAnimationEnd();
     }
 }

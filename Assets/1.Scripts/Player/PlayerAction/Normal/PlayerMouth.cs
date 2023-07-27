@@ -14,6 +14,7 @@ public class PlayerMouth : MonoBehaviour
     Stack<GameObject> stackList = new Stack<GameObject>();
 
     [SerializeField] GameObject suction;
+    [SerializeField] ParticleSystem suctionEffect;
     bool canUse = true;
     bool isSuction = false;
     public bool IsSuction
@@ -22,15 +23,20 @@ public class PlayerMouth : MonoBehaviour
         set
         {
             if (isSuction == value) return;
-
             isSuction = value;
-            if (suction.activeSelf != value)
-                suction.SetActive(value);
 
             if (value)
+            {
+                suction.SetActive(true);
+                suctionEffect.Play();
                 audioSource.Play();
+            }
             else
+            {
+                suction.SetActive(false);
+                suctionEffect.Stop();
                 audioSource.Stop();
+            }
         }
     }
     bool canSuction = true;
@@ -84,7 +90,7 @@ public class PlayerMouth : MonoBehaviour
     public void KeyAction()
     {
         if (PlayerManager.Instance.IsChange || PlayerManager.Instance.IsUnChange || PlayerManager.Instance.IsHit || PlayerManager.Instance.IsStartMotion) return;
-        if (PlayerManager.Instance.PMovement.IsFly) return;
+        if (PlayerManager.Instance.PMovement.IsFly || PlayerManager.Instance.PMovement.IsBreathAttack) return;
         if (!canUse) return;
 
         if (stack != MOUTHSTACK.None)
@@ -201,5 +207,8 @@ public class PlayerMouth : MonoBehaviour
         PlayerManager.Instance.ChangeScale(1.2f);
 
         stackList.Push(suctionObejct);
+
+        if (isSuction)
+            IsSuction = false;
     }
 }

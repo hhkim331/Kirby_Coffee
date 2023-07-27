@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -49,6 +50,7 @@ public class PlayerManager : MonoBehaviour
     public bool IsChange { get { return isChange; } }
     bool isUnChange = false;
     public bool IsUnChange { get { return isUnChange; } }
+    [SerializeField] TextMeshProUGUI changeNameText;
     [SerializeField] GameObject[] changeBubbles;
     [SerializeField] ParticleSystem changeEffect;
 
@@ -88,6 +90,7 @@ public class PlayerManager : MonoBehaviour
         playerCoin.Set();
 
         changeType = PlayerIngameData.Instance.ChangeType;
+        NameChange();
         playerMouth.Set(changeType);
         GameManager.Input.keyaction += playerMouth.KeyAction;
 
@@ -188,6 +191,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.Input.keyaction -= playerActionManager.GetCurAction().KeyAction;
         //액션정보 변경
         changeType = type;
+        NameChange();
         playerMouth.Set(changeType);
         playerActionManager.Set(changeType);
         //새 액션 설정
@@ -196,6 +200,19 @@ public class PlayerManager : MonoBehaviour
             GameManager.Input.keyaction += playerActionManager.GetCurAction().KeyAction;
             //변신 애니메이션
             StartCoroutine(ChangeCoroutine());
+        }
+    }
+
+    void NameChange()
+    {
+        switch (changeType)
+        {
+            case CHANGETYPE.Normal:
+                changeNameText.text = "커비";
+                break;
+            case CHANGETYPE.Pistol:
+                changeNameText.text = "노블 레인저";
+                break;
         }
     }
 

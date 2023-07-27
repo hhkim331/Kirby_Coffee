@@ -32,6 +32,14 @@ public class psw_animEvent : MonoBehaviour
     public void StarAttack()
     {
         print("ㅇㅇㅇㅇㅇㅇ");
-        anim.makeStar1();
+        anim.makeStar();
+    }
+
+    public void starAT()
+    {
+        print("별아 튀어나와라");
+        anim.makeStar();
+        anim2.makeStar();
+        anim3.makeStar();
     }
 }

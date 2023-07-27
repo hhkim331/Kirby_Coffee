@@ -207,7 +207,23 @@ public class Boss_Ex : MonoBehaviour
         }
     }
 
-  
+    public void DamageProcess()
+    {
+        //적 체력을 1 감소하고 싶다
+        bossHP.HP--;
+        //만약 체력이 0 이하라면
+        if (bossHP.HP <= 0)
+        {
+            print("체력 0");
+            //state 변경하기
+            //m_state = BossState.Die;
+            //파괴하고싶다.3초 뒤에
+            StartCoroutine(GameClearManager.Instance.GameClear());
+            Destroy(gameObject, 3);
+            //anim.SetTrigger("Die");
+        }
+    }
+
     //private void UpdateMove1()
     //{
 

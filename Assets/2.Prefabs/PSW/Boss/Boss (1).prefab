@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5234700002249348642}
   - component: {fileID: 1556234074140344905}
   - component: {fileID: 6284628794016613923}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface23
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 73098656160651201}
   - component: {fileID: 128804907966331101}
   - component: {fileID: 3510286486318302728}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 1855044916538325178}
   - component: {fileID: 1040612656106406100}
   - component: {fileID: 4961297512070390967}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 4472028256989664288}
   - component: {fileID: 1449792621168758405}
   - component: {fileID: 2730658372304256918}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 6073916820928539363}
   - component: {fileID: 1575913526508760010}
   - component: {fileID: 2753163804044857239}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 8931089718667146925}
   - component: {fileID: 8662979264973734859}
   - component: {fileID: 130569630147418907}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 9011150865508772839}
   - component: {fileID: 2083622561078876437}
   - component: {fileID: 8902174798826363776}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_polySurface16_spikes_bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 5000090458330635398}
   - component: {fileID: 3553043545902376443}
   - component: {fileID: 3849763937296783044}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface27
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 3904256209220339725}
   - component: {fileID: 7329423883561183479}
   - component: {fileID: 6292041165302029392}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 5942037931019938309}
   - component: {fileID: 6226554223104783714}
   - component: {fileID: 8082723872130451244}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 454496504167908990}
   - component: {fileID: 8145916877216325035}
   - component: {fileID: 2752753051980887420}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -924,7 +924,7 @@ GameObject:
   - component: {fileID: 8618274596964803543}
   - component: {fileID: 993252670451281899}
   - component: {fileID: 8094131072562028573}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: wood2_hammer_export
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1007,7 +1007,7 @@ GameObject:
   - component: {fileID: 1637874322169640911}
   - component: {fileID: 3095800182984191065}
   - component: {fileID: 8359282224555934303}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1090,7 +1090,7 @@ GameObject:
   - component: {fileID: 6976086663587574582}
   - component: {fileID: 7467360014331779138}
   - component: {fileID: 1409204846170978203}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,11 +1259,11 @@ CapsuleCollider:
   m_GameObject: {fileID: 3124206300927035251}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 0.74
-  m_Height: 3.6305
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 0.62, z: -0.12}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3124206300927035250
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1287,12 +1287,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3124206300927035251}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c00cb7d8ccdb17469da8346dc089386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 5
+  maxHP: 20
   sliderHP: {fileID: 0}
 --- !u!114 &3124206300927035237
 MonoBehaviour:
@@ -1322,7 +1322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2805737995979434437}
   - component: {fileID: 5800232510361317082}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1390,8 +1390,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.3258483, y: 4.631386, z: 5.9280376}
-  m_Center: {x: 0.6632145, y: 0.4582282, z: 2.464271}
+  m_Size: {x: 3.222059, y: 3.6263576, z: 5.364913}
+  m_Center: {x: -0.018139968, y: -0.04434358, z: 2.7456186}
 --- !u!1 &3621481735221233645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,7 +1403,7 @@ GameObject:
   - component: {fileID: 6951450528274298679}
   - component: {fileID: 9192389799386630416}
   - component: {fileID: 2626407985310824015}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1486,7 +1486,7 @@ GameObject:
   - component: {fileID: 3116081128768019536}
   - component: {fileID: 6746443906043017865}
   - component: {fileID: 4885302942982142831}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_Sides
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1569,7 +1569,7 @@ GameObject:
   - component: {fileID: 6866958711227078867}
   - component: {fileID: 7380908166871867648}
   - component: {fileID: 3031787494168406203}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1652,7 +1652,7 @@ GameObject:
   - component: {fileID: 681683736902135398}
   - component: {fileID: 8656310747905293301}
   - component: {fileID: 6693138408341178810}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_stick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1735,7 +1735,7 @@ GameObject:
   - component: {fileID: 308443271383332954}
   - component: {fileID: 1056909894809170811}
   - component: {fileID: 464791983897964006}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1818,7 +1818,7 @@ GameObject:
   - component: {fileID: 2567305964087048663}
   - component: {fileID: 6684036488490514306}
   - component: {fileID: 518835268634459242}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface26
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1901,7 +1901,7 @@ GameObject:
   - component: {fileID: 8525149280049130245}
   - component: {fileID: 5529619228122041133}
   - component: {fileID: 2860390935963626981}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_polySurface16_spikes_top_spikes1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1984,7 +1984,7 @@ GameObject:
   - component: {fileID: 2606982481515716745}
   - component: {fileID: 7107306801356691496}
   - component: {fileID: 6072535174652584634}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface24
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2067,7 +2067,7 @@ GameObject:
   - component: {fileID: 9108436498137729497}
   - component: {fileID: 5007915831099351393}
   - component: {fileID: 1607531207188284550}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2150,7 +2150,7 @@ GameObject:
   - component: {fileID: 5793903074329089323}
   - component: {fileID: 3431590273979247052}
   - component: {fileID: 7327881657585132879}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface26
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2779,7 +2779,7 @@ GameObject:
   - component: {fileID: 5096091343119873133}
   - component: {fileID: 1831801598074755598}
   - component: {fileID: 5422465525118609611}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2862,7 +2862,7 @@ GameObject:
   - component: {fileID: 3623038388818202865}
   - component: {fileID: 6802158253227781613}
   - component: {fileID: 8626735456997989246}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface27
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2945,7 +2945,7 @@ GameObject:
   - component: {fileID: 3151213937168126773}
   - component: {fileID: 7189512241437890473}
   - component: {fileID: 3585820776621241924}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3028,7 +3028,7 @@ GameObject:
   - component: {fileID: 9204031335613896457}
   - component: {fileID: 5484483308436668738}
   - component: {fileID: 280097356097913537}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3111,7 +3111,7 @@ GameObject:
   - component: {fileID: 4566543361900170442}
   - component: {fileID: 5464599379820997112}
   - component: {fileID: 5088239259244165549}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface23
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3194,7 +3194,7 @@ GameObject:
   - component: {fileID: 5413819485001691153}
   - component: {fileID: 6255048534629118721}
   - component: {fileID: 7416228845852970175}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3277,7 +3277,7 @@ GameObject:
   - component: {fileID: 7482862686757421621}
   - component: {fileID: 1722448075151843430}
   - component: {fileID: 100845897705233692}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3360,7 +3360,7 @@ GameObject:
   - component: {fileID: 1707405049730880027}
   - component: {fileID: 3356158501956279820}
   - component: {fileID: 8983624079840140604}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3443,7 +3443,7 @@ GameObject:
   - component: {fileID: 5160745829663179567}
   - component: {fileID: 7645637458939001457}
   - component: {fileID: 2547756462579942262}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3526,7 +3526,7 @@ GameObject:
   - component: {fileID: 4325612792875318405}
   - component: {fileID: 8523117106231363952}
   - component: {fileID: 4808723619099684167}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes1_spikes_bottom_polySurface19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3609,7 +3609,7 @@ GameObject:
   - component: {fileID: 936901383500174738}
   - component: {fileID: 8831786832152452570}
   - component: {fileID: 4509578016045438492}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hammer_export_spikes_top_spikes1_polySurface24
   m_TagString: Untagged
   m_Icon: {fileID: 0}

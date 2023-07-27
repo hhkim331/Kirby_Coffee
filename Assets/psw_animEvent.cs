@@ -13,17 +13,6 @@ public class psw_animEvent : MonoBehaviour
     public psw_starPosition anim3;
     public psw_starPosition anim4;
     
-    void Start()
-    {
-       
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ATJump()
     {
         print("콘솔아 나 이벤트 찍혔나 확인 부탁행");
@@ -34,4 +23,10 @@ public class psw_animEvent : MonoBehaviour
         anim3.makeStar();
         anim4.makeStar();
     } 
+
+    public void StarAttack()
+    {
+        print("ㅇㅇㅇㅇㅇㅇ");
+        anim.makeStar1();
+    }
 }

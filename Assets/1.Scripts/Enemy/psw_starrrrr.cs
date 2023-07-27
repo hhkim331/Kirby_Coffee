@@ -21,28 +21,29 @@ public class psw_starrrrr : MonoBehaviour
    
     void Update()
     {
-        
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-
-        if (other.gameObject.CompareTag("Player"))
+        currentTime += Time.deltaTime;
+        if (currentTime > 2.5f)
         {
-            //적의 반대를 향하는 벡터
-            Vector3 dir = other.transform.position - transform.position;
-            dir.y = 0;
-            dir.Normalize();
-            PlayerManager.Instance.PHealth.Hit(dir, 1, true);
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject, 3);
     }
 
-    private void OnDestroy()
-    {
-        //GameObject pa = Instantiate(particle);
-        //pa.transform.position = this.transform.position;
-        Destroy(gameObject, 1);
-    }
+    //private void OnCollisionEnter(Collision other)
+    //{
+
+    //    if (other.gameObject.CompareTag("Player"))
+    //    {
+    //        //적의 반대를 향하는 벡터
+    //        Vector3 dir = other.transform.position - transform.position;
+    //        dir.y = 0;
+    //        dir.Normalize();
+    //        PlayerManager.Instance.PHealth.Hit(dir, 1, true);
+    //    }
+
+    //    Destroy(gameObject, 3);
+    //}
+
+   
+        
+    
 }

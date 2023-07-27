@@ -44,8 +44,14 @@ public class PlayerNormalBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Boss") || other.gameObject.layer == LayerMask.NameToLayer("Hammer"))
+        {
+            other.transform.root.GetComponent<Boss_Ex>().DamageProcess();
+            Destroy(gameObject);
+            //Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity), 3);
+        }
         //레이어가 스테이지 인경우
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             //닿은 지점과 중심간의 벡터를 구한다.
             Vector3 vec = other.ClosestPoint(transform.position) - transform.position;

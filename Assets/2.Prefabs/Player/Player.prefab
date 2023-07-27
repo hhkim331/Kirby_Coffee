@@ -2303,7 +2303,7 @@ GameObject:
   - component: {fileID: 5050361922567872722}
   - component: {fileID: 5050361922567872723}
   - component: {fileID: 592122960}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: MouthCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2834,7 +2834,7 @@ GameObject:
   - component: {fileID: 5050361923841243306}
   - component: {fileID: 5050361923841243317}
   - component: {fileID: 5050361923841243310}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Suction
   m_TagString: Suction
   m_Icon: {fileID: 0}
@@ -3313,7 +3313,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5047
+  m_VersionIndex: 5050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

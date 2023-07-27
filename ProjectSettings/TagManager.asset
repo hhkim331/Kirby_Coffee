@@ -29,7 +29,7 @@ TagManager:
   - PlayerUI
   - MoveableObj
   - PlayerBullet
-  - 
+  - PlayerSuction
   - Boss
   - Hammer
   - 

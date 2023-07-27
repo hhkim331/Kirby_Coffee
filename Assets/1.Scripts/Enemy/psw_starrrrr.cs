@@ -13,12 +13,12 @@ public class psw_starrrrr : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Vector3 dir = -transform.forward + transform.up;
+        Vector3 dir = transform.forward + transform.up;
         dir.Normalize();
         rb.AddForce(dir * speed, ForceMode.Impulse);
     }
 
-   
+
     void Update()
     {
         currentTime += Time.deltaTime;
@@ -43,7 +43,7 @@ public class psw_starrrrr : MonoBehaviour
     //    Destroy(gameObject, 3);
     //}
 
-   
-        
-    
+
+
+
 }

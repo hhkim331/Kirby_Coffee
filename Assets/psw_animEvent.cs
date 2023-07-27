@@ -12,7 +12,9 @@ public class psw_animEvent : MonoBehaviour
     public psw_starPosition anim2;
     public psw_starPosition anim3;
     public psw_starPosition anim4;
-    
+
+    public GameObject particle;
+
     public void ATJump()
     {
         print("콘솔아 나 이벤트 찍혔나 확인 부탁행");
@@ -22,7 +24,10 @@ public class psw_animEvent : MonoBehaviour
         anim2.makeStar();
         anim3.makeStar();
         anim4.makeStar();
-    } 
+
+        GameObject obj = Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(obj, 3.2f);
+    }
 
     public void StarAttack()
     {

@@ -18,7 +18,10 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            return;
+        Debug.Log(other.name);
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy") && other.gameObject.layer != LayerMask.NameToLayer("Star"))
             return;
         //닿은 대상을 목록에 추가시킨다
         colliderDic.Add(other.transform, 0f);
@@ -26,7 +29,7 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy") && other.gameObject.layer != LayerMask.NameToLayer("Star"))
             return;
 
         //이미 목록에 있는 대상이라면
@@ -57,7 +60,7 @@ public class PlayerSuction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("MoveableObj") && other.gameObject.layer != LayerMask.NameToLayer("Enemy") && other.gameObject.layer != LayerMask.NameToLayer("Star"))
             return;
         //나간대상을 목록에서 제거한다
         colliderDic.Remove(other.transform);

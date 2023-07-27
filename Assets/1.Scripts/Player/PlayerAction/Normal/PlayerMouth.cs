@@ -146,7 +146,7 @@ public class PlayerMouth : MonoBehaviour
     public void SetStack(GameObject suctionObejct)
     {
         //해당 오브젝트가 물건인 경우
-        if (suctionObejct.layer == LayerMask.NameToLayer("MoveableObj"))
+        if (suctionObejct.layer == LayerMask.NameToLayer("MoveableObj") || suctionObejct.layer == LayerMask.NameToLayer("Star"))
         {
             //태그가 버블인 경우
             if (suctionObejct.CompareTag("Bubble"))

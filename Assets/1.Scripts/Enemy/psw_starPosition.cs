@@ -14,12 +14,11 @@ public class psw_starPosition : MonoBehaviour
     public float bulletSpeed = 5.0f; // 원하는 총알 속도를 설정합니다.
     public float attackRange = 3;
     AnimationEvent anim;
-    public GameObject particle;
     // public float maxDistance = 10f;
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.Find("Player");
+        //target = GameObject.Find("Player");
         //anim = GetComponent<AnimationEvent>();
     }
 
@@ -34,15 +33,15 @@ public class psw_starPosition : MonoBehaviour
 
     public void makeStar()
     {
-            // 3. 적공장에서 적을 만들어서
-            GameObject bullet = Instantiate(enemyFactory);
-            // 4. 내 위치에 배치하고 싶다.
-            bullet.transform.position = transform.position;
-            Vector3 direction = target.transform.position - transform.position;
-            direction.y = 0;
-            direction.Normalize();
-            bullet.transform.forward = direction;
-            // 5. 현재 시간을 0으로 초기화 하고 싶다.
+        // 3. 적공장에서 적을 만들어서
+        GameObject bullet = Instantiate(enemyFactory);
+        // 4. 내 위치에 배치하고 싶다.
+        bullet.transform.position = transform.position;
+        //Vector3 direction = target.transform.position - transform.position;
+        //direction.y = 0;
+        //direction.Normalize();
+        bullet.transform.forward = transform.forward;
+        // 5. 현재 시간을 0으로 초기화 하고 싶다.
     }
 
     public void makeStar1()
@@ -51,17 +50,10 @@ public class psw_starPosition : MonoBehaviour
         GameObject bullet = Instantiate(enemyFactory);
         // 4. 내 위치에 배치하고 싶다.
         bullet.transform.position = transform.position;
-        Vector3 direction = target.transform.position - transform.position;
-        direction.y = 0;
-        direction.Normalize();
-        bullet.transform.forward = direction;
+        //Vector3 direction = target.transform.position - transform.position;
+        //direction.y = 0;
+        //direction.Normalize();
+        bullet.transform.forward = transform.forward;
         // 5. 현재 시간을 0으로 초기화 하고 싶다.
-    }
-
-    private void OnDestroy()
-    {
-        GameObject pa = Instantiate(particle);
-        pa.transform.position = this.transform.position;
-        Destroy(pa, 1);
     }
 }

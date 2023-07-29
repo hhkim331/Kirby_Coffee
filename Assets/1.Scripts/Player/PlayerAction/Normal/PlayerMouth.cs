@@ -166,6 +166,10 @@ public class PlayerMouth : MonoBehaviour
             }
             else
             {
+                if (suctionObejct.layer == LayerMask.NameToLayer("Star"))
+                {
+                    suctionObejct.GetComponent<psw_starrrrr>().enabled = false;
+                }
                 AddStack(suctionObejct);
             }
         }

@@ -104,13 +104,15 @@ public class Boss_Ex : MonoBehaviour
         switch (state)
         {
             case EState.Idle:
+                anim.SetBool("Move", false);
                 anim.SetTrigger("Idle");
                 break;
             case EState.Attack:
-                currentTime = 2;
+                anim.SetBool("Move", false);
+                currentTime = 4;
                 break;
             case EState.Move:
-                anim.SetTrigger("Move");
+                anim.SetBool("Move", true);
                 break;
         }
 
@@ -175,9 +177,13 @@ public class Boss_Ex : MonoBehaviour
         // 현재 시간을 증가시킨다.
         currentTime += Time.deltaTime;
         // 1초가 지나면
-        if (currentTime > 2)
+        if (currentTime > 4)
         {
             float dis = Vector3.Distance(target.transform.position, this.transform.position);
+
+            if (attackAniType == 2)
+                PlayerManager.Instance.FCamera.SetBossBasic(transform);
+
             // 만약에 타켓과의 거리가 3보다 커지면
             if (dis > 3)
             {
@@ -190,19 +196,22 @@ public class Boss_Ex : MonoBehaviour
                 {
                     anim.SetTrigger("Attack");
                     attackAniType = 1;
+                    currentTime = 1;
                 }
                 else if (attackAniType == 1)
                 {
                     anim.SetTrigger("Attack1");
+                    PlayerManager.Instance.FCamera.SetBossTopView(transform, GameManager.Instance.bossGround);
                     attackAniType = 2;
-                }    
+                    currentTime = 0;
+                }
                 else if (attackAniType == 2)
                 {
                     anim.SetTrigger("Attack2");
                     attackAniType = 0;
+                    currentTime = 1;
                 }
-                
-                currentTime = 0;
+
             }
         }
     }
@@ -224,7 +233,7 @@ public class Boss_Ex : MonoBehaviour
         }
     }
 
-    
+
 
     //private void UpdateMove1()
     //{

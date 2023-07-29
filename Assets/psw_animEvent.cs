@@ -16,6 +16,8 @@ public class psw_animEvent : MonoBehaviour
     public GameObject particle;
     public Collider playerCollider;
 
+    public Collider hammerCollider;
+
     public void ATJump()
     {
         print("콘솔아 나 이벤트 찍혔나 확인 부탁행");
@@ -43,5 +45,15 @@ public class psw_animEvent : MonoBehaviour
         anim.makeStar();
         anim2.makeStar();
         anim3.makeStar();
+    }
+
+    public void HammerEnable()
+    {
+        hammerCollider.enabled = true;
+    }
+
+    public void HammerDisable()
+    {
+        hammerCollider.enabled = false;
     }
 }

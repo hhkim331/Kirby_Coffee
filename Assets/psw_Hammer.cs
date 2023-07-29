@@ -4,19 +4,7 @@ using UnityEngine;
 
 public class psw_Hammer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -26,5 +14,9 @@ public class psw_Hammer : MonoBehaviour
             dir.Normalize();
             PlayerManager.Instance.PHealth.Hit(dir, 1, false);
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
     }
 }

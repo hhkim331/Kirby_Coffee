@@ -8,6 +8,6 @@ public class ForceSceneChanger : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
-            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("PlayerTestScene2"));
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("Boss"));
     }
 }

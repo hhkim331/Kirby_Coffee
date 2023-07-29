@@ -1258,7 +1258,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3124206300927035251}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.4
   m_Height: 3
@@ -1322,6 +1322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2805737995979434437}
   - component: {fileID: 5800232510361317082}
+  - component: {fileID: 953504899}
   m_Layer: 12
   m_Name: hammer base
   m_TagString: Untagged
@@ -1388,10 +1389,22 @@ BoxCollider:
   m_GameObject: {fileID: 3288801435665036159}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 3.222059, y: 3.6263576, z: 5.364913}
   m_Center: {x: -0.018139968, y: -0.04434358, z: 2.7456186}
+--- !u!114 &953504899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3288801435665036159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a6ddbcdeae38b4b996ef73d39ead92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3621481735221233645
 GameObject:
   m_ObjectHideFlags: 0
@@ -3812,3 +3825,5 @@ MonoBehaviour:
   anim3: {fileID: 5800232509966475057}
   anim4: {fileID: 5800232511145208414}
   particle: {fileID: 1714681308540598, guid: cbe3fcdf7809d3649a23dc1ea2dc5f58, type: 3}
+  playerCollider: {fileID: 0}
+  hammerCollider: {fileID: 5800232510361317082}

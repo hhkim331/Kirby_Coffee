@@ -540,7 +540,7 @@ public class PlayerMovement : MonoBehaviour
             PlayerIngameData.Instance.HP = PlayerManager.Instance.PHealth.HP;
             PlayerIngameData.Instance.ChangeType = PlayerManager.Instance.ChangeType;
             SoundManager.Instance.BGMVolume = 0;
-            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("PlayerTestScene2"));
+            StartCoroutine(SceneChanger.Instance.ChangeSceneStart("Boss"));
         }
     }
 

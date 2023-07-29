@@ -518,6 +518,16 @@ PrefabInstance:
       propertyPath: sliderHP
       value: 
       objectReference: {fileID: 1031207728}
+    - target: {fileID: 3288801435665036159, guid: 3afbd8750b539474b8ea01b3f6fa1179,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800232510361317082, guid: 3afbd8750b539474b8ea01b3f6fa1179,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3afbd8750b539474b8ea01b3f6fa1179, type: 3}
 --- !u!1 &295056382
@@ -3179,6 +3189,24 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &999905385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3288801435665036159, guid: 3afbd8750b539474b8ea01b3f6fa1179,
+    type: 3}
+  m_PrefabInstance: {fileID: 268603050}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &999905387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999905385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a6ddbcdeae38b4b996ef73d39ead92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1031207726
 GameObject:
   m_ObjectHideFlags: 0
@@ -3275,7 +3303,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh72842
+  m_Name: pb_Mesh42068
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

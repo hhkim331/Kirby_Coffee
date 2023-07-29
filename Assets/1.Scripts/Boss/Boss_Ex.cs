@@ -224,6 +224,8 @@ public class Boss_Ex : MonoBehaviour
         }
     }
 
+    
+
     //private void UpdateMove1()
     //{
 

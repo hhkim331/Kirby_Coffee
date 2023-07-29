@@ -43,17 +43,4 @@ public class psw_starPosition : MonoBehaviour
         bullet.transform.forward = transform.forward;
         // 5. 현재 시간을 0으로 초기화 하고 싶다.
     }
-
-    public void makeStar1()
-    {
-        // 3. 적공장에서 적을 만들어서
-        GameObject bullet = Instantiate(enemyFactory);
-        // 4. 내 위치에 배치하고 싶다.
-        bullet.transform.position = transform.position;
-        //Vector3 direction = target.transform.position - transform.position;
-        //direction.y = 0;
-        //direction.Normalize();
-        bullet.transform.forward = transform.forward;
-        // 5. 현재 시간을 0으로 초기화 하고 싶다.
-    }
 }

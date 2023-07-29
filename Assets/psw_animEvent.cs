@@ -14,6 +14,7 @@ public class psw_animEvent : MonoBehaviour
     public psw_starPosition anim4;
 
     public GameObject particle;
+    public Collider playerCollider;
 
     public void ATJump()
     {
@@ -26,6 +27,7 @@ public class psw_animEvent : MonoBehaviour
         anim4.makeStar();
 
         GameObject obj = Instantiate(particle, transform.position, Quaternion.identity);
+        obj.GetComponent<ParticleSystem>().trigger.AddCollider(playerCollider.transform);
         Destroy(obj, 3.2f);
     }
 

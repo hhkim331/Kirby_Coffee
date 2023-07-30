@@ -43,7 +43,10 @@ public class GameManager : MonoBehaviour
             SoundManager.Instance.PlayBGM("BGM1");
         }
         else
+        {
             PlayerManager.Instance.FCamera.State = startCameraState;
+            SoundManager.Instance.PlayBGM("BGM2");
+        }
 
         SoundManager.Instance.BGMVolume = 1;
         SceneChanger.Instance.gameObject.SetActive(true);

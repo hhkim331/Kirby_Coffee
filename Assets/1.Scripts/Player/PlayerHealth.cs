@@ -204,11 +204,15 @@ public class PlayerHealth : MonoBehaviour
         prevSliderValue = mainHPSlider.value;
         HP -= damage;
         mainHPSlider.value = hp / maxHP;
-        SoundManager.Instance.PlaySFXOnce("Damaged");
         if (hp <= 0f)
+        {
             Die();
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.PlaySFXOnce("KirbyDeath");
+        }
         else
         {
+            SoundManager.Instance.PlaySFXOnce("Damaged");
             PlayerManager.Instance.Hit(hitDir);
             //아이템 드롭
             if (drop)

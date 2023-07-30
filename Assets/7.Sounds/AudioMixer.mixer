@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-8586648105308964819
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KirbyDeath
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: f65ff7fbf6fc1de4ea1e3281742f2f2d
+  m_Children: []
+  m_Volume: 8fef8bf8c2667a14abf33dd90fd0ef92
+  m_Pitch: 9323680c304ff604d994cb384f4ba83a
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -5579043375707650186}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &-7911947102148796118
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -100,6 +119,20 @@ AudioMixerEffectController:
   m_EffectID: 4ebf7691b5c8a864a83d73acf96458be
   m_EffectName: Attenuation
   m_MixLevel: 9eec3e8ba0e892746ad902d39746d779
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-5579043375707650186
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 476f9ad51daadb141aeace60207e615e
+  m_EffectName: Attenuation
+  m_MixLevel: 8d11d80cd2efc4e4b9f1d1de59d03a1a
   m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
@@ -398,6 +431,7 @@ AudioMixerController:
     - 390f9a17fbee06c41919533d5531d0e2
     - 5376d133482906f4791f591cc0ef3b8e
     - 52bd4a38311ba9e4d818a4861425c952
+    - f65ff7fbf6fc1de4ea1e3281742f2f2d
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -598,6 +632,7 @@ AudioMixerGroupController:
   - {fileID: -5161873372973028038}
   - {fileID: 5298756845475257709}
   - {fileID: 5586658731642139910}
+  - {fileID: -8586648105308964819}
   m_Volume: ff8938dd92047db41bddb526d7d043c4
   m_Pitch: 3803acc2abd059246b019fb9b88a6c1c
   m_Send: 00000000000000000000000000000000

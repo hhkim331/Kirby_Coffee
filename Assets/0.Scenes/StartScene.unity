@@ -747,6 +747,10 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 98a82f9133b207e4e9281a285174d4fe, type: 3}
     audioMixerGroup: {fileID: 5586658731642139910, guid: aca2c2bb313214d498a53a5c5d377ed8,
       type: 2}
+  - key: KirbyDeath
+    audioClip: {fileID: 8300000, guid: 89a5c4dfd39ea434997b816178a5b872, type: 3}
+    audioMixerGroup: {fileID: -8586648105308964819, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
 --- !u!4 &829594977
 Transform:
   m_ObjectHideFlags: 0

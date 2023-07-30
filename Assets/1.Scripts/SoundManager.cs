@@ -185,6 +185,15 @@ public class SoundManager : MonoBehaviour
             bgmSrc.Play(0);
         }
     }
+
+    public void StopBGM()
+    {
+        if (bgmSrc != null)
+        {
+            bgmSrc.Stop();
+            bgmSrc.clip = null;
+        }
+    }
     #endregion
 
     #region SFX

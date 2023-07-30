@@ -32,5 +32,6 @@ public class psw_DeBox : MonoBehaviour
         if (item != null) item.SetActive(true);
         Destroy(pa, 1);
         Destroy(this.gameObject);
+        SoundManager.Instance.PlaySFX("BoxBreak");
     }
 }

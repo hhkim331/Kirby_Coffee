@@ -12,5 +12,7 @@ public class ItemHealth : Item
         base.GetItem();
         PlayerManager.Instance.PHealth.Heal(health);
         Destroy(gameObject);
+
+        SoundManager.Instance.PlaySFX("Tomato");
     }
 }

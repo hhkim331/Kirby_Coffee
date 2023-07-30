@@ -107,6 +107,7 @@ public class PlayerManager : MonoBehaviour
             startCameraPoint = GameManager.Instance.startPos;
             starObj.SetActive(true);
             anim.SetTrigger("StartMotion");
+            SoundManager.Instance.PlaySFX("KirbyStar", 1f);
             transform.DOMove(GameManager.Instance.startPos, 1f).SetEase(Ease.Linear).SetDelay(1f).OnComplete(() =>
             {
                 starObj.SetActive(false);

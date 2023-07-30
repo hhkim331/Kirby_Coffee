@@ -16,6 +16,9 @@ public class Boss_Ex : MonoBehaviour
 
     int attackAniType = 0;
 
+    float footsoundTime = 0f;
+    float footsoundDelay = 0.5f;
+
     public enum EState
     {
         Idle,
@@ -113,6 +116,7 @@ public class Boss_Ex : MonoBehaviour
                 break;
             case EState.Move:
                 anim.SetBool("Move", true);
+                footsoundTime = 0;
                 break;
         }
 
@@ -151,6 +155,12 @@ public class Boss_Ex : MonoBehaviour
     // 타켓을 향해서 이동하고 싶다.
     private void UpdateMove()
     {
+        footsoundTime += Time.deltaTime;
+        if (footsoundTime > footsoundDelay)
+        {
+            footsoundTime = 0;
+            SoundManager.Instance.PlaySFX("DededeFoot");
+        }
 
         transform.LookAt(target.transform);
 
@@ -197,6 +207,7 @@ public class Boss_Ex : MonoBehaviour
                     anim.SetTrigger("Attack");
                     attackAniType = 1;
                     currentTime = 1;
+                    SoundManager.Instance.PlaySFX("DededeAttack1",0.8f);
                 }
                 else if (attackAniType == 1)
                 {
@@ -204,12 +215,14 @@ public class Boss_Ex : MonoBehaviour
                     PlayerManager.Instance.FCamera.SetBossTopView(transform, GameManager.Instance.bossGround);
                     attackAniType = 2;
                     currentTime = 0;
+                    SoundManager.Instance.PlaySFX("DededeAttack2",1.7f);
                 }
                 else if (attackAniType == 2)
                 {
                     anim.SetTrigger("Attack2");
                     attackAniType = 0;
                     currentTime = 1;
+                    SoundManager.Instance.PlaySFX("DededeAttack3",1f);
                 }
 
             }

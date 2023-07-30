@@ -695,10 +695,6 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 1db184fc802667a48a2e2ed7540b8d73, type: 3}
     audioMixerGroup: {fileID: 3041405511499744667, guid: aca2c2bb313214d498a53a5c5d377ed8,
       type: 2}
-  - key: Box
-    audioClip: {fileID: 8300000, guid: 64141ff1fce6a754baf58c6853c63413, type: 3}
-    audioMixerGroup: {fileID: -1524853237325851200, guid: aca2c2bb313214d498a53a5c5d377ed8,
-      type: 2}
   - key: Coin
     audioClip: {fileID: 8300000, guid: 0ac7017d4a236f54a9a81a9ed13ab528, type: 3}
     audioMixerGroup: {fileID: 9144201334225004735, guid: aca2c2bb313214d498a53a5c5d377ed8,
@@ -714,6 +710,42 @@ MonoBehaviour:
   - key: SceneChange
     audioClip: {fileID: 8300000, guid: 0118d22ed2652c943a8d9aa62e6c3be1, type: 3}
     audioMixerGroup: {fileID: 7605826375707514946, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: KirbyStar
+    audioClip: {fileID: 8300000, guid: e7176a3d23e88ca40a6c37a3bdcc9913, type: 3}
+    audioMixerGroup: {fileID: -7229369938192606773, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: EnemyBomb
+    audioClip: {fileID: 8300000, guid: 99856e8e4e5559d4898e8dc99495ae3f, type: 3}
+    audioMixerGroup: {fileID: 1067958951437090561, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: EnemyGun
+    audioClip: {fileID: 8300000, guid: ac49ed5b4f7be9c4e81b36369e7a8f37, type: 3}
+    audioMixerGroup: {fileID: -6928811562372263704, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: BoxBreak
+    audioClip: {fileID: 8300000, guid: 64141ff1fce6a754baf58c6853c63413, type: 3}
+    audioMixerGroup: {fileID: 5997433171767605097, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: DededeFoot
+    audioClip: {fileID: 8300000, guid: 4ef5fc7102efe164e8613a1b123f935f, type: 3}
+    audioMixerGroup: {fileID: 1906940583783650234, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: DededeAttack1
+    audioClip: {fileID: 8300000, guid: 851665acf0c33cf4e815f4cea7e8c00d, type: 3}
+    audioMixerGroup: {fileID: -2324781810358818781, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: DededeAttack2
+    audioClip: {fileID: 8300000, guid: 72b5f3cf796a44f4d9c4222d23176fc5, type: 3}
+    audioMixerGroup: {fileID: -5161873372973028038, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: DededeAttack3
+    audioClip: {fileID: 8300000, guid: e1f0eefae8733fe48a9520c41cae5c6e, type: 3}
+    audioMixerGroup: {fileID: 5298756845475257709, guid: aca2c2bb313214d498a53a5c5d377ed8,
+      type: 2}
+  - key: Tomato
+    audioClip: {fileID: 8300000, guid: 98a82f9133b207e4e9281a285174d4fe, type: 3}
+    audioMixerGroup: {fileID: 5586658731642139910, guid: aca2c2bb313214d498a53a5c5d377ed8,
       type: 2}
 --- !u!4 &829594977
 Transform:

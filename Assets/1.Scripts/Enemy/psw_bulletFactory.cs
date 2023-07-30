@@ -40,6 +40,9 @@ public class psw_bulletFactory : MonoBehaviour
             bullet.transform.forward = direction;
             // 5. 현재 시간을 0으로 초기화 하고 싶다.
             currentTime = 0;
+
+            if (enemyFactory.name == "bullet")
+                SoundManager.Instance.PlaySFX("EnemyGun");
         }
     }
 }

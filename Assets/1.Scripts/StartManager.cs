@@ -26,6 +26,7 @@ public class StartManager : MonoBehaviour
             startButton.interactable = false;
             videoPlayer.clip = videoClips[0];
             videoPlayer.loopPointReached += VideoEnd;
+            videoPlayer.targetTexture.Release();
             videoPlayer.Play();
         }
         else

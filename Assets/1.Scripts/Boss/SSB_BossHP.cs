@@ -10,7 +10,7 @@ public class SSB_BossHP : MonoBehaviour
 {
     bool isChange = false;//체력이 변경되었는지
     //현재체력
-    int hp;
+    [SerializeField] int hp;
     //최대체력
     public int maxHP = 5;
     //UI
@@ -19,7 +19,7 @@ public class SSB_BossHP : MonoBehaviour
     public int HP //함수인데 변수처럼 쓸 수 있는 property를 만든다
     {
         get { return hp; }//쓸 때 
-        set 
+        set
         {
             if (isChange) return;
             isChange = true;
@@ -39,7 +39,7 @@ public class SSB_BossHP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isChange)
+        if (isChange)
         {
             isChange = false;
         }

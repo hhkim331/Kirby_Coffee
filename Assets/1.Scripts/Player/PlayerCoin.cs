@@ -27,6 +27,7 @@ public class PlayerCoin : MonoBehaviour
     public void GetCoin(int add)
     {
         coin = coin + add;
+        PlayerIngameData.Instance.Coin = coin;
         coinImage.material.DOKill();
         coinImage.material.DOColor(Color.black, "_Color", 0.1f).From(Color.white);
         coinEffectImage.DOKill();

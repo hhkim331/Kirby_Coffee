@@ -31,8 +31,8 @@ public class SceneChanger : MonoBehaviour
         prevSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         yield return new WaitForSecondsRealtime(0.15f);
         starHoleImage.gameObject.SetActive(true);
-        starHoleImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine).SetUpdate(true);
-        rotStarImage.rectTransform.DOSizeDelta(new Vector2(100, 100), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear).SetUpdate(true);
+        starHoleImage.rectTransform.DOSizeDelta(new Vector2(0, 0), 1f).From(new Vector2(3600, 3600)).SetEase(Ease.OutSine).SetUpdate(true);
+        rotStarImage.rectTransform.DOSizeDelta(new Vector2(0, 0), 1f).From(new Vector2(4500, 4500)).SetEase(Ease.Linear).SetUpdate(true);
         rotStarImage.transform.DORotate(Vector2.zero, 1f).From(new Vector3(0, 0, 144)).SetEase(Ease.Linear).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(1.2f);

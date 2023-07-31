@@ -45,31 +45,37 @@ public class psw_Door : MonoBehaviour
         if (CanDoor == false)
         {
             currentTime += Time.deltaTime;
-            if (currentTime > 2f && !coins[0].activeSelf)
-            {
-                coins[0].SetActive(true);
-                Instantiate(spawnEffect, coins[0].transform.position, Quaternion.identity);
-            }
-            if (currentTime > 2.2f && !coins[1].activeSelf)
-            {
-                coins[1].SetActive(true);
-                Instantiate(spawnEffect, coins[1].transform.position, Quaternion.identity);
-            }
-            if (currentTime > 2.4f && !coins[2].activeSelf)
-            {
-                coins[2].SetActive(true);
-                Instantiate(spawnEffect, coins[2].transform.position, Quaternion.identity);
-            }
-            if (currentTime > 2.6f && !coins[3].activeSelf)
-            {
-                coins[3].SetActive(true);
-                Instantiate(spawnEffect, coins[3].transform.position, Quaternion.identity);
-            }
-            if (currentTime > 2.8f && !coins[4].activeSelf)
-            {
-                coins[4].SetActive(true);
-                Instantiate(spawnEffect, coins[4].transform.position, Quaternion.identity);
-            }
+
+            if (coins[0] != null)
+                if (currentTime > 2f && !coins[0].activeSelf)
+                {
+                    coins[0].SetActive(true);
+                    Instantiate(spawnEffect, coins[0].transform.position, Quaternion.identity);
+                }
+            if (coins[1] != null)
+                if (currentTime > 2.2f && !coins[1].activeSelf)
+                {
+                    coins[1].SetActive(true);
+                    Instantiate(spawnEffect, coins[1].transform.position, Quaternion.identity);
+                }
+            if (coins[2] != null)
+                if (currentTime > 2.4f && !coins[2].activeSelf)
+                {
+                    coins[2].SetActive(true);
+                    Instantiate(spawnEffect, coins[2].transform.position, Quaternion.identity);
+                }
+            if (coins[3] != null)
+                if (currentTime > 2.6f && !coins[3].activeSelf)
+                {
+                    coins[3].SetActive(true);
+                    Instantiate(spawnEffect, coins[3].transform.position, Quaternion.identity);
+                }
+            if (coins[4] != null)
+                if (currentTime > 2.8f && !coins[4].activeSelf)
+                {
+                    coins[4].SetActive(true);
+                    Instantiate(spawnEffect, coins[4].transform.position, Quaternion.identity);
+                }
         }
     }
 }

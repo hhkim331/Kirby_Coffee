@@ -1,9 +1,6 @@
 ﻿using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Claims;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,36 +24,30 @@ public class PlayerActionPistol : PlayerAction
 
     enum CHARGELEVEL
     {
-        None,
-        Level1,
-        Level2,
-        Level3
+        None,   //발사
+        Level1, //차지1단계
+        Level2, //차지2단계
+        Level3  //차지3단계
     }
     CHARGELEVEL chargeLevel = CHARGELEVEL.None;
+    
+    bool isFire = false;        //공격 시전중    
+    bool isFireKey = false;     //발사키 입력중
 
-    //공격 시전중
-    bool isFire = false;
-
-    //발사키 입력중
-    bool isFireKey = false;
     //차지 시간
     float chargeTime = 0.0f;
-    float charge1Time = 0.5f;
-    float charge2Time = 1.0f;
-    float charge3Time = 1.5f;
+    readonly float charge1Time = 0.5f;
+    readonly float charge2Time = 1.0f;
+    readonly float charge3Time = 1.5f;
     [SerializeField] SpriteRenderer[] chargeSpriteRenderer;
     [SerializeField] Sprite[] chargeSprite;
 
-    //에임 활성화
-    bool isAim = false;
-    //에임 이동 방향
-    Vector3 aimDir = Vector3.zero;
-    //에임 이동 속도
-    float aimSpeed = 3f;
-    //오른쪽 에임 방향
-    Vector3 rightAimDir = Vector3.zero;
-    //왼쪽 에임 방향
-    Vector3 leftAimDir = Vector3.zero;
+    //에임
+    bool isAim = false;    
+    float aimSpeed = 3f;            //에임 이동 속도    
+    Vector3 aimDir = Vector3.zero;  //에임 이동 방향
+    Vector3 rightAimDir = Vector3.zero; //오른쪽총 발사 방향    
+    Vector3 leftAimDir = Vector3.zero;  //왼쪽총 발사 방향
 
     //락온
     bool isLockOn = false;
@@ -302,8 +293,6 @@ public class PlayerActionPistol : PlayerAction
             foreach (RaycastHit hit in hits)
             {
                 if (hit.collider.isTrigger || hit.collider.CompareTag("Player")) continue;
-
-                Debug.Log(hit.collider.name);
                 UpdateAimPlayer(hit.point);
                 if (hit.transform.CompareTag("Enemy") || hit.transform.CompareTag("Boss"))
                 {
@@ -321,7 +310,6 @@ public class PlayerActionPistol : PlayerAction
                     if (distance < lockOnDistance)
                         LockOn(hit.collider);
                 }
-
                 break;
             }
         }

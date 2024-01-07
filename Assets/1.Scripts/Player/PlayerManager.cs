@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -161,7 +160,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region 변신
-    //변신하면 호출되는 함수(나중에 사용)
     public void Change(CHANGETYPE type, bool isSwallow = false)
     {
         if (type == changeType) return;
